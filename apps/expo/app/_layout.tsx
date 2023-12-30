@@ -1,10 +1,10 @@
 import { Provider } from 'app/provider'
-import { Stack } from 'expo-router'
+import { Slot } from 'expo-router'
 
 export default function Root() {
-  return (
-    <Provider>
-      <Stack />
-    </Provider>
-  )
+    return (
+        <Provider>
+            <Slot />
+        </Provider>
+    )
 }

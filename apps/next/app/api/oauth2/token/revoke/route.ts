@@ -1,6 +1,9 @@
-import {NextRequest} from "next/server";
-import {authorizationServer, handleError, handleResponse} from "../../../../lib/typescirpt-node-oauth-server";
-
+import { NextRequest } from 'next/server'
+import {
+    authorizationServer,
+    handleError,
+    handleResponse,
+} from '../../../../../server/lib/typescirpt-node-oauth-server'
 
 export async function POST(req: NextRequest) {
     const query = Object.fromEntries(req.nextUrl.searchParams)
@@ -11,11 +14,11 @@ export async function POST(req: NextRequest) {
         const oauthResponse = await authorizationServer.revoke({
             headers: req.headers,
             body: body,
-            query: query
-        });
+            query: query,
+        })
         return handleResponse(oauthResponse)
     } catch (e) {
         console.error(e)
-        return handleError(e);
+        return handleError(e)
     }
 }

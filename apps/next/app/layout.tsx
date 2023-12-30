@@ -1,5 +1,6 @@
 import { StylesProvider } from './styles-provider'
-import './globals.css'
+import '../global.css'
+import { Provider } from 'app/provider'
 
 export const metadata = {
     title: 'Create Solito App',
@@ -7,15 +8,17 @@ export const metadata = {
 }
 
 export default function RootLayout({
-                                       children,
-                                   }: {
+    children,
+}: {
     children: React.ReactNode
 }) {
     return (
         <html lang="en">
-        <body>
-        <StylesProvider>{children}</StylesProvider>
-        </body>
+            <body>
+                <StylesProvider>
+                    <Provider>{children}</Provider>
+                </StylesProvider>
+            </body>
         </html>
     )
 }

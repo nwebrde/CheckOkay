@@ -2,10 +2,25 @@
 
 /** @type {import('tailwindcss').Config['theme']} */
 const theme = {
-  // edit your tailwind theme here!
-  // https://tailwindcss.com/docs/adding-custom-styles
+    extend: {
+        colors: {
+            primary: {
+                light: '#2F5651',
+                DEFAULT: '#2F5651',
+                dark: '#F1EDE1',
+            },
+            secondary: {
+                light: '#F1EDE1',
+                DEFAULT: '#F1EDE1',
+            },
+            brown: {
+                light: '#CBA780',
+                DEFAULT: '#CBA780',
+            },
+        },
+    },
 }
 
 module.exports = {
-  theme,
+    theme,
 }

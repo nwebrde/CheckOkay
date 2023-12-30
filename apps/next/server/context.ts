@@ -1,5 +1,5 @@
 import { FetchCreateContextFnOptions } from '@trpc/server/dist/adapters/fetch'
-import { jwtService } from '../app/lib/typescirpt-node-oauth-server'
+import { jwtService } from './lib/typescirpt-node-oauth-server'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../app/api/auth/[...nextauth]/route'

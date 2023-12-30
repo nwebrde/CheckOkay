@@ -11,15 +11,16 @@ import {
     CodeChallengeMethod,
     OAuthTokenRepository,
     OAuthToken,
-    DateInterval
-} from "@jmondi/oauth2-server";
-import {eq} from "drizzle-orm";
-import * as crypto from "crypto";
-import {ACCESS_TOKEN_INTERVAL, REFRESH_TOKEN_INTERVAL} from "./index";
-import {db} from "db";
-import {authCodes, refreshTokens} from "db/schema/oauthserver";
-import {users} from "db/schema/auth";
-const defaultScope = "all";
+    DateInterval,
+    ExtraAccessTokenFields,
+} from '@jmondi/oauth2-server'
+import { eq } from 'drizzle-orm'
+import * as crypto from 'crypto'
+import { ACCESS_TOKEN_INTERVAL, REFRESH_TOKEN_INTERVAL } from './index'
+import { db } from 'db'
+import { authCodes, refreshTokens } from 'db/schema/oauthserver'
+import { users } from 'db/schema/auth'
+const defaultScope = 'all'
 
 /**
  * Important: supports only ONE scope.
@@ -28,23 +29,31 @@ const defaultScope = "all";
  * Important:
  */
 export class AuthCodeRepository implements OAuthAuthCodeRepository {
-
     // Fetch auth code entity from storage by code
     async getByIdentifier(authCodeCode: string): Promise<OAuthAuthCode> {
-        const result = await db.select().from(authCodes).where(eq(authCodes.authCode, authCodeCode));
-        if(result.length > 0) {
+        const result = await db
+            .select()
+            .from(authCodes)
+            .where(eq(authCodes.authCode, authCodeCode))
+        if (result.length > 0) {
             return {
                 code: result[0].authCode,
                 expiresAt: result[0].expiresAt,
-                client: await (new ClientRepository()).getByIdentifier(result[0].clientId),
-                user: await (new UserRepository).getUserByCredentials(result[0].userId),
+                client: await new ClientRepository().getByIdentifier(
+                    result[0].clientId,
+                ),
+                user: await new UserRepository().getUserByCredentials(
+                    result[0].userId,
+                ),
                 codeChallenge: result[0].codeChallenge,
                 codeChallengeMethod: result[0].codeChallengeMethod,
                 redirectUri: result[0].redirectUri,
-                scopes: await (new ScopeRepository()).getAllByIdentifiers([result[0].scope])
+                scopes: await new ScopeRepository().getAllByIdentifiers([
+                    result[0].scope,
+                ]),
             }
         }
-        throw new Error("auth code not found");
+        throw new Error('auth code not found')
     }
 
     // An async call that should return an OAuthAuthCode that has not been
@@ -52,21 +61,21 @@ export class AuthCodeRepository implements OAuthAuthCodeRepository {
     issueAuthCode(
         client: OAuthClient,
         user: OAuthUser | undefined,
-        scopes: OAuthScope[]
+        scopes: OAuthScope[],
     ) {
         return {
             code: crypto.randomBytes(64).toString('hex'),
-            codeChallengeMethod: "SHA256" as CodeChallengeMethod,
-            expiresAt: new DateInterval("15min").getEndDate(), // changing has no effect! expiration is overriden to 15min
+            codeChallengeMethod: 'SHA256' as CodeChallengeMethod,
+            expiresAt: new DateInterval('15min').getEndDate(), // changing has no effect! expiration is overriden to 15min
             client: client,
             user: user,
-            scopes: scopes
+            scopes: scopes,
         }
     }
 
     // An async call that should persist an OAuthAuthCode into your storage.
     async persist(authCode: OAuthAuthCode): Promise<void> {
-        type NewEntry = typeof authCodes.$inferInsert;
+        type NewEntry = typeof authCodes.$inferInsert
         const entry: NewEntry = {
             authCode: authCode.code,
             clientId: authCode.client.id,
@@ -74,30 +83,30 @@ export class AuthCodeRepository implements OAuthAuthCodeRepository {
             expiresAt: authCode.expiresAt,
             issuedAt: new Date(),
             redirectUri: authCode.redirectUri,
-            scope: (authCode.scopes[0]) ? authCode.scopes[0].name : defaultScope,
+            scope: authCode.scopes[0] ? authCode.scopes[0].name : defaultScope,
             codeChallenge: authCode.codeChallenge!,
-            codeChallengeMethod: authCode.codeChallengeMethod!
+            codeChallengeMethod: authCode.codeChallengeMethod!,
         }
-        await db.insert(authCodes).values(entry);
+        await db.insert(authCodes).values(entry)
     }
 
     // This async method is called when an auth code is validated by the
     // authorization server. Return `true` if the auth code has been
     // manually revoked. If the code is still valid return `false`
     async isRevoked(authCodeCode: string): Promise<boolean> {
-        let authCode;
+        let authCode
 
         try {
-            authCode = await this.getByIdentifier(authCodeCode);
+            authCode = await this.getByIdentifier(authCodeCode)
         } catch (e) {
-            return true;
+            return true
         }
 
-        return authCode.expiresAt < new Date();
+        return authCode.expiresAt < new Date()
     }
 
     async revoke(authCodeCode: string): Promise<void> {
-        await db.delete(authCodes).where(eq(authCodes.authCode, authCodeCode));
+        await db.delete(authCodes).where(eq(authCodes.authCode, authCodeCode))
     }
 }
 
@@ -107,7 +116,7 @@ export class TokenRepository implements OAuthTokenRepository {
     async issueToken(
         client: OAuthClient,
         scopes: OAuthScope[],
-        user?: OAuthUser
+        user?: OAuthUser,
     ): Promise<OAuthToken> {
         return {
             accessToken: crypto.randomBytes(64).toString('hex'),
@@ -131,20 +140,20 @@ export class TokenRepository implements OAuthTokenRepository {
         accessToken: OAuthToken,
         client: OAuthClient,
     ): Promise<OAuthToken> {
-        const token = accessToken;
-        token.refreshToken = crypto.randomBytes(64).toString('hex');
-        token.refreshTokenExpiresAt = REFRESH_TOKEN_INTERVAL.getEndDate();
+        const token = accessToken
+        token.refreshToken = crypto.randomBytes(64).toString('hex')
+        token.refreshTokenExpiresAt = REFRESH_TOKEN_INTERVAL.getEndDate()
 
-        type NewEntry = typeof refreshTokens.$inferInsert;
+        type NewEntry = typeof refreshTokens.$inferInsert
         const entry: NewEntry = {
             refreshToken: token.refreshToken,
             clientId: token.client.id,
             userId: token.user!.id.toString(),
             scope: token.scopes[0].name,
-            expiresAt: token.refreshTokenExpiresAt
+            expiresAt: token.refreshTokenExpiresAt,
         }
-        await db.insert(refreshTokens).values(entry);
-        return token;
+        await db.insert(refreshTokens).values(entry)
+        return token
     }
 
     // This async method is called when a refresh token is used to reissue
@@ -153,37 +162,51 @@ export class TokenRepository implements OAuthTokenRepository {
     async revoke(accessToken: OAuthToken): Promise<void> {
         // for accessTokens, do nothing as they are treated as self-encoded JWTs with a short lifespan
         // for refreshTokens, we need to delete them in the db
-        await db.delete(refreshTokens).where(eq(refreshTokens.refreshToken, accessToken.refreshToken!));
+        await db
+            .delete(refreshTokens)
+            .where(eq(refreshTokens.refreshToken, accessToken.refreshToken!))
     }
 
     // This async method, if implemented, will be called by the authorization
     // code grant if the original authorization code is reused.
     // See https://www.rfc-editor.org/rfc/rfc6749#section-4.1.2 for why.
-    revokeDescendantsOf?(authCodeId: string): Promise<void>;
+    revokeDescendantsOf?(authCodeId: string): Promise<void>
 
     // This async method is called when an access token is validated by the
     // authorization server. Return `true` if the access token has been
     // manually revoked. If the token is still valid return `false`
     async isRefreshTokenRevoked(refreshToken: OAuthToken): Promise<boolean> {
-        const result = await db.select().from(refreshTokens).where(eq(refreshTokens.refreshToken, refreshToken.refreshToken!));
-        return result.length <= 0;
+        const result = await db
+            .select()
+            .from(refreshTokens)
+            .where(eq(refreshTokens.refreshToken, refreshToken.refreshToken!))
+        return result.length <= 0
     }
 
     // Fetch refresh token entity from storage by refresh token
     async getByRefreshToken(refreshTokenToken: string): Promise<OAuthToken> {
-        const result = await db.select().from(refreshTokens).where(eq(refreshTokens.refreshToken, refreshTokenToken));
-        if(result.length > 0) {
+        const result = await db
+            .select()
+            .from(refreshTokens)
+            .where(eq(refreshTokens.refreshToken, refreshTokenToken))
+        if (result.length > 0) {
             return {
-                accessToken: "NOT STORED",
+                accessToken: 'NOT STORED',
                 accessTokenExpiresAt: result[0].expiresAt, // also not stored, but not important
                 refreshToken: result[0].refreshToken,
                 refreshTokenExpiresAt: result[0].expiresAt,
-                client: await (new ClientRepository()).getByIdentifier(result[0].clientId),
-                user: await (new UserRepository).getUserByCredentials(result[0].userId),
-                scopes: await (new ScopeRepository()).getAllByIdentifiers([result[0].scope])
+                client: await new ClientRepository().getByIdentifier(
+                    result[0].clientId,
+                ),
+                user: await new UserRepository().getUserByCredentials(
+                    result[0].userId,
+                ),
+                scopes: await new ScopeRepository().getAllByIdentifiers([
+                    result[0].scope,
+                ]),
             }
         }
-        throw new Error("refresh token not found");
+        throw new Error('refresh token not found')
     }
 }
 
@@ -197,69 +220,75 @@ export class UserRepository implements OAuthUserRepository {
         grantType?: GrantIdentifier,
         client?: OAuthClient,
     ): Promise<OAuthUser | undefined> {
-        const result = await db.select().from(users).where(eq(users.id, identifier));
-        if(password) {
-            return undefined;
+        const result = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, identifier))
+        if (password) {
+            return undefined
         }
-        if(result.length > 0) {
+        if (result.length > 0) {
             return {
                 id: result[0].id,
-                name: result[0].name
-            };
+                name: result[0].name,
+            }
         }
     }
 
-    /*
-    async extraAccessTokenFields(user: OAuthUser): Promise<ExtraAccessTokenFields | undefined> {
+    async extraAccessTokenFields(
+        user: OAuthUser,
+    ): Promise<ExtraAccessTokenFields | undefined> {
+        //const userData = (new UserRepository).getUserByCredentials(user.id)
         return {
-            anything_here: user.
-            seriously: true,
-            count: 1,
+            name: user.name,
         }
     }
-
-     */
 }
 
 export class ClientRepository implements OAuthClientRepository {
     // Fetch client entity from storage by client_id
     async getByIdentifier(clientId: string): Promise<OAuthClient> {
-        if(clientId === "BeingWellApp") {
+        if (clientId === 'BeingWellApp') {
             return {
-                id: "BeingWellApp",
-                name: "App for BeingWell",
-                redirectUris: ["exp://192.168.178.150:8081", "exp://192.168.0.247:8081", "exp://172.17.119.171:8081", "exp://172.20.10.3:8081", "http://localhost"],
-                allowedGrants: ["authorization_code", "refresh_token"],
-                scopes: [{name: defaultScope}],
-                secret: undefined
+                id: 'BeingWellApp',
+                name: 'App for BeingWell',
+                redirectUris: [
+                    'exp://192.168.178.150:8081',
+                    'exp://192.168.0.247:8081',
+                    'exp://172.17.119.171:8081',
+                    'exp://172.20.10.3:8081',
+                    'http://localhost',
+                ],
+                allowedGrants: ['authorization_code', 'refresh_token'],
+                scopes: [{ name: defaultScope }],
+                secret: undefined,
             }
         }
-        throw new Error("client not known")
+        throw new Error('client not known')
     }
 
     // check the grant type and secret against the client
     async isClientValid(
         grantType: GrantIdentifier,
         client: OAuthClient,
-        clientSecret?: string
+        clientSecret?: string,
     ): Promise<boolean> {
-        if(client.secret && client.secret !== clientSecret) {
-            return false;
+        if (client.secret && client.secret !== clientSecret) {
+            return false
+        } else if (!client.allowedGrants.includes(grantType)) {
+            return false
         }
-        else if(!client.allowedGrants.includes(grantType)) {
-            return false;
-        }
-        return true;
+        return true
     }
 }
 
 export class ScopeRepository implements OAuthScopeRepository {
     // Find all scopes by scope names
     async getAllByIdentifiers(scopeNames: string[]): Promise<OAuthScope[]> {
-        const scopes: OAuthScope[] = [];
+        const scopes: OAuthScope[] = []
         for (const scopeName of scopeNames) {
             scopes.push({
-                name: scopeName
+                name: scopeName,
             })
         }
         return scopes
@@ -275,6 +304,6 @@ export class ScopeRepository implements OAuthScopeRepository {
         client: OAuthClient,
         user_id?: string,
     ): Promise<OAuthScope[]> {
-        return scopes;
+        return scopes
     }
 }

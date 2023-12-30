@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { CommonAuthContext } from 'app/provider/auth-context/types'
 import { useSession, getSession } from 'next-auth/react'
