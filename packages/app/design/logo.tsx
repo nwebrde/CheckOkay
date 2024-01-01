@@ -13,7 +13,7 @@ function logo(classNames?: string) {
             src={imgSrc}
             contentFit="contain"
             alt="Some cool logo of CheckOkay"
-            className={'h-20 w-60' + (classNames ? classNames : '')}
+            className={'h-20 w-60 ' + (classNames ? classNames : '')}
         />
     )
 }

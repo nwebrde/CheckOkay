@@ -1,7 +1,6 @@
 import {Pressable, Text, View} from "react-native";
 import React from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import {TimePicker} from "./TimePicker";
+import {TimePicker} from "app/design/timepicker/timepicker";
 
 const renderItem = ({ item }: { item: number }) => {
     return (

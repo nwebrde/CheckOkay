@@ -1,6 +1,8 @@
 import { Redirect, Stack } from 'expo-router'
 import { Text } from 'react-native'
 import { useAuth } from 'app/provider/auth-context/index.native'
+import {Logo} from "app/design/logo";
+
 
 export default function AppLayout() {
     const { refreshToken, isLoading } = useAuth()!
@@ -23,12 +25,13 @@ export default function AppLayout() {
         <Stack
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#f4511e',
+                    backgroundColor: '#F1EDE1',
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
+              headerTitle: props => <Logo className="w-10 top-0 mt-0 p-0" />,
             }}
         />
     )

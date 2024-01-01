@@ -25,6 +25,7 @@
     "react": "latest",
     "react-dom": "latest",
     "setimmediate": "^1.0.5",
+    "timepicker-ui": "^2.6.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
