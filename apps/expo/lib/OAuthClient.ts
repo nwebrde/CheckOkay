@@ -1,17 +1,16 @@
 import * as AuthSession from 'expo-auth-session'
 import { router } from 'expo-router'
 import { DiscoveryDocument } from 'expo-auth-session'
-import type { User } from 'app/provider/auth-context/types'
 
 const redirectUri = AuthSession.makeRedirectUri({})
 
 // Endpoint
 const discovery: DiscoveryDocument = {
-    authorizationEndpoint: 'http://localhost:3000/api/oauth2/authorize',
-    tokenEndpoint: 'http://localhost:3000/api/oauth2/token',
-    revocationEndpoint: 'http://localhost:3000/api/oauth2/token/revoke',
+    authorizationEndpoint: process.env.EXPO_PUBLIC_OAUTH_AUTHORIZATION_ENDPOINT,
+    tokenEndpoint: process.env.EXPO_PUBLIC_OAUTH_TOKEN_ENDPOINT,
+    revocationEndpoint: process.env.EXPO_PUBLIC_OAUTH_REVOCATION_ENDPOINT,
 }
-const clientId = 'BeingWellApp'
+const clientId = process.env.EXPO_PUBLIC_OAUTH_CLIENT_ID!
 
 type TokenSetter = (token: string | null) => void
 
@@ -78,6 +77,8 @@ export const refresh = async (
         refreshTokenObject,
         discovery,
     )
+
+    console.log('new refresh token', tokenResult.refreshToken)
 
     setAccessToken(tokenResult.accessToken)
     setRefreshToken(tokenResult.refreshToken ? tokenResult.refreshToken : null)

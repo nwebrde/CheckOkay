@@ -54,6 +54,13 @@ export async function modifyCheck(
     return await updateEventTiming(checkId, hour, minute)
 }
 
+export async function getChecks(userId: string) {
+    const result = await db.query.checks.findMany({
+        where: eq(checks.guardedUserId, userId),
+    })
+    return toChecks(result)
+}
+
 /**
  * Converts a DB object to corresponding lib type
  * @param check

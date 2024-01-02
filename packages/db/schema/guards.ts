@@ -38,9 +38,11 @@ export const guardsRelations = relations(guards, ({ one }) => ({
   guardUser: one(users, {
     fields: [guards.guardUserId],
     references: [users.id],
+    relationName: 'guardUser'
   }),
   guardedUser: one(users, {
     fields: [guards.guardedUserId],
     references: [users.id],
+    relationName: 'guardedUser'
   }),
 }))

@@ -3,7 +3,7 @@ import React from 'react'
 import { Text, Pressable, GestureResponderEvent } from 'react-native'
 import { styled } from 'nativewind'
 
-const StyledPressable = styled(Pressable)
+export const StyledPressable = styled(Pressable)
 const StyledText = styled(Text)
 
 export interface ButtonProps {

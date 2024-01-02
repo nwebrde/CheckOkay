@@ -8,60 +8,38 @@ import { trpc } from 'app/provider/trpc-client'
 import { useAuth } from 'app/provider/auth-context'
 import { Button } from 'app/design/button'
 
-import { AcademicCap } from '@nandorojo/heroicons/24/outline'
-import {TimePicker} from "app/design/timepicker/timepicker";
-import ChecksList from "app/features/settings/checks/ChecksList";
-
+import { useRouter } from 'solito/navigation'
 
 export function HomeScreen() {
+    const router = useRouter()
     const { isLoading, isError, data, error } = trpc.checks.test.useQuery()
 
     const { user, signOut } = useAuth()!
 
     return (
         <View className="flex-1 items-center justify-center p-3">
-            <View className="bg-secondary rounded w-full max-w-xl h-32">
+            <Button text="Settings" onClick={() => router.push('/settings')} />
+            <Button text="Logout" onClick={signOut} />
+            <Button text="ss" />
+            <MotiLink
+                animate={({ hovered, pressed }) => {
+                    'worklet'
 
-            </View>
+                    return {
+                        scale: pressed ? 0.95 : hovered ? 1.1 : 1,
+                        rotateZ: pressed ? '0deg' : hovered ? '-3deg' : '0deg',
+                    }
+                }}
+                transition={{
+                    type: 'timing',
+                    duration: 150,
+                }}
+            ></MotiLink>
 
-          <Button text="ss" />
-          <MotiLink
+            <H1>Welcome to Solito.</H1>
 
-            animate={({ hovered, pressed }) => {
-              'worklet'
-
-              return {
-                scale: pressed ? 0.95 : hovered ? 1.1 : 1,
-                rotateZ: pressed
-                  ? '0deg'
-                  : hovered
-                    ? '-3deg'
-                    : '0deg',
-              }
-            }}
-            transition={{
-              type: 'timing',
-              duration: 150,
-            }}>
-            <AcademicCap color="red" className="text-green-500" />
-          </MotiLink>
-
-          <AcademicCap color="red" />
-
-          <View className="w-full h-56">
-            <ChecksList />
-          </View>
-
-
-          <H1>Welcome to Solito.</H1>
             {!isLoading && <H1>UserId: {user?.name}</H1>}
             <View className="max-w-xl">
-                <P className="text-center text-green-500">
-                    Here is a basic starter to show you how you can navigate
-                    from one screen to another. This screen uses the same code
-                    on Next.js and React Native.
-                </P>
-
                 <P className="text-center">
                     Solito is made by{' '}
                     <A
@@ -72,19 +50,6 @@ export function HomeScreen() {
                         }}
                     >
                         Fernando Rojo
-                    </A>
-                    .
-                </P>
-                <P className="text-center">
-                    NativeWind is made by{' '}
-                    <A
-                        href="https://twitter.com/mark__lawlor"
-                        hrefAttrs={{
-                            target: '_blank',
-                            rel: 'noreferrer',
-                        }}
-                    >
-                        Mark Lawlor
                     </A>
                     .
                 </P>
@@ -102,8 +67,8 @@ export function HomeScreen() {
                             rotateZ: pressed
                                 ? '0deg'
                                 : hovered
-                                ? '-3deg'
-                                : '0deg',
+                                  ? '-3deg'
+                                  : '0deg',
                         }
                     }}
                     transition={{
@@ -116,7 +81,6 @@ export function HomeScreen() {
                     </Text>
                 </MotiLink>
             </Row>
-            <Button text="Logout" onClick={signOut} />
         </View>
     )
 }

@@ -6,6 +6,8 @@ const initOptions: RequestInit = {
     headers: {
         'Content-Type': 'application/json',
         'X-API-Key': process.env.SCHEDULER_API_KEY!,
+        'CF-Access-Client-Id': process.env.CF_SCHEDULER_CLIENT_ID!,
+        'CF-Access-Client-Secret': process.env.CF_SCHEDULER_CLIENT_SECRET!,
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -46,7 +48,7 @@ async function createEvent(
             timezone: 'Etc/UTC',
             timing: {
                 hours: [hour],
-                minute: [minute],
+                minutes: [minute],
             },
             algo: 'round_robin',
             catch_up: true, // ensures that all jobs of this event run, even if late
@@ -56,7 +58,7 @@ async function createEvent(
         }),
     })
     const response = await result.json()
-    if (response.has('code') && response.code == 0) {
+    if (response && response.code == 0) {
         return response.id
     } else {
         return undefined
@@ -103,12 +105,12 @@ export async function updateEventTiming(
             id: eventId,
             timing: {
                 hours: [hour],
-                minute: [minute],
+                minutes: [minute],
             },
         }),
     })
     const response = await result.json()
-    if (response.has('code') && response.code == 0) {
+    if (response && response.code == 0) {
         return true
     } else {
         return false
@@ -124,7 +126,7 @@ export async function deleteEvent(eventId: string): Promise<boolean> {
         }),
     })
     const response = await result.json()
-    if (response.has('code') && response.code == 0) {
+    if (response && response.code == 0) {
         return true
     } else {
         return false

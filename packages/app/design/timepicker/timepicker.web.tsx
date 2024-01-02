@@ -1,48 +1,62 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { TimepickerUI } from "timepicker-ui";
+import React, { useRef, useEffect, useState, useCallback } from 'react'
+import { TimepickerUI } from 'timepicker-ui'
+import './style.css'
+import { Props } from 'app/design/timepicker/timepicker'
 
-export function TimePicker() {
-  const tmRef = useRef(null);
-  const [inputValue, setInputValue] = useState("12:00 PM");
-
-  const testHandler = useCallback(({ detail: { hour, minutes, type } }) => {
-    setInputValue(`${hour}:${minutes} ${type}`);
-  }, []);
-
-  useEffect(() => {
-    if (inputValue === "10:00 PM") {
-      alert("You selected 10:00 PM");
+function addLeadingZero(number: number): string {
+    if (number <= 9) {
+        return '0' + number
+    } else {
+        return number.toString()
     }
-  }, [inputValue]);
+}
 
-  useEffect(() => {
-    const tm = tmRef.current;
+function toString(hour: number, minute: number): string {
+    return addLeadingZero(hour) + ':' + addLeadingZero(minute)
+}
 
-    const newPicker = new TimepickerUI(tm!, {
-      mobile: true,
-      theme: "m3",
-      clockType: "24h",
-      enableScrollbar: true,
+export function TimePicker(props: Props) {
+    const tmRef = useRef(null)
+    const [inputValue, setInputValue] = useState(
+        toString(props.hour, props.minute),
+    )
 
-    });
-    newPicker.create();
+    useEffect(() => {
+        setInputValue(toString(props.hour, props.minute))
+    }, [props])
 
-    // @ts-ignore
-    tm.addEventListener("accept", testHandler);
+    const testHandler = useCallback(({ detail: { hour, minutes, type } }) => {
+        setInputValue(`${hour}:${minutes} ${type}`)
+        props.onChange(Number(hour), Number(minutes))
+    }, [])
 
-    return () => {
-      // @ts-ignore
-      tm.removeEventListener("accept", testHandler);
-    };
-  }, [testHandler]);
+    useEffect(() => {
+        const tm = tmRef.current
 
-  return (
-    <div className="timepicker-ui" ref={tmRef}>
-      <input
-        type="test"
-        className="timepicker-ui-input"
-        defaultValue={inputValue}
-      />
-    </div>
-  );
+        const newPicker = new TimepickerUI(tm!, {
+            mobile: true,
+            theme: 'm3',
+            clockType: '24h',
+            enableScrollbar: true,
+        })
+        newPicker.create()
+
+        // @ts-ignore
+        tm.addEventListener('accept', testHandler)
+
+        return () => {
+            // @ts-ignore
+            tm.removeEventListener('accept', testHandler)
+        }
+    }, [testHandler])
+
+    return (
+        <div className="timepicker-ui" ref={tmRef}>
+            <input
+                type="test"
+                className="timepicker-ui-input"
+                defaultValue={inputValue}
+            />
+        </div>
+    )
 }

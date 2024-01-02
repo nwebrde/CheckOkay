@@ -1,0 +1,11 @@
+.timepicker-ui-hour, .timepicker-ui-minutes, .timepicker-ui-hour.mobile, .timepicker-ui-minutes.mobile {
+    padding: unset !important;
+}
+
+.timepicker-ui-wrapper.m3 {
+    background-color: rgb(241 237 225) !important;
+}
+
+.timepicker-ui-input {
+    background-color: transparent;
+}

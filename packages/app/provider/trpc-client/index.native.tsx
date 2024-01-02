@@ -6,7 +6,16 @@ import { refreshTokenLink } from '@pyncz/trpc-refresh-token-link'
 import type { AppRouter } from 'next-app/server/routers/_app'
 import { useAuth } from 'app/provider/auth-context/index.native'
 
-export const trpc = createTRPCReact<AppRouter>({})
+export const trpc = createTRPCReact<AppRouter>({
+    unstable_overrides: {
+        useMutation: {
+            async onSuccess(opts) {
+                await opts.originalFn()
+                await opts.queryClient.invalidateQueries()
+            },
+        },
+    },
+})
 
 function getBaseUrl() {
     if (typeof window !== 'undefined')
@@ -41,6 +50,10 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
 
                     // Fetch a new JWT pair by refresh token from your API
                     fetchJwtPairByRefreshToken: async (refreshT) => {
+                        console.log(
+                            'refreshing with refresh token',
+                            refreshToken,
+                        )
                         const result = await refresh()
                         localAccessToken = result?.accessToken!
                         return {
@@ -54,6 +67,18 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
 
                     // optional: Callback on JWT refresh request is failed
                     onRefreshFailed: async () => {
+                        console.log(
+                            'refresh failed with refresh token',
+                            refreshToken,
+                        )
+                        console.log(
+                            'refresh failed with access token',
+                            accessToken,
+                        )
+                        console.log(
+                            'refresh failed with local access token',
+                            localAccessToken,
+                        )
                         await signOut()
                     },
 
