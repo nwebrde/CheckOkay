@@ -8,6 +8,7 @@ import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { Animated, LayoutAnimation } from 'react-native'
 import { trpc } from 'app/provider/trpc-client/index'
 import FlatList = Animated.FlatList
+import { EmptyItem } from 'app/features/settings/checks/EmptyItem'
 
 function pushNewButton(checks?: Check[]) {
     if (!checks) {
@@ -41,7 +42,21 @@ const ChecksList = () => {
     }
 
     const renderItem = ({ item }: { item: Check }) => {
-        return <ChecksListItem item={item} />
+        return (
+            <ChecksListItem
+                item={item}
+                latestItem={getLatestItem(checks.data)}
+            />
+        )
+    }
+
+    const getLatestItem = (items: Check[] | undefined) => {
+        if (items) {
+            if (items[items.length - 1]!.checkId == LAST_ITEM_ID) {
+                return items[items.length - 2]!
+            }
+            return items[items.length - 1]!
+        }
     }
 
     return (
@@ -54,6 +69,7 @@ const ChecksList = () => {
                     return item.checkId
                 }}
                 renderItem={renderItem}
+                ListEmptyComponent={<EmptyItem />}
                 data={pushNewButton(checks.data)}
             />
         </View>

@@ -1,7 +1,7 @@
 import Check from './types/check'
 import { checks } from 'db/schema/checks'
 import { db } from 'db'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import {
     createCheckEvent,
     deleteEvent,
@@ -36,22 +36,37 @@ export async function addCheck(
     return undefined
 }
 
-export async function removeCheck(checkId: string) {
-    await db.delete(checks).where(eq(checks.checkId, checkId))
-    return await deleteEvent(checkId)
+export async function removeCheck(checkId: string, userId: string) {
+    const res = await db
+        .delete(checks)
+        .where(
+            and(eq(checks.checkId, checkId), eq(checks.guardedUserId, userId)),
+        )
+    if (res[0].affectedRows > 0) {
+        return await deleteEvent(checkId)
+    } else {
+        return false
+    }
 }
 
 export async function modifyCheck(
     checkId: string,
     hour: number,
     minute: number,
+    userId: string,
 ) {
     const timeString = hour + ':' + minute
-    await db
+    const res = await db
         .update(checks)
         .set({ time: timeString })
-        .where(eq(checks.checkId, checkId))
-    return await updateEventTiming(checkId, hour, minute)
+        .where(
+            and(eq(checks.checkId, checkId), eq(checks.guardedUserId, userId)),
+        )
+    if (res[0].affectedRows > 0) {
+        return await updateEventTiming(checkId, hour, minute)
+    } else {
+        return false
+    }
 }
 
 export async function getChecks(userId: string) {

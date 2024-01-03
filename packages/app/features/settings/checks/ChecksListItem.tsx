@@ -9,7 +9,13 @@ import { StyledPressable } from 'app/design/button'
 import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { Text } from 'app/design/typography'
 
-const renderItem = ({ item }: { item: Check }) => {
+const renderItem = ({
+    item,
+    latestItem,
+}: {
+    item: Check
+    latestItem?: Check
+}) => {
     const modifyMutation = trpc.checks.modify.useMutation()
     const removeMutation = trpc.checks.remove.useMutation()
     const addMutation = trpc.checks.add.useMutation()
@@ -27,7 +33,17 @@ const renderItem = ({ item }: { item: Check }) => {
     }
 
     const add = () => {
-        addMutation.mutate({ hour: 23, minute: 59 })
+        let hour = 9
+        let minute = 0
+        if (latestItem) {
+            hour = latestItem.hour + 1
+            if (hour > 23) {
+                hour = 23
+                minute = latestItem.minute + 1
+            }
+        }
+
+        addMutation.mutate({ hour: hour, minute: minute })
     }
 
     if (item.checkId === LAST_ITEM_ID) {

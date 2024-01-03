@@ -12,8 +12,6 @@ import { useRouter } from 'solito/navigation'
 
 export function HomeScreen() {
     const router = useRouter()
-    const { isLoading, isError, data, error } = trpc.checks.test.useQuery()
-
     const { user, signOut } = useAuth()!
 
     return (
@@ -39,7 +37,6 @@ export function HomeScreen() {
 
             <H1>Welcome to Solito.</H1>
 
-            {!isLoading && <H1>UserId: {user?.name}</H1>}
             <View className="max-w-xl">
                 <P className="text-center">
                     Solito is made by{' '}

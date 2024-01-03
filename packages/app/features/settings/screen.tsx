@@ -12,12 +12,9 @@ import { TimePicker } from 'app/design/timepicker/timepicker'
 import ChecksList from 'app/features/settings/checks/ChecksList'
 
 export function SettingsScreen() {
-    const { isLoading, isError, data, error } = trpc.checks.test.useQuery()
-
-    const { user, signOut } = useAuth()!
-
     return (
-        <View className="flex-1 items-center justify-center p-3">
+        <View className="mt-10 flex-1 items-center justify-center p-3">
+            <H1>Kontrollzeitpunkte</H1>
             <ChecksList />
         </View>
     )

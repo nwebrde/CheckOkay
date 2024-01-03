@@ -37,6 +37,7 @@ export const checksRouter = router({
                 opts.input.checkId,
                 opts.input.hour,
                 opts.input.minute,
+                opts.ctx.userId,
             )
             if (!result) {
                 throw new TRPCError({
@@ -52,7 +53,10 @@ export const checksRouter = router({
             }),
         )
         .mutation(async (opts) => {
-            const result = await removeCheck(opts.input.checkId)
+            const result = await removeCheck(
+                opts.input.checkId,
+                opts.ctx.userId,
+            )
             if (!result) {
                 throw new TRPCError({
                     code: 'INTERNAL_SERVER_ERROR',
@@ -68,8 +72,5 @@ export const checksRouter = router({
             })
         }
         return result
-    }),
-    test: authorizedProcedure.query(async (opts) => {
-        return opts.ctx.userId
     }),
 })
