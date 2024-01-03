@@ -1,10 +1,19 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink, loggerLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
-import { useEffect, useState } from 'react'
-import { refreshTokenLink } from '@pyncz/trpc-refresh-token-link'
+import { useState } from 'react'
 import type { AppRouter } from 'next-app/server/routers/_app'
 import { useAuth } from 'app/provider/auth-context/index.native'
+import { jwtDecode } from 'jwt-decode'
+
+//polyfill needed for jwtDecode
+import atob from 'core-js-pure/stable/atob'
+import btoa from 'core-js-pure/stable/btoa'
+import { tokenRefreshLink } from 'app/provider/trpc-client/refreshLink'
+import { localAccessToken } from 'app/provider/auth-context/state.native'
+
+global.atob = atob
+global.btoa = btoa
 
 export const trpc = createTRPCReact<AppRouter>({
     unstable_overrides: {
@@ -32,80 +41,80 @@ function getBaseUrl() {
 }
 
 export function TRPCProvider(props: { children: React.ReactNode }) {
-    const { accessToken, refresh, refreshToken, signOut } = useAuth()!
-    let localAccessToken = accessToken
+    const { refresh, signOut } = useAuth()!
+    const trpcClient = trpc.createClient({
+        links: [
+            loggerLink({
+                enabled: () => false,
+            }),
 
-    const createClient = () =>
-        trpc.createClient({
-            links: [
-                loggerLink({
-                    enabled: () => false,
-                }),
+            tokenRefreshLink({
+                // access to the original tRPC query operation object
+                // is accessible on both methods
+                tokenRefreshNeeded: (query) => {
+                    // on every request, this function is called
+                    if (!localAccessToken) {
+                        return true
+                    }
 
-                refreshTokenLink({
-                    // Get locally stored refresh token
-                    getRefreshToken: () => {
-                        return !refreshToken ? undefined : refreshToken
-                    },
+                    let decodedToken
+                    try {
+                        decodedToken = jwtDecode(localAccessToken!)
+                    } catch {
+                        signOut()
+                    }
 
-                    // Fetch a new JWT pair by refresh token from your API
-                    fetchJwtPairByRefreshToken: async (refreshT) => {
-                        console.log(
-                            'refreshing with refresh token',
-                            refreshToken,
-                        )
+                    if (!decodedToken) {
+                        return true
+                    }
+
+                    // if access token expires in the next 10 sec
+                    if (decodedToken.exp! - Date.now() / 1000 <= 5) {
+                        return true
+                    }
+
+                    // Return `false` as default statement
+                    return false
+                },
+                fetchAccessToken: async (query) => {
+                    // if true is returned from tokenRefreshNeeded, this function will be called
+
+                    // do your magic to fetch a refresh token here
+                    // example:
+                    try {
                         const result = await refresh()
-                        localAccessToken = result?.accessToken!
-                        return {
-                            access: result?.accessToken!,
-                            refresh: result?.refreshToken!,
+                        if (!result) {
+                            await signOut()
                         }
-                    },
-
-                    // Callback on JWT pair is successfully fetched with `fetchJwtPairByRefreshToken`
-                    onJwtPairFetched: (payload) => {},
-
-                    // optional: Callback on JWT refresh request is failed
-                    onRefreshFailed: async () => {
-                        console.log(
-                            'refresh failed with refresh token',
-                            refreshToken,
-                        )
-                        console.log(
-                            'refresh failed with access token',
-                            accessToken,
-                        )
-                        console.log(
-                            'refresh failed with local access token',
-                            localAccessToken,
-                        )
+                    } catch (err) {
+                        // token refreshing failed, let's log the user out
                         await signOut()
+                    }
+                },
+            }),
+
+            httpBatchLink({
+                url: 'http://localhost:3000/api/trpc',
+                headers: () => {
+                    return { authorization: localAccessToken! }
+                },
+            }),
+        ],
+    })
+
+    const [queryClient] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: {
+                    queries: {
+                        retry: 3,
                     },
-
-                    // optional: Callback on a request is failed with UNAUTHORIZED code,
-                    // before the refresh flow is started
-                    onUnauthorized: () => {},
-                }),
-
-                httpBatchLink({
-                    url: 'http://localhost:3000/api/trpc',
-                    async headers() {
-                        return {
-                            authorization: localAccessToken!,
-                        }
+                    mutations: {
+                        retry: 3,
                     },
-                }),
-            ],
-        })
-    const [trpcClient, setClient] = useState(createClient)
-
-    // update trpcClient if accessToken or refreshToken updates
-    useEffect(() => {
-        localAccessToken = accessToken
-        setClient(createClient)
-    }, [accessToken, refreshToken])
-
-    const [queryClient] = useState(() => new QueryClient())
+                },
+            }),
+    )
 
     return (
         // @ts-ignore

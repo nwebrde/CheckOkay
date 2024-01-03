@@ -15,7 +15,11 @@ const isAuthed = t.middleware((opts) => {
         // by throwing an UNAUTHORIZED error, the trpc client fetches a new access token and retries the failed request
         throw new TRPCError({ code: 'UNAUTHORIZED' })
     }
-    return opts.next()
+    return opts.next({
+        ctx: {
+            userId: ctx.userId,
+        },
+    })
 })
 
 export const authorizedProcedure = publicProcedure.use(isAuthed)

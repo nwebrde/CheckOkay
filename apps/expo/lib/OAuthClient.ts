@@ -1,6 +1,10 @@
 import * as AuthSession from 'expo-auth-session'
 import { router } from 'expo-router'
 import { DiscoveryDocument } from 'expo-auth-session'
+import {
+    setLocalAccessToken,
+    setLocalRefreshToken,
+} from 'app/provider/auth-context/state.native'
 
 const redirectUri = AuthSession.makeRedirectUri({})
 
@@ -46,6 +50,11 @@ export const signIn = async (
             discovery,
         )
 
+        setLocalAccessToken(tokenResult.accessToken)
+        setLocalRefreshToken(
+            tokenResult.refreshToken ? tokenResult.refreshToken : null,
+        )
+
         setAccessToken(tokenResult.accessToken)
         setRefreshToken(
             tokenResult.refreshToken ? tokenResult.refreshToken : null,
@@ -66,7 +75,7 @@ export const refresh = async (
     refreshToken: string | null,
 ) => {
     if (!refreshToken) {
-        return null
+        return false
     }
     const refreshTokenObject: AuthSession.RefreshTokenRequestConfig = {
         clientId: clientId,
@@ -78,17 +87,14 @@ export const refresh = async (
         discovery,
     )
 
-    console.log('new refresh token', tokenResult.refreshToken)
-
+    setLocalAccessToken(tokenResult.accessToken)
+    setLocalRefreshToken(
+        tokenResult.refreshToken ? tokenResult.refreshToken : null,
+    )
     setAccessToken(tokenResult.accessToken)
     setRefreshToken(tokenResult.refreshToken ? tokenResult.refreshToken : null)
 
-    return {
-        accessToken: tokenResult.accessToken,
-        refreshToken: tokenResult.refreshToken
-            ? tokenResult.refreshToken
-            : null,
-    }
+    return true
 }
 
 export const signOut = async (
@@ -104,6 +110,9 @@ export const signOut = async (
         discovery,
     )
     if (!revoked) return false
+
+    setLocalAccessToken(null)
+    setLocalRefreshToken(null)
 
     setAccessToken(null)
     setRefreshToken(null)

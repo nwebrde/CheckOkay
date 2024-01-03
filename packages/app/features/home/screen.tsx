@@ -19,6 +19,7 @@ export function HomeScreen() {
     return (
         <View className="flex-1 items-center justify-center p-3">
             <Button text="Settings" onClick={() => router.push('/settings')} />
+            <Button text="Test" onClick={signOut} />
             <Button text="Logout" onClick={signOut} />
             <Button text="ss" />
             <MotiLink

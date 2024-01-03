@@ -17,11 +17,9 @@ export async function createContext({
         let userId = undefined
         if (req.headers.has('authorization')) {
             const token = req.headers.get('authorization')
-            console.log('auth header', token)
             if (token) {
                 try {
                     userId = (await jwtService.verify(token)).sub
-                    console.log('user id', userId)
                 } catch (e) {
                     console.error('Error verifying jwt', e)
                 }
