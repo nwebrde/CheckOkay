@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { Text, Pressable, GestureResponderEvent } from 'react-native'
 import { styled } from 'nativewind'
+import { MotiLink as MLink } from 'solito/moti/app'
+import { MotiPressable as MPressable } from 'moti/interactions'
 
 export const StyledPressable = styled(Pressable)
 const StyledText = styled(Text)
@@ -23,5 +25,65 @@ export function Button({ text, onClick }: ButtonProps) {
                 {text}
             </StyledText>
         </StyledPressable>
+    )
+}
+
+export const MotiPressable = styled(MPressable)
+export const MotiLink = styled(MLink)
+
+export function AnimatedLink({
+    children,
+    href,
+}: {
+    children: ReactNode
+    href: string
+}) {
+    return (
+        <MotiLink
+            href={href}
+            className="h-fit"
+            animate={({ hovered, pressed }) => {
+                'worklet'
+
+                return {
+                    scale: pressed ? 0.95 : hovered ? 1.1 : 1,
+                    rotateZ: pressed ? '0deg' : hovered ? '-3deg' : '0deg',
+                }
+            }}
+            transition={{
+                type: 'timing',
+                duration: 150,
+            }}
+        >
+            {children}
+        </MotiLink>
+    )
+}
+
+export function AnimatedPressable({
+    children,
+    onClick,
+}: {
+    children: ReactNode
+    onClick: () => void
+}) {
+    return (
+        <MotiPressable
+            onPress={onClick}
+            animate={({ hovered, pressed }) => {
+                'worklet'
+
+                return {
+                    scale: pressed ? 0.95 : hovered ? 1.1 : 1,
+                    rotateZ: pressed ? '0deg' : hovered ? '-3deg' : '0deg',
+                }
+            }}
+            transition={{
+                type: 'timing',
+                duration: 150,
+            }}
+        >
+            {children}
+        </MotiPressable>
     )
 }

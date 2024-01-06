@@ -1,12 +1,12 @@
 import UserProfile from 'app/provider/app-context/types/userProfile'
 
-export default interface GuardUser {
-  priority: GuardType
-  since: Date
-  profile: UserProfile
+export default interface Guard {
+    priority: GuardType
+    since: string
+    guardUser: UserProfile
 }
 
 export enum GuardType {
-  IMPORTANT = 'important',
-  BACKUP = 'backup',
+    IMPORTANT = 'important',
+    BACKUP = 'backup',
 }

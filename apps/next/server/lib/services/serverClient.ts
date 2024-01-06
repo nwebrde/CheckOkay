@@ -1,5 +1,5 @@
 import { httpBatchLink } from '@trpc/client'
-import { appRouter } from '../routers/_app'
+import { appRouter } from '../../routers/_app'
 
 function getBaseUrl() {
     if (typeof window !== 'undefined')

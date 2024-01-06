@@ -1,5 +1,11 @@
 # CheckOkay
 
+Localhost is running MariaDB installed with brew.
+To start MariaDB: brew services start mariadb
+
+Database must be configured to use UTC timeformat (for auto filled values like createdAt)!
+All Dates stored are in UTC timeformat.
+
 # Solito + NativeWind Example Monorepo 🕴
 
 ```sh

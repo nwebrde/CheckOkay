@@ -65,16 +65,17 @@ const renderItem = ({
 
     return (
         <Pressable>
-            <View className="m-2 flex-row items-center justify-around rounded-full bg-gray-200 p-2">
+            <View className="m-2 flex-row items-center justify-around rounded-full bg-gray-200 p-1.5 pl-3">
                 <TimePicker
                     hour={item.hour}
                     minute={item.minute}
                     onChange={modify}
+                    displayTimeInLocalFormat
                 />
                 <StyledPressable
                     onPress={remove}
                     className={`
-      ml-5 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
+      ml-2 mr-2 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
     `}
                 >
                     <XMark />

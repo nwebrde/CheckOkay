@@ -1,7 +1,13 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react'
-import { TimepickerUI } from 'timepicker-ui'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { View } from 'app/design/view'
+import { P, Text } from 'app/design/typography'
+import { localToUTC, UTCToLocal } from 'app/lib/time'
+import 'react-time-picker/dist/TimePicker.css'
 import './style.css'
 import { Props } from 'app/design/timepicker/timepicker'
+
+import { TimePicker as TimePickerComponent } from 'react-time-picker'
 
 function addLeadingZero(number: number): string {
     if (number <= 9) {
@@ -15,48 +21,54 @@ function toString(hour: number, minute: number): string {
     return addLeadingZero(hour) + ':' + addLeadingZero(minute)
 }
 
-export function TimePicker(props: Props) {
+let valueF
+
+export const TimePicker = ({
+    onChange,
+    hour,
+    minute,
+    displayTimeInLocalFormat,
+    unit,
+}: Props) => {
     const tmRef = useRef(null)
-    const [inputValue, setInputValue] = useState(
-        toString(props.hour, props.minute),
-    )
+    const [inputValue, setInputValue] = useState<string>()
 
     useEffect(() => {
-        setInputValue(toString(props.hour, props.minute))
-    }, [props])
-
-    const testHandler = useCallback(({ detail: { hour, minutes, type } }) => {
-        setInputValue(`${hour}:${minutes} ${type}`)
-        props.onChange(Number(hour), Number(minutes))
-    }, [])
-
-    useEffect(() => {
-        const tm = tmRef.current
-
-        const newPicker = new TimepickerUI(tm!, {
-            mobile: true,
-            theme: 'm3',
-            clockType: '24h',
-            enableScrollbar: true,
-        })
-        newPicker.create()
-
-        // @ts-ignore
-        tm.addEventListener('accept', testHandler)
-
-        return () => {
-            // @ts-ignore
-            tm.removeEventListener('accept', testHandler)
+        if (displayTimeInLocalFormat) {
+            const local = UTCToLocal(hour, minute)
+            setInputValue(toString(local.hour, local.minute))
+        } else {
+            setInputValue(toString(hour, minute))
         }
-    }, [testHandler])
+    }, [hour, minute, displayTimeInLocalFormat])
+
+    const changeHandler = useCallback(() => {
+        if (valueF) {
+            console.log(valueF)
+            const time = valueF.split(':')
+            if (displayTimeInLocalFormat) {
+                const utc = localToUTC(Number(time[0]), Number(time[1]))
+                onChange(utc.hour, utc.minute)
+            } else {
+                onChange(Number(time[0]), Number(time[1]))
+            }
+        }
+    }, [onChange, displayTimeInLocalFormat])
 
     return (
-        <div className="timepicker-ui" ref={tmRef}>
-            <input
-                type="test"
+        <View className="flex-row">
+            <TimePickerComponent
                 className="timepicker-ui-input"
-                defaultValue={inputValue}
+                disableClock
+                clearIcon={<></>}
+                onBlur={changeHandler}
+                onChange={(value: string) => {
+                    setInputValue(value)
+                    valueF = value
+                }}
+                value={inputValue}
             />
-        </div>
+            <P> {unit}</P>
+        </View>
     )
 }

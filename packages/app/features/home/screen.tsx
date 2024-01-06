@@ -1,6 +1,6 @@
 'use client'
 import { A, H1, P, Text, TextLink } from 'app/design/typography'
-import { Row } from 'app/design/layout'
+import { Row, Screen } from 'app/design/layout'
 import { View } from 'app/design/view'
 
 import { MotiLink } from 'solito/moti/app'
@@ -9,76 +9,16 @@ import { useAuth } from 'app/provider/auth-context'
 import { Button } from 'app/design/button'
 
 import { useRouter } from 'solito/navigation'
+import { CheckOkay } from 'app/features/checkIn/CheckOkay'
+import { Guards } from 'app/features/settings/guards/Guards'
 
 export function HomeScreen() {
     const router = useRouter()
     const { user, signOut } = useAuth()!
 
     return (
-        <View className="flex-1 items-center justify-center p-3">
-            <Button text="Settings" onClick={() => router.push('/settings')} />
-            <Button text="Test" onClick={signOut} />
-            <Button text="Logout" onClick={signOut} />
-            <Button text="ss" />
-            <MotiLink
-                animate={({ hovered, pressed }) => {
-                    'worklet'
-
-                    return {
-                        scale: pressed ? 0.95 : hovered ? 1.1 : 1,
-                        rotateZ: pressed ? '0deg' : hovered ? '-3deg' : '0deg',
-                    }
-                }}
-                transition={{
-                    type: 'timing',
-                    duration: 150,
-                }}
-            ></MotiLink>
-
-            <H1>Welcome to Solito.</H1>
-
-            <View className="max-w-xl">
-                <P className="text-center">
-                    Solito is made by{' '}
-                    <A
-                        href="https://twitter.com/fernandotherojo"
-                        hrefAttrs={{
-                            target: '_blank',
-                            rel: 'noreferrer',
-                        }}
-                    >
-                        Fernando Rojo
-                    </A>
-                    .
-                </P>
-            </View>
-            <View className="h-[32px]" />
-            <Row className="space-x-8">
-                <TextLink href="/user/fernando">Regular Link</TextLink>
-                <MotiLink
-                    href="/user/fernando"
-                    animate={({ hovered, pressed }) => {
-                        'worklet'
-
-                        return {
-                            scale: pressed ? 0.95 : hovered ? 1.1 : 1,
-                            rotateZ: pressed
-                                ? '0deg'
-                                : hovered
-                                  ? '-3deg'
-                                  : '0deg',
-                        }
-                    }}
-                    transition={{
-                        type: 'timing',
-                        duration: 150,
-                    }}
-                >
-                    <Text selectable={false} className="text-base font-bold">
-                        Moti Link
-                    </Text>
-                </MotiLink>
-            </Row>
-        </View>
+        <Screen width="max-w-xl">
+            <CheckOkay />
+        </Screen>
     )
 }

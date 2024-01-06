@@ -1,5 +1,5 @@
 import styles from '../../styles/index.module.css'
-import { serverClient } from '../server/lib/serverClient'
+import { serverClient } from '../server/lib/services/serverClient'
 import { Button } from 'app/design/button'
 export default async function ServerComponent() {
     const data = await serverClient.hello({ text: 'tt' })

@@ -65,31 +65,57 @@ async function createEvent(
     }
 }
 
-export async function createCheckEvent(hour: number, minute: number) {
+export async function createCheckEvent(
+    hour: number,
+    minute: number,
+    userId: string,
+) {
     return createEvent(
         hour,
         minute,
         'check event',
         'clql2okdx02',
         '',
+        'User-Id: ' + userId,
         '',
-        '',
-        '',
-        '',
+        'success',
+        'failure',
     )
 }
 
-export async function createNotificationEvent(hour: number, minute: number) {
+export async function createNotificationEvent(
+    hour: number,
+    minute: number,
+    userId: string,
+) {
     return createEvent(
         hour,
         minute,
         'notification event',
         'clql2p08i03',
         '',
+        'User-Id: ' + userId,
         '',
+        'success',
+        'failure',
+    )
+}
+
+export async function createBackupEvent(
+    hour: number,
+    minute: number,
+    userId: string,
+) {
+    return createEvent(
+        hour,
+        minute,
+        'backup event',
+        'clr11basjiu',
         '',
+        'User-Id: ' + userId,
         '',
-        '',
+        'success',
+        'failure',
     )
 }
 
