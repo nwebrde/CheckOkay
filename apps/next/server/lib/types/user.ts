@@ -1,5 +1,6 @@
 import Check from './check'
 import Guard, { Guarded } from './gaurd'
+import { CheckState } from 'app/lib/types/checks'
 
 export default interface User {
     id: string
@@ -7,8 +8,11 @@ export default interface User {
     email: string
     emailVerified: boolean
     image?: string
-    lastManualCheck?: Date
-    lastStepCheck?: Date
+
+    state: CheckState
+    step?: boolean
+    lastCheckOkay?: Date
+    nextRequiredCheckDate?: Date
     checks?: Check[]
     guards?: Guard[]
     guardedUsers?: Guarded[]

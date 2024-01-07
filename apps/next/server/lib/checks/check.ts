@@ -38,6 +38,9 @@ export async function addCheck(
             checkId: eventId,
         })
 
+        // required as the nextRequiredCheckDate value in the db must be updated
+        await checkOkay(userId, true)
+
         const checkSettings = await getCheckSettings(userId)
         const check = {
             checkId: eventId,
@@ -81,6 +84,10 @@ export async function removeCheck(checkId: string, userId: string) {
         .where(
             and(eq(checks.checkId, checkId), eq(checks.guardedUserId, userId)),
         )
+
+    // required as the nextRequiredCheckDate value in the db must be updated
+    await checkOkay(userId, true)
+
     if (res[0].affectedRows > 0) {
         return await deleteEvent(checkId)
     } else {
@@ -102,6 +109,9 @@ export async function modifyCheck(
             and(eq(checks.checkId, checkId), eq(checks.guardedUserId, userId)),
         )
     if (res[0].affectedRows > 0) {
+        // required as the nextRequiredCheckDate value in the db must be updated
+        await checkOkay(userId, true)
+
         if (!(await updateEventTiming(checkId, hour, minute))) return false
 
         const checkSettings = await getCheckSettings(userId)
@@ -388,7 +398,7 @@ export async function checkOkay(user: string, step: boolean) {
             .set({
                 lastStepCheck: new Date(),
                 state: CheckState.OK,
-                nextRequiredCheckDate: nextRequiredCheckDate,
+                nextRequiredCheckDate: nextRequiredCheckDate ?? null,
             })
             .where(and(eq(users.id, user)))
         return res[0].affectedRows > 0
@@ -411,39 +421,46 @@ export async function handleEvent(userId: string) {
         return true
     }
     const guardedUser = await getUser(userId, false, true)
+    if (!guardedUser) {
+        return false
+    }
+    if (!guardedUser.guards || guardedUser.guards.length <= 0) {
+        // do nothing as guarded user has not setup the app correctly
+        return true
+    }
     if (state == CheckState.NOTIFIED) {
         await sendReminder(
-            guardedUser!.email,
-            guardedUser!.name!,
-            moment((await getNextCheckDate(guardedUser!.id))!).fromNow(),
+            guardedUser.email,
+            guardedUser.name ?? guardedUser.email,
+            moment((await getNextCheckDate(guardedUser.id))!).fromNow(),
         )
     } else if (state == CheckState.WARNED) {
-        const notifyBackupAfter = (await getCheckSettings(guardedUser!.id))
+        const notifyBackupAfter = (await getCheckSettings(guardedUser.id))
             ?.notifyBackupAfter
-        for (const guard of guardedUser?.guards!) {
+        for (const guard of guardedUser.guards!) {
             if (
                 guard.priority == GuardType.IMPORTANT ||
                 (notifyBackupAfter?.minute == 0 && notifyBackupAfter?.hour == 0)
             ) {
                 await warn(
                     guard,
-                    guardedUser!,
-                    (await getLastCheckOkay(guardedUser!.id))?.latestCheck!,
+                    guardedUser,
+                    (await getLastCheckOkay(guardedUser.id))?.latestCheck!,
                 )
             }
         }
     } else if (state == CheckState.BACKUP) {
-        for (const guard of guardedUser?.guards!) {
+        for (const guard of guardedUser.guards!) {
             if (guard.priority == GuardType.BACKUP) {
                 await warn(
                     guard,
-                    guardedUser!,
+                    guardedUser,
                     (await getLastCheckOkay(guardedUser!.id))?.latestCheck!,
                 )
             }
         }
     }
-    await updateState(guardedUser!.id, state)
+    await updateState(guardedUser.id, state)
     return true
 }
 

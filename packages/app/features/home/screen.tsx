@@ -1,6 +1,6 @@
 'use client'
 import { A, H1, P, Text, TextLink } from 'app/design/typography'
-import { Row, Screen } from 'app/design/layout'
+import { Row, Screen, VSpacer } from 'app/design/layout'
 import { View } from 'app/design/view'
 
 import { MotiLink } from 'solito/moti/app'
@@ -20,6 +20,7 @@ export function HomeScreen() {
     return (
         <Screen width="max-w-xl">
             <CheckOkay />
+            <VSpacer />
             <Guarded />
         </Screen>
     )

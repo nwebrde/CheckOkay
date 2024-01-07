@@ -1,6 +1,6 @@
 import User from './types/user'
 import { eq } from 'drizzle-orm'
-import { toChecks } from './checks/check'
+import { convertLastCheckOkay, toChecks } from './checks/check'
 import { toGuardedUsers, toGuards } from './guard'
 import { db } from 'db'
 import { users } from 'db/schema/auth'
@@ -50,15 +50,18 @@ export async function getUser(
  * @param user
  */
 export function toUser(user: UserDB): User {
+    const lastCheck = convertLastCheckOkay(
+        user.lastManualCheck,
+        user.lastStepCheck,
+    )
     return {
         ...user,
-        name: user.name ? user.name : undefined,
+        name: user.name ?? undefined,
         emailVerified: user.emailVerified != null,
-        image: user.image ? user.image : undefined,
-        lastManualCheck: user.lastManualCheck
-            ? user.lastManualCheck
-            : undefined,
-        lastStepCheck: user.lastStepCheck ? user.lastStepCheck : undefined,
+        image: user.image ?? undefined,
+        step: lastCheck.step,
+        lastCheckOkay: lastCheck.latestCheck,
+        nextRequiredCheckDate: user.nextRequiredCheckDate ?? undefined,
         checks: undefined,
         guards: undefined,
     }

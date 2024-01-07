@@ -170,7 +170,8 @@ export function toGuarded(guarded: GuardWithGuardedUserDB): Guarded {
         state: guarded.guardedUser.state,
         lastCheckOkay: latestCheck.latestCheck,
         step: latestCheck.step,
-        nextOpenCheck: guarded.guardedUser.nextRequiredCheckDate ?? undefined,
+        nextRequiredCheckDate:
+            guarded.guardedUser.nextRequiredCheckDate ?? undefined,
     }
 }
 export function toGuardedUsers(guards: GuardWithGuardedUserDB[]): Guarded[] {

@@ -14,7 +14,7 @@ export interface Guarded {
     state: CheckState
     step?: boolean
     lastCheckOkay?: Date
-    nextOpenCheck?: Date
+    nextRequiredCheckDate?: Date
 }
 
 export enum GuardType {

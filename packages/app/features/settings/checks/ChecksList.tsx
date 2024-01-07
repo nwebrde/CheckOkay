@@ -7,6 +7,7 @@ import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { trpc } from 'app/provider/trpc-client'
 import { EmptyItem } from 'app/features/settings/checks/EmptyItem'
 import { FlatList } from 'react-native'
+import { Skeleton } from 'moti/skeleton'
 
 function pushNewButton(checks?: Check[]) {
     if (!checks) {
@@ -47,20 +48,31 @@ const ChecksList = () => {
 
     return (
         <View>
-            <FlatList
-                // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
-                numColumns={5}
-                // This prop is necessary to uniquely identify the elements in the list.
-                keyExtractor={(item: Check) => {
-                    return item.checkId
-                }}
-                columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 5 }}
-                renderItem={renderItem}
-                data={pushNewButton(checks.data)}
-                style={{
-                    flexGrow: 0,
-                }}
-            />
+            <Skeleton
+                colorMode="light"
+                width={'100%'}
+                height={100}
+                show={checks.isLoading}
+            >
+                <FlatList
+                    // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
+                    numColumns={5}
+                    // This prop is necessary to uniquely identify the elements in the list.
+                    keyExtractor={(item: Check) => {
+                        return item.checkId
+                    }}
+                    columnWrapperStyle={{
+                        flexWrap: 'wrap',
+                        flex: 1,
+                        marginTop: 5,
+                    }}
+                    renderItem={renderItem}
+                    data={pushNewButton(checks.data)}
+                    style={{
+                        flexGrow: 0,
+                    }}
+                />
+            </Skeleton>
         </View>
     )
 }

@@ -8,7 +8,7 @@ export default interface GuardedUser {
     state: CheckState
     lastCheckOkay?: string
     step?: boolean
-    nextOpenCheck?: string
+    nextRequiredCheckDate?: string
 }
 
 export enum CheckState {

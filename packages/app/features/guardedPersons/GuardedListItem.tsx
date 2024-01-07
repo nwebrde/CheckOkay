@@ -54,13 +54,13 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
                     />
                 </Text>
             )}
-            {item.nextOpenCheck && (
+            {item.nextRequiredCheckDate && (
                 <Text>
                     Nächste Rückmeldung bis{' '}
                     <Moment
                         element={Text}
                         locale="de"
-                        date={new Date(item.nextOpenCheck)}
+                        date={new Date(item.nextRequiredCheckDate)}
                         fromNow
                     />
                 </Text>

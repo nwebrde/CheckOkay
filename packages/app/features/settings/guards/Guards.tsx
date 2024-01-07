@@ -32,7 +32,7 @@ export function Guards() {
                         <PlusCircle className="h-14" />
                     </AnimatedPressable>
                 </Row>
-                <GuardsList />
+                <GuardsList invite={() => setShareVisible(true)} />
             </View>
             <InviteModal visible={shareVisible} onClose={onShareClose} />
         </>

@@ -5,6 +5,8 @@ import { trpc } from 'app/provider/trpc-client'
 import { FlatList } from 'react-native'
 import GuardedUser from 'app/provider/app-context/types/guardedUser'
 import GuardedListItem from 'app/features/guardedPersons/GuardedListItem'
+import { EmptyItem } from 'app/features/guardedPersons/EmptyItem'
+import { Skeleton } from 'moti/skeleton'
 
 const GuardedList = () => {
     const guardedUsers = trpc.getUser.useQuery()
@@ -15,20 +17,32 @@ const GuardedList = () => {
 
     return (
         <View>
-            <FlatList
-                // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
-                numColumns={2}
-                // This prop is necessary to uniquely identify the elements in the list.
-                keyExtractor={(item: GuardedUser) => {
-                    return item.guardedUser.id
-                }}
-                columnWrapperStyle={{ flexWrap: 'wrap', flex: 1, marginTop: 5 }}
-                renderItem={renderItem}
-                data={guardedUsers.data?.guardedUsers}
-                style={{
-                    flexGrow: 0,
-                }}
-            />
+            <Skeleton
+                colorMode="light"
+                width={'100%'}
+                height={'100%'}
+                show={guardedUsers.isLoading}
+            >
+                <FlatList
+                    // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
+                    numColumns={2}
+                    // This prop is necessary to uniquely identify the elements in the list.
+                    keyExtractor={(item: GuardedUser) => {
+                        return item.guardedUser.id
+                    }}
+                    columnWrapperStyle={{
+                        flexWrap: 'wrap',
+                        flex: 1,
+                        marginTop: 5,
+                    }}
+                    ListEmptyComponent={<EmptyItem />}
+                    renderItem={renderItem}
+                    data={guardedUsers.data?.guardedUsers}
+                    style={{
+                        flexGrow: 0,
+                    }}
+                />
+            </Skeleton>
         </View>
     )
 }
