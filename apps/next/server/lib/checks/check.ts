@@ -169,14 +169,21 @@ export async function getLastCheckOkay(user: string) {
     if (!res) {
         return undefined
     }
-    let latest = res.lastManualCheck
+    return convertLastCheckOkay(res.lastManualCheck, res.lastStepCheck)
+}
+
+export function convertLastCheckOkay(
+    lastManualCheck: Date | null | undefined,
+    lastStepCheck: Date | null | undefined,
+) {
+    let latest = lastManualCheck
     let step = false
-    if (res.lastStepCheck) {
+    if (lastStepCheck) {
         if (!latest) {
-            latest = res.lastStepCheck
+            latest = lastStepCheck
             step = true
-        } else if (res.lastStepCheck > res.lastManualCheck!) {
-            latest = res.lastStepCheck
+        } else if (lastStepCheck > lastManualCheck!) {
+            latest = lastStepCheck
             step = true
         }
     }
@@ -283,18 +290,19 @@ export async function updateState(
 
 /**
  *
+ * @param startDate returns the UTC date of the next check according to this date. if undefined, the next check according to current time will be returned.
  * @param user
  * returns:
  * UTC date of the next upcoming check-in time
  * undefined - if no checks are set or an error occurred
  */
-async function getNextCheckDate(user: string) {
+async function getNextCheckDate(user: string, startDate?: Date) {
     const checks = await getChecks(user, true)
     if (!checks || checks.length <= 0) {
         return undefined
     }
 
-    let currDate = new Date()
+    let currDate = startDate ?? new Date()
 
     let nextCheck = checks[0]
     let nextDay = true
@@ -372,16 +380,26 @@ async function getPreviousCheckDate(user: string, date?: Date) {
 }
 
 export async function checkOkay(user: string, step: boolean) {
+    const thisCheckDate = await getNextCheckDate(user)
+    const nextRequiredCheckDate = await getNextCheckDate(user, thisCheckDate)
     if (step) {
         const res = await db
             .update(users)
-            .set({ lastStepCheck: new Date(), state: CheckState.OK })
+            .set({
+                lastStepCheck: new Date(),
+                state: CheckState.OK,
+                nextRequiredCheckDate: nextRequiredCheckDate,
+            })
             .where(and(eq(users.id, user)))
         return res[0].affectedRows > 0
     } else {
         const res = await db
             .update(users)
-            .set({ lastManualCheck: new Date(), state: CheckState.OK })
+            .set({
+                lastManualCheck: new Date(),
+                state: CheckState.OK,
+                nextRequiredCheckDate: nextRequiredCheckDate,
+            })
             .where(and(eq(users.id, user)))
         return res[0].affectedRows > 0
     }

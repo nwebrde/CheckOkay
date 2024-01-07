@@ -1,18 +1,15 @@
-import { Pressable } from 'react-native'
-import React, { useRef } from 'react'
-import { TimePicker } from 'app/design/timepicker/timepicker'
+import React from 'react'
 import { XMark } from '@nandorojo/heroicons/20/solid'
 import { View } from 'app/design/view'
-import type Check from 'app/provider/app-context/types/check'
 import { trpc } from 'app/provider/trpc-client'
 import { StyledPressable } from 'app/design/button'
-import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { Text } from 'app/design/typography'
-import Guard from 'app/provider/app-context/types/guardUser'
+import Guard, { GuardType } from 'app/provider/app-context/types/guardUser'
+import { BellAlert, BellSnooze } from '@nandorojo/heroicons/20/solid'
 
 const renderItem = ({ item }: { item: Guard }) => {
     const switchTypeMutation = trpc.guards.switchType.useMutation()
-    const deleteMutation = trpc.guards.delete.useMutation()
+    const deleteMutation = trpc.guards.deleteGuard.useMutation()
     const switchType = () => {
         switchTypeMutation.mutate({
             guardUserId: item.guardUser.id,
@@ -31,6 +28,19 @@ const renderItem = ({ item }: { item: Guard }) => {
                     ? item.guardUser.name
                     : item.guardUser.email}
             </Text>
+            <StyledPressable
+                onPress={switchType}
+                className={`
+      ml-2 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
+    `}
+            >
+                {item.priority == GuardType.IMPORTANT && (
+                    <BellAlert color="#ebb434" />
+                )}
+                {item.priority == GuardType.BACKUP && (
+                    <BellSnooze color="#4f36c9" />
+                )}
+            </StyledPressable>
             <StyledPressable
                 onPress={remove}
                 className={`

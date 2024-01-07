@@ -63,12 +63,15 @@ if (process.env.NODE_ENV === 'production') {
         global.db = drizzle(poolConnection, {
             schema: schema,
             mode: 'default',
-            logger: {
+            logger: undefined /*{
+
                 logQuery: (query) => {
                     // to remove quotes on query string, to make it more readable
                     console.log({ query: query.replace(/\"/g, '') })
                 },
-            },
+
+
+            },*/,
         })
     }
 

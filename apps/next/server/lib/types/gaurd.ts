@@ -12,8 +12,9 @@ export interface Guarded {
     since: Date
     guardedUser: User
     state: CheckState
-    lastCheckOkay: Date
-    nextOpenCheck: Date
+    step?: boolean
+    lastCheckOkay?: Date
+    nextOpenCheck?: Date
 }
 
 export enum GuardType {

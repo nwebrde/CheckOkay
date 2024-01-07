@@ -33,7 +33,7 @@ export const guardsRouter = router({
         }
         return result.guards!
     }),
-    delete: authorizedProcedure
+    deleteGuard: authorizedProcedure
         .input(
             z.object({
                 guardUserId: z.string(),
@@ -43,6 +43,24 @@ export const guardsRouter = router({
             const result = await deleteRelation(
                 opts.input.guardUserId,
                 opts.ctx.userId!,
+            )
+            if (!result) {
+                throw new TRPCError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                })
+            }
+            return result
+        }),
+    deleteGuardedUser: authorizedProcedure
+        .input(
+            z.object({
+                guardedUserId: z.string(),
+            }),
+        )
+        .mutation(async (opts) => {
+            const result = await deleteRelation(
+                opts.ctx.userId!,
+                opts.input.guardedUserId,
             )
             if (!result) {
                 throw new TRPCError({

@@ -10,6 +10,7 @@ import moment from 'moment/moment'
 import User from './types/user'
 import { and, eq } from 'drizzle-orm'
 import { Guarded } from './types/gaurd'
+import { convertLastCheckOkay, getLastCheckOkay } from './checks/check'
 
 type GuardDB = typeof guards.$inferSelect
 type UserDB = typeof users.$inferSelect
@@ -158,13 +159,18 @@ export function toGuards(guards: GuardWithGuardUserDB[]): Guard[] {
 }
 
 export function toGuarded(guarded: GuardWithGuardedUserDB): Guarded {
+    const latestCheck = convertLastCheckOkay(
+        guarded.guardedUser.lastManualCheck,
+        guarded.guardedUser.lastStepCheck,
+    )
     return {
         priority: guarded.priority,
         since: guarded.createdAt,
         guardedUser: toUser(guarded.guardedUser),
         state: guarded.guardedUser.state,
-        lastCheckOkay: new Date(),
-        nextOpenCheck: new Date(),
+        lastCheckOkay: latestCheck.latestCheck,
+        step: latestCheck.step,
+        nextOpenCheck: guarded.guardedUser.nextRequiredCheckDate ?? undefined,
     }
 }
 export function toGuardedUsers(guards: GuardWithGuardedUserDB[]): Guarded[] {

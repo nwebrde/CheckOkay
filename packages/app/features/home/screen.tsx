@@ -11,6 +11,7 @@ import { Button } from 'app/design/button'
 import { useRouter } from 'solito/navigation'
 import { CheckOkay } from 'app/features/checkIn/CheckOkay'
 import { Guards } from 'app/features/settings/guards/Guards'
+import { Guarded } from 'app/features/guardedPersons/Guarded'
 
 export function HomeScreen() {
     const router = useRouter()
@@ -19,6 +20,7 @@ export function HomeScreen() {
     return (
         <Screen width="max-w-xl">
             <CheckOkay />
+            <Guarded />
         </Screen>
     )
 }
