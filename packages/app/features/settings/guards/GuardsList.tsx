@@ -17,12 +17,7 @@ const GuardsList = ({ invite }: { invite: () => void }) => {
 
     return (
         <View>
-            <Skeleton
-                colorMode="light"
-                width={'100%'}
-                height={'100%'}
-                show={guards.isLoading}
-            >
+            <Skeleton colorMode="light" width={'100%'} show={guards.isLoading}>
                 <FlatList
                     // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
                     numColumns={5}
@@ -30,6 +25,7 @@ const GuardsList = ({ invite }: { invite: () => void }) => {
                     keyExtractor={(item: Guard) => {
                         return item.guardUser.id
                     }}
+                    scrollEnabled={false}
                     ListEmptyComponent={<EmptyItem invite={invite} />}
                     columnWrapperStyle={{
                         flexWrap: 'wrap',

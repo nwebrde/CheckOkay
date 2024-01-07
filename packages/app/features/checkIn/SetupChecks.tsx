@@ -16,14 +16,12 @@ export function SetupChecks() {
                     Kontrollzeitpunkte fest und lade Freunde ein die dich
                     beschützen.
                 </Text>
-                <TextLink href="/settings">
+                <AnimatedLink href="/settings">
                     <Row className="mt-5 items-center justify-center">
-                        <AnimatedLink href="/settings">
-                            <Cog6Tooth />
-                        </AnimatedLink>
+                        <Cog6Tooth />
                         <Text className="text-lg"> App einrichten</Text>
                     </Row>
-                </TextLink>
+                </AnimatedLink>
             </Card>
         </View>
     )

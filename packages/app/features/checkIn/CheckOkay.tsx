@@ -36,12 +36,7 @@ export function CheckOkay() {
     }
     return (
         <View className="w-full">
-            <Skeleton
-                colorMode="light"
-                width={'100%'}
-                height={'100%'}
-                show={user.isLoading}
-            >
+            <Skeleton colorMode="light" width={'100%'} show={user.isLoading}>
                 {user.data && (
                     <>
                         {isSetup() && (

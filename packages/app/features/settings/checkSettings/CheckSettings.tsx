@@ -27,7 +27,7 @@ export function CheckSettings() {
             <View className="flex-row flex-wrap gap-8">
                 <View className="flex-col">
                     <Label>Warne Backup Guards nach</Label>
-                    <Skeleton colorMode="light" width={'100%'} height={'100%'}>
+                    <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data && (
                             <TimePicker
                                 hour={checkSettings.data.notifyBackupAfter.hour}
@@ -42,7 +42,7 @@ export function CheckSettings() {
                 </View>
                 <View className="flex-col">
                     <Label>Benachrichtige mich vor Checks</Label>
-                    <Skeleton colorMode="light" width={'100%'} height={'100%'}>
+                    <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data && (
                             <TimePicker
                                 hour={

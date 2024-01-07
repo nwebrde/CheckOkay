@@ -61,6 +61,7 @@ const ChecksList = () => {
                     keyExtractor={(item: Check) => {
                         return item.checkId
                     }}
+                    scrollEnabled={false}
                     columnWrapperStyle={{
                         flexWrap: 'wrap',
                         flex: 1,

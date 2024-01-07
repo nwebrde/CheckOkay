@@ -20,7 +20,6 @@ const GuardedList = () => {
             <Skeleton
                 colorMode="light"
                 width={'100%'}
-                height={'100%'}
                 show={guardedUsers.isLoading}
             >
                 <FlatList
