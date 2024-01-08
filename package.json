@@ -1,5 +1,5 @@
 {
-  "name": "CheckOkay",
+  "name": "checkokay",
   "private": true,
   "workspaces": [
     "apps/*",
