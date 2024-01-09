@@ -1,10 +1,22 @@
 # CheckOkay
 
-Localhost is running MariaDB installed with brew.
-To start MariaDB: brew services start mariadb
+Localhost is running MySQL.
+To start MySQL: Use the launcher in System settings
 
 Database must be configured to use UTC timeformat (for auto filled values like createdAt)!
 All Dates stored are in UTC timeformat.
+
+## Deployment of Web Server
+To build an image, in repo root, run
+```sh
+docker-compose build
+docker build -t nextjs-docker .
+```
+
+To run an built image, execute
+```sh
+docker run -p 3000:3000 docker.io/library/checkokay-web
+```
 
 # Solito + NativeWind Example Monorepo 🕴
 

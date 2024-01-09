@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  web:
+    container_name: next
+    build:
+      context: .
+      dockerfile: ./apps/next/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
