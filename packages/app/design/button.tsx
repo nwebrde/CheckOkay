@@ -42,7 +42,13 @@ export function AnimatedLink({
         <MotiLink
             href={href}
             className="h-fit"
-            animate={({ hovered, pressed }) => {
+            animate={({
+                hovered,
+                pressed,
+            }: {
+                hovered: boolean
+                pressed: boolean
+            }) => {
                 'worklet'
 
                 return {

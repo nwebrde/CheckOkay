@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
 import { acceptInvitation } from '../../../server/lib/guard'
-import { authOptions } from '../auth/[...nextauth]/route'
+import { authOptions } from '../../../server/lib/nextAuthOptions'
 
 export async function GET(req: NextRequest) {
     const code = req.nextUrl.searchParams.get('code')

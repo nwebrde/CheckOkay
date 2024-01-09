@@ -5,9 +5,9 @@ import {
 } from '../../../../server/lib/typescirpt-node-oauth-server'
 import { NextRequest } from 'next/server'
 import { redirect } from 'next/navigation'
-import { authOptions } from '../../auth/[...nextauth]/route'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
+import { authOptions } from '../../../../server/lib/nextAuthOptions'
 
 export async function GET(req: NextRequest) {
     const query = Object.fromEntries(req.nextUrl.searchParams)

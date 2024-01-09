@@ -2,7 +2,7 @@ import { FetchCreateContextFnOptions } from '@trpc/server/dist/adapters/fetch'
 import { jwtService } from './lib/typescirpt-node-oauth-server'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
-import { authOptions } from '../app/api/auth/[...nextauth]/route'
+import { authOptions } from './lib/nextAuthOptions'
 
 export async function createContext({
     req,

@@ -19,7 +19,7 @@ export const InviteModal = ({
         if (visible) {
             linkMutation.mutate()
         }
-    }, [visible])
+    }, [visible, linkMutation])
     return (
         <Modal
             animationType="slide"
