@@ -23,6 +23,8 @@ jobs:
     - name: Push to dokku
       uses: obrassard/action-dokku-deploy@v1.0.2
       with:
-        dokku_repo: 'ssh://dokku@dokku.myhost.ca:22/appname'
+        dokku_repo: 'ssh://ubuntu@dokku-ssh.nweber.de:22/checkokay'
         ssh_key: ${{ secrets.SSH_KEY }}
-        deploy_branch: 'develop'
+        deploy_branch: 'master'
+        cloudflared_client_id: ${{ secrets.CLOUDFLARED_CLIENT_ID }}
+        cloudflared_client_secret: ${{ secrets.CLOUDFLARED_CLIENT_SECRET }}
