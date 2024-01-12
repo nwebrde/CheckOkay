@@ -9,11 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-  
-    - name: Cancel Previous Runs # Optional step 
-      uses: styfle/cancel-workflow-action@0.4.0
-      with:
-        access_token: ${{ github.token }}
     
     - name: Cloning repo # This step is required
       uses: actions/checkout@v2
