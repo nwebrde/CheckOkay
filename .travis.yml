@@ -1,4 +1,3 @@
-sudo: enabled
 language: node_js
 node_js:
   - "stable"
@@ -7,19 +6,19 @@ services:
   - docker
 
 before_script:
-    - curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
-    - echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
-    - sudo apt-get -qq update
-    - sudo apt-get -y install cloudflared
-    - eval $(ssh-agent)
-    - mkdir -p ~/.ssh
-    - |
-        cat >> ~/.ssh/config << EOF
-      Host dokku-ssh.nweber.de
-          HostName dokku-ssh.nweber.de
-          StrictHostKeyChecking no
-          ProxyCommand /usr/local/bin/cloudflared access ssh --id $CF_CLIENT_ID --secret $CF_CLIENT_SECRET --hostname %h
-        EOF
+  - curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
+  - echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
+  - sudo apt-get -qq update
+  - sudo apt-get -y install cloudflared
+  - eval $(ssh-agent)
+  - mkdir -p ~/.ssh
+  - |
+    cat >> ~/.ssh/config << EOF
+    Host dokku-ssh.nweber.de
+        HostName dokku-ssh.nweber.de
+        StrictHostKeyChecking no
+        ProxyCommand /usr/local/bin/cloudflared access ssh --id $CF_CLIENT_ID --secret $CF_CLIENT_SECRET --hostname %h
+    EOF
 
 before_install:
   - docker-compose build .
