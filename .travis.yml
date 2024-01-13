@@ -1,17 +1,13 @@
+language: python
+python: '3.7'
+os: linux
+dist: bionic
 arch: arm64
-language: c
-compiler: gcc
+cache: pip
 services:
   - docker
-
-env:
-  - DOCKER_COMPOSE_VERSION=v2.17.3
-
-before_install:
-    - sudo rm /usr/local/bin/docker-compose
-    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    - chmod +x docker-compose
-    - sudo mv docker-compose /usr/local/bin
+install:
+  - pip3 install -IU "docker-compose==1.25.1"
 
 before_script:
   - curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
