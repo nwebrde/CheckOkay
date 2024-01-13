@@ -1,8 +1,8 @@
 FROM --platform=linux/amd64 node:18-alpine AS base
 
 FROM base AS builder
-#RUN apk add --no-cache libc6-compat
-#RUN apk update
+RUN apk add --no-cache libc6-compat
+RUN apk update
 # Set working directory
 WORKDIR /app
 RUN yarn global add turbo
@@ -11,8 +11,8 @@ RUN turbo prune next-app --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-#RUN apk add --no-cache libc6-compat
-#RUN apk update
+RUN apk add --no-cache libc6-compat
+RUN apk update
 WORKDIR /app
 
 # First install the dependencies (as they change less often)
