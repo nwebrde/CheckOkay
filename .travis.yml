@@ -1,8 +1,6 @@
-arch: arm64-graviton2          # optional, this is default, routes to a full VM
-virt: vm
-os: linux            # optional, this is default
-dist: focal          # or bionic | xenial | trusty | precise with xenial as default
-
+arch: arm64
+language: c
+compiler: gcc
 services:
   - docker
 
