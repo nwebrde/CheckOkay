@@ -20,7 +20,7 @@ before_script:
     EOF
 
 before_install:
-  - docker-compose build .
+  - docker-compose build
 
 after_success:
   - echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin

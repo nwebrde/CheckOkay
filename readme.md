@@ -6,20 +6,22 @@ To start MySQL: Use the launcher in System settings
 Database must be configured to use UTC timeformat (for auto filled values like createdAt)!
 All Dates stored are in UTC timeformat.
 
-## Deployment of Web Server
-To build an image, in repo root, run
+## Deployment of Server & Website
+To build a docker image, run in repo root
 ```sh
 docker-compose build .
 ```
+This command builds a docker image that is optimized for ARM64 (as this is the operating architecture of the hosting server).
+The image includes a nodejs next server that serves the API endpoint and the website.
 
-To run an built image, execute
+To run a built image, execute
 ```sh
-docker run -p 3000:3000 docker.io/library/checkokay-web
+docker run -p 3000:3000 ghcr.io/nikwebr/checkokay
 ```
 
-To deploy a built docker image to dokku server, run
+To deploy a built docker image to the hosting dokku server, run
 ```sh
-docker image save dokku/checkokay:latest | ssh -i /Users/niklasweber/.ssh/dokku.key ubuntu@dokku-ssh.nweber.de dokku git:load-image checkokay dokku/checkokay:latest
+docker image save ghcr.io/nikwebr/checkokay:latest | ssh -i /Users/niklasweber/.ssh/dokku.key ubuntu@dokku-ssh.nweber.de dokku git:load-image checkokay ghcr.io/nikwebr/checkokay:latest
 ```
 
 To upload to ghcr, run
