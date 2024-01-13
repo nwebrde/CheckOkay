@@ -4,24 +4,6 @@ dist: focal
 services:
   - docker
 
-install:
-  - docker-compose version
-  # Update docker-engine using Ubuntu 'trusty' apt repo
-  - >
-    curl -sSL "https://get.docker.com/gpg" |
-     sudo -E apt-key add -
-  - >
-    echo "deb https://apt.dockerproject.org/repo ubuntu-focal main" |
-     sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update
-  - >
-    sudo apt-get -o Dpkg::Options::="--force-confdef" \
-     -o Dpkg::Options::="--force-confold" --assume-yes install docker-engine
-  - docker version
-  # Update docker-compose via pip
-  - sudo pip install docker-compose
-  - docker-compose version
-
 before_script:
   - curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
   - echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
