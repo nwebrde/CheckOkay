@@ -21,3 +21,5 @@ after_success:
   - echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin
   - docker push ghcr.io/nikwebr/checkokay:latest
   - docker image save ghcr.io/nikwebr/checkokay:latest  | ssh ubuntu@${DOKKU_SERVER} dokku git:load-image checkokay ghcr.io/nikwebr/checkokay:latest
+  - ssh ubuntu@${DOKKU_SERVER} dokku ps:rebuild checkokay
+  - ssh ubuntu@${DOKKU_SERVER} dokku run checkokay /bin/sh -c 'cd packages/db; node dist/migrate.js'
