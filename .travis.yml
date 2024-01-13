@@ -1,6 +1,7 @@
 os: linux
 dist: xenial #or bionic
 arch: arm64-graviton2
+virt: vm
 language: python
 
 before_script:
