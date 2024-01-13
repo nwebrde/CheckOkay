@@ -1,6 +1,8 @@
 os: linux
 dist: xenial #or bionic
-arch: arm64
+arch:
+  - amd64
+  - arm64
 language: python
 
 before_script:
