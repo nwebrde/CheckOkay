@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 node:18 AS base
+FROM --platform=linux/arm64/v8 node:18 AS base
 
 FROM base AS builder
 #RUN apk add --no-cache libc6-compat
