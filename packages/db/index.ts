@@ -44,22 +44,36 @@ let db: MySqlDatabase<
     MySql2PreparedQueryHKT,
     typeof schema
 >
+let poolConnection: mysql.Pool
 if (process.env.NODE_ENV === 'production') {
-    const poolConnection = mysql.createPool({
-        host: process.env.DATABASE_HOST,
-        user: process.env.DATABASE_USER,
-        database: process.env.DATABASE,
-        password: process.env.DATABASE_PASSWORD,
-    })
-    db = drizzle(poolConnection, { schema: schema, mode: 'default' })
-} else {
-    if (!global.db) {
-        const poolConnection = mysql.createPool({
+    if (process.env.DATABASE_URL) {
+        poolConnection = mysql.createPool({
+            uri: process.env.DATABASE_URL,
+        })
+    } else {
+        poolConnection = mysql.createPool({
             host: process.env.DATABASE_HOST,
             user: process.env.DATABASE_USER,
             database: process.env.DATABASE,
             password: process.env.DATABASE_PASSWORD,
         })
+    }
+
+    db = drizzle(poolConnection, { schema: schema, mode: 'default' })
+} else {
+    if (!global.db) {
+        if (process.env.DATABASE_URL) {
+            poolConnection = mysql.createPool({
+                uri: process.env.DATABASE_URL,
+            })
+        } else {
+            poolConnection = mysql.createPool({
+                host: process.env.DATABASE_HOST,
+                user: process.env.DATABASE_USER,
+                database: process.env.DATABASE,
+                password: process.env.DATABASE_PASSWORD,
+            })
+        }
         global.db = drizzle(poolConnection, {
             schema: schema,
             mode: 'default',
@@ -74,7 +88,6 @@ if (process.env.NODE_ENV === 'production') {
             },*/,
         })
     }
-
     db = global.db
 }
 

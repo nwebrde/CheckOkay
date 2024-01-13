@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM --platform=linux/arm64/v8 node:18-alpine AS base
 
 FROM base AS builder
 RUN apk add --no-cache libc6-compat
@@ -21,9 +21,9 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
 RUN yarn install
 
-# Build the project
+# Build nextjs and migration executable
 COPY --from=builder /app/out/full/ .
-RUN yarn turbo run build --filter=next-app...
+RUN yarn turbo run build
 
 FROM base AS runner
 WORKDIR /app
@@ -35,6 +35,9 @@ USER nextjs
 
 COPY --from=installer /app/apps/next/next.config.js .
 COPY --from=installer /app/apps/next/package.json .
+
+# include db package in final image for running migrations on remote system
+COPY --from=installer /app/packages/db ./packages/db
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

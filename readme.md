@@ -9,13 +9,23 @@ All Dates stored are in UTC timeformat.
 ## Deployment of Web Server
 To build an image, in repo root, run
 ```sh
-docker-compose build
-docker build -t nextjs-docker .
+docker-compose build .
 ```
 
 To run an built image, execute
 ```sh
 docker run -p 3000:3000 docker.io/library/checkokay-web
+```
+
+To deploy a built docker image to dokku server, run
+```sh
+docker image save dokku/checkokay:latest | ssh -i /Users/niklasweber/.ssh/dokku.key ubuntu@dokku-ssh.nweber.de dokku git:load-image checkokay dokku/checkokay:latest
+```
+
+To upload to ghcr, run
+```sh
+echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin
+docker push ghcr.io/nikwebr/checkokay:latest
 ```
 
 # Solito + NativeWind Example Monorepo 🕴
