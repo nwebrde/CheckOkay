@@ -1,8 +1,6 @@
 os: linux
 dist: xenial #or bionic
-arch:
-  - amd64
-  - arm64
+arch: arm64-graviton2
 language: python
 
 before_script:
