@@ -26,4 +26,4 @@ script:
 after_success:
   - echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin
   - docker push ghcr.io/nikwebr/checkokay:latest
-  - docker image save ghcr.io/nikwebr/checkokay:latest  | ssh -i /Users/niklasweber/.ssh/dokku.key ubuntu@dokku-ssh.nweber.de dokku git:load-image tes ghcr.io/nikwebr/checkokay:latest
+  - docker image save ghcr.io/nikwebr/checkokay:latest  | ssh ubuntu@dokku-ssh.nweber.de dokku git:load-image checkokay ghcr.io/nikwebr/checkokay:latest
