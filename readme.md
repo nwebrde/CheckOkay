@@ -52,6 +52,12 @@ dokku run checkokay /bin/sh -c 'cd packages/db; node dist/migrate.js'
 ### Docker
 The built docker image does not contain any environment variables. The docker image must be started with the environment variables needed for next (automatically done by dokku)
 
+### Next.js builds, dev servers
+The env variables inside /apps/next must be adopted
+
+### Expo
+The env variables inside /apps/expo must be adopted
+
 # Solito + NativeWind Example Monorepo 🕴
 
 ```sh
