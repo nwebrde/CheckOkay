@@ -12,13 +12,7 @@ before_script:
   - sudo apt-get -y install cloudflared
   - eval $(ssh-agent)
   - mkdir -p ~/.ssh
-  - |
-    cat >> ~/.ssh/config << EOF
-    Host dokku-ssh.nweber.de
-        HostName dokku-ssh.nweber.de
-        StrictHostKeyChecking no
-        ProxyCommand /usr/local/bin/cloudflared access ssh --id $CF_CLIENT_ID --secret $CF_CLIENT_SECRET --hostname %h
-    EOF
+  - echo -e "Host ${DOKKU_SERVER}\n\tHostName ${DOKKU_SERVER}\n\tStrictHostKeyChecking no\n\tProxyCommand /usr/local/bin/cloudflared access ssh --id $CF_CLIENT_ID --secret $CF_CLIENT_SECRET --hostname %h\n" >> ~/.ssh/config
 
 script:
   - docker-compose build
