@@ -13,6 +13,7 @@ docker-compose build .
 ```
 This command builds a docker image that is optimized for ARM64 (as this is the operating architecture of the hosting server).
 The image includes a nodejs next server that serves the API endpoint and the website.
+Also, the image includes an executable migrate.js that applies migration files to the host database.
 
 To run a built image, execute
 ```sh
@@ -29,6 +30,27 @@ To upload to ghcr, run
 echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin
 docker push ghcr.io/nikwebr/checkokay:latest
 ```
+
+## Database migrations
+Changes to the database scheme must be committed by running 
+```sh
+cd packages/db
+yarn migrations:generate
+```
+This command generates migration files. These migrations can then be applied to the local database by running
+```sh
+cd packages/db
+yarn migrations:push-local
+```
+
+Host database migrations can be executed by running
+```sh
+dokku run checkokay /bin/sh -c 'cd packages/db; node dist/migrate.js'
+```
+
+## Environment variables
+### Docker
+The built docker image does not contain any environment variables. The docker image must be started with the environment variables needed for next (automatically done by dokku)
 
 # Solito + NativeWind Example Monorepo 🕴
 
