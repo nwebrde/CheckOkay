@@ -1,4 +1,5 @@
-arch: amd64          # optional, this is default, routes to a full VM
+arch: arm64-graviton2          # optional, this is default, routes to a full VM
+virt: vm
 os: linux            # optional, this is default
 dist: focal          # or bionic | xenial | trusty | precise with xenial as default
 
@@ -20,7 +21,7 @@ before_script:
         ProxyCommand /usr/local/bin/cloudflared access ssh --id $CF_CLIENT_ID --secret $CF_CLIENT_SECRET --hostname %h
     EOF
 
-before_install:
+script:
   - docker-compose build
 
 after_success:
