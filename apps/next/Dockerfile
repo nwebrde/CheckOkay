@@ -1,7 +1,7 @@
 FROM --platform=linux/arm64/v8 node:18-alpine AS base
 
 FROM base AS builder
-RUN apk add --no-cache libc6-compat
+#RUN apk add --no-cache libc6-compat
 RUN apk update
 # Set working directory
 WORKDIR /app
