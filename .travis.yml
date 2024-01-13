@@ -13,7 +13,7 @@ before_script:
   - echo -e "Host ${DOKKU_SERVER}\n\tHostName ${DOKKU_SERVER}\n\tStrictHostKeyChecking no\n\tProxyCommand /usr/local/bin/cloudflared access ssh --id $CF_CLIENT_ID --secret $CF_CLIENT_SECRET --hostname %h\n" >> ~/.ssh/config
 
 script:
-  - docker buildx build --platform linux/arm64/v8 --tag ghcr.io/nikwebr:latest . -f apps/next/Dockerfile
+  - docker buildx build --platform linux/arm64/v8 --tag ghcr.io/nikwebr/checkokay:latest . -f apps/next/Dockerfile
 
 after_success:
   - echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin
