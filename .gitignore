@@ -84,3 +84,5 @@ build/**
 
 **/*/.env.*
 **/*/.env
+/packages/db/dist/bundle.js
+/packages/db/dist/bundle.js.LICENSE.txt
