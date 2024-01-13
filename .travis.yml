@@ -1,8 +1,8 @@
-os: linux
-dist: bionic #or bionic
-arch: arm64-graviton2
-virt: vm
-language: python
+arch: arm64
+language: c
+compiler: gcc
+services:
+  - docker
 
 before_install:
   - sudo systemctl stop docker.service && sudo systemctl stop docker.socket
