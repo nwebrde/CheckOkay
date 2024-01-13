@@ -1,7 +1,11 @@
 arch: arm64
-dist: trusty
+dist: focal
+
+services:
+  - docker
 
 install:
+  - docker-compose version
   # Update docker-engine using Ubuntu 'trusty' apt repo
   - >
     curl -sSL "https://get.docker.com/gpg" |
