@@ -1,6 +1,5 @@
 arch: arm64
 language: node_js
-node_js: 18
 services:
   - docker
 
