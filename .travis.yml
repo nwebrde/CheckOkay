@@ -1,6 +1,6 @@
 arch: arm64
-language: c
-compiler: gcc
+language: node_js
+node_js: 18
 services:
   - docker
 
