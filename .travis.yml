@@ -11,7 +11,7 @@ install:
     curl -sSL "https://get.docker.com/gpg" |
      sudo -E apt-key add -
   - >
-    echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" |
+    echo "deb https://apt.dockerproject.org/repo ubuntu-focal main" |
      sudo tee -a /etc/apt/sources.list
   - sudo apt-get update
   - >
