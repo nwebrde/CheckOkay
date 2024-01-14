@@ -3,16 +3,49 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-
   build:
-
-    runs-on: macos-13-xlarge
-
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker-compose build
+      - name: install cloudflared
+        run: |
+          curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
+          echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
+          sudo apt update
+          sudo apt-get install cloudflared
+          cloudflared --version
+      - name: Generate SSH Config
+        id: ssh
+        shell: bash
+        run: |
+          eval $(ssh-agent)
+          mkdir -p ~/.ssh
+          cat >> ~/.ssh/config << EOF
+          Host ${{ vars.DEPLOY_SSH_ADDRESS }}
+            HostName ${{ vars.DEPLOY_SSH_ADDRESS }}
+            StrictHostKeyChecking no
+            ProxyCommand /usr/local/bin/cloudflared access ssh --id ${{ secrets.CLOUDFLARED_CLIENT_ID }} --secret ${{ secrets.CLOUDFLARED_CLIENT_SECRET }} --hostname %h
+          EOF
+      - uses: webfactory/ssh-agent@v0.8.0
+        with: 
+            ssh-private-key: ${{ secrets.SSH_KEY }}
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker-compose build
+      - name: Publish image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+          docker push ${{ vars.IMAGE_NAME }}
+      - name: Deploy image
+        run: |
+          docker image save ${{ vars.IMAGE_NAME }}  | ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku git:load-image ${{ vars.DOKKU_APP_NAME }} ${{ vars.IMAGE_NAME }}
+          ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku ps:rebuild ${{ vars.DOKKU_APP_NAME }}
+      - name: Database migration
+        run: |
+          ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku run ${{ vars.DOKKU_APP_NAME }} /bin/sh -c 'cd packages/db; node dist/migrate.js'
+      - name: Purge cache
+        uses: jakejarvis/cloudflare-purge-action@master
+        env:
+          CLOUDFLARE_ZONE: ${{ vars.CF_ZONE }}
+          CLOUDFLARE_TOKEN: ${{ secrets.CF_PURGE_API_TOKEN }}
