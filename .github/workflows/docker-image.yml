@@ -44,8 +44,3 @@ jobs:
       - name: Database migration
         run: |
           ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku run ${{ vars.DOKKU_APP_NAME }} /bin/sh -c 'cd packages/db; node dist/migrate.js'
-      - name: Purge cache
-        uses: jakejarvis/cloudflare-purge-action@master
-        env:
-          CLOUDFLARE_ZONE: ${{ vars.CF_ZONE }}
-          CLOUDFLARE_TOKEN: ${{ secrets.CF_PURGE_API_TOKEN }}
