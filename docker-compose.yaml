@@ -2,7 +2,7 @@ version: "2.4"
 
 services:
   web:
-    platform: linux/arm64
+    platform: linux/amd64
     image: ghcr.io/nikwebr/checkokay:latest
     container_name: next
     build:
