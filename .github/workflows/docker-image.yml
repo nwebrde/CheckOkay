@@ -41,11 +41,8 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u $ --password-stdin
           sudo docker push ${{ vars.IMAGE_NAME }}
       - name: Push to dokku
-        uses: dokku/github-action@master
-        with:
-          git_remote_url: 'ssh://ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }}:22/${{ vars.DOKKU_APP_NAME }}'
-          ssh_private_key: ${{ secrets.SSH_KEY }}
-          deploy_docker_image: ${{ vars.IMAGE_NAME }}
+        run: |
+          ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku git:from-image ${{ vars.DOKKU_APP_NAME }} ${{ vars.IMAGE_NAME }}
       - name: Database migration
         run: |
           ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku run ${{ vars.DOKKU_APP_NAME }} /bin/sh -c 'cd packages/db; node dist/migrate.js'
