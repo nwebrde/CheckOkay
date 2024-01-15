@@ -58,6 +58,11 @@ The env variables inside /apps/next must be adopted
 ### Expo
 The env variables inside /apps/expo must be adopted
 
+## GitHub Actions
+Builds and pushes every push to dokku.
+Runs the database migration as part of the Procfile on the dokku server
+
+
 # Solito + NativeWind Example Monorepo 🕴
 
 ```sh
