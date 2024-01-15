@@ -1,3 +1,4 @@
+LABEL org.opencontainers.image.source = "https://github.com/nikwebr/CheckOkay"
 FROM --platform=linux/arm64/v8 node:18-alpine AS base
 
 FROM base AS builder
