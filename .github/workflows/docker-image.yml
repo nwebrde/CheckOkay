@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: install cloudflared
         run: |
@@ -32,14 +35,14 @@ jobs:
             ssh-private-key: ${{ secrets.SSH_KEY }}
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker-compose build
+        run: sudo docker-compose build
       - name: Publish image
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-          docker push ${{ vars.IMAGE_NAME }}
+          echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u $ --password-stdin
+          sudo docker push ${{ vars.IMAGE_NAME }}
       - name: Deploy image
         run: |
-          docker image save ${{ vars.IMAGE_NAME }}  | ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku git:load-image ${{ vars.DOKKU_APP_NAME }} ${{ vars.IMAGE_NAME }}
+          sudo docker image save ${{ vars.IMAGE_NAME }}  | ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku git:load-image ${{ vars.DOKKU_APP_NAME }} ${{ vars.IMAGE_NAME }}
           ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku ps:rebuild ${{ vars.DOKKU_APP_NAME }}
       - name: Database migration
         run: |
