@@ -42,7 +42,7 @@ jobs:
           docker push ${{ vars.IMAGE_NAME }}
       - name: download to dokku
         run: |
-          ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} docker pull ${{ vars.IMAGE_NAME }}
+          ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} sudo docker pull ${{ vars.IMAGE_NAME }}
       - name: Push to dokku
         run: |
           ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku ps:rebuild ${{ vars.DOKKU_APP_NAME }}
