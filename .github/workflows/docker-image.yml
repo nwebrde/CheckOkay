@@ -43,7 +43,7 @@ jobs:
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: ssh://dokku@${{ vars.DEPLOY_SSH_ADDRESS }}:22/${{ vars.DOKKU_APP_NAME }}
+          git_remote_url: 'ssh://dokku@${{ vars.DEPLOY_SSH_ADDRESS }}:22/${{ vars.DOKKU_APP_NAME }}'
           ssh_private_key: ${{ secrets.SSH_KEY }}
           deploy_docker_image: ${{ vars.IMAGE_NAME }}
       - name: Database migration
