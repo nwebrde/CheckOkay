@@ -11,14 +11,14 @@ jobs:
       contents: read
       packages: write
     steps:
-      - name: install cloudflared
+      - name: Install cloudflared
         run: |
           curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
           echo "deb [signed-by=/usr/share/keyrings/cloudflare-archive-keyring.gpg] https://pkg.cloudflare.com/cloudflared $(lsb_release -cs) main" | sudo tee  /etc/apt/sources.list.d/cloudflared.list
           sudo apt update
           sudo apt-get install cloudflared
           cloudflared --version
-      - name: Generate SSH Config
+      - name: Generate SSH config for cloudflared
         id: ssh
         shell: bash
         run: |
@@ -40,16 +40,13 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
           docker push ${{ vars.IMAGE_NAME }}
-      - name: download to dokku
+      - name: Download image to dokku
         run: |
           ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} sudo docker pull ${{ vars.IMAGE_NAME }}
-      - name: Push to dokku
+      - name: Redeploy dokku app
         run: |
           ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku ps:rebuild ${{ vars.DOKKU_APP_NAME }}
-      - name: Database migrations
-        run: |
-          ssh ubuntu@${{ vars.DEPLOY_SSH_ADDRESS }} dokku run ${{ vars.DOKKU_APP_NAME }} /bin/sh -c "cd packages/db; node dist/migrate.js"
-      - name: Purge cache
+      - name: Purge cloudflare checkokay.com cache
         uses: jakejarvis/cloudflare-purge-action@master
         env:
           CLOUDFLARE_ZONE: ${{ vars.CF_ZONE }}

@@ -50,18 +50,55 @@ dokku run checkokay /bin/sh -c 'cd packages/db; node dist/migrate.js'
 
 ## Environment variables
 ### Docker
-The built docker image does not contain any environment variables. The docker image must be started with the environment variables needed for next (automatically done by dokku)
+The built docker image does not contain any environment variables. The docker image must be started with the environment variables needed for next (see step 8 of Setup Dokku Server and App)
 
 ### Next.js builds, dev servers
-The env variables inside /apps/next must be adopted
+The env variables inside /apps/next must be adopted.
+The database connection can be configured by either providing DATABASE_HOST, DATABASE, DATABASE_USER, and DATABASE_PASSWORD or by simply providing DATABASE_URL.
+The DATABASE_URL env variable is provided automatically by dokku on linkage of mysql service with the app.
 
 ### Expo
 The env variables inside /apps/expo must be adopted
 
 ## GitHub Actions
-Builds and pushes every push to dokku.
-Runs the database migration as part of the Procfile on the dokku server
+Builds and pushes every git push to dokku and ghcr.io.
+Runs the database migration as part of the Procfile on the dokku server.
 
+Important!: App must already be deployed to dokku. This GitHub Action only pushes changes to dokku app (see Setup Dokku Server and App, step 9)
+
+
+## Setup Dokku Server and App
+1. Install Dokku by following https://dokku.com/docs~v0.8.2/getting-started/installation/#1-install-dokku
+2. Setup cloudflare tunnel
+3Add a new App with
+```sh
+dokku apps:create checkokay
+```
+4. Add a mysql database service with
+```sh
+dokku mysql:create checkokay-db
+```
+5. Link database service with app
+```sh
+dokku mysql:link checkokay-db checkokay
+```
+6. Add domain checkokay.com to app
+```sh
+dokku domains:add checkokay checkokay.com
+```
+7. Add port mapping
+```sh
+dokku ports:add checkokay http:80:3000
+```
+8. Add env variables: Copy the content of apps/next/.env.production and paste it in this command:
+```sh
+dokku config:set checkokay CONTENT
+```
+9. Deploy first version of app manually (important! Github Actions only pushes changes)
+```sh
+dokku git:from-image checkokay ghcr.io/nikwebr/checkokay:latest
+```
+10. Setup env Variables in GitHub to enable GitHub Actions to push changes to dokku server
 
 # Solito + NativeWind Example Monorepo 🕴
 
