@@ -15,11 +15,14 @@ export const InviteModal = ({
     onClose: () => void
 }) => {
     const linkMutation = trpc.guards.invite.useMutation()
+    const { mutate } = linkMutation
+
     useEffect(() => {
         if (visible) {
-            linkMutation.mutate()
+            mutate()
         }
-    }, [visible, linkMutation])
+    }, [visible, mutate])
+
     return (
         <Modal
             animationType="slide"
