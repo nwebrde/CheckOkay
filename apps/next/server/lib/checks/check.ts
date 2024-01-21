@@ -365,9 +365,7 @@ async function getPreviousCheckDate(user: string, date?: Date) {
         return undefined
     }
 
-    const now = new Date()
-    now.setUTCSeconds(now.getUTCSeconds() + 30)
-    let currDate = date ?? now
+    let currDate = date ?? new Date()
 
     let previousCheck = checks[0]
     let previousDay = true
@@ -378,7 +376,7 @@ async function getPreviousCheckDate(user: string, date?: Date) {
             break
         } else if (
             check.hour == currDate.getUTCHours() &&
-            check.minute < currDate.getUTCMinutes()
+            check.minute <= currDate.getUTCMinutes()
         ) {
             previousCheck = check
             previousDay = false
