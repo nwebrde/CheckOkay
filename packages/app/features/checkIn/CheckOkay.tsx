@@ -41,7 +41,16 @@ export function CheckOkay() {
                 {user.data && (
                     <>
                         {isSetup() && (
-                            <Card className={`w-full bg-green-500`}>
+                            <Card
+                                className={`w-full ${
+                                    user.data?.state == CheckState.OK
+                                        ? 'bg-green-500'
+                                        : user.data?.state ==
+                                            CheckState.NOTIFIED
+                                          ? 'bg-amber-300'
+                                          : 'bg-orange-400'
+                                }`}
+                            >
                                 <Row className="items-center justify-between">
                                     <H1 className="text-primary my-0">
                                         Ist alles okay?
@@ -55,7 +64,7 @@ export function CheckOkay() {
                                     <AnimatedPressable onClick={check}>
                                         <Text
                                             selectable={false}
-                                            className="text- text-base font-bold"
+                                            className="text-base font-bold"
                                         >
                                             Ja &#128077;
                                         </Text>
