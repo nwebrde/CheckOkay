@@ -244,14 +244,15 @@ export async function getState(
     if (lastCheckOkay!.latestCheck! < prevCheckDate) {
         if (previousState != CheckState.BACKUP) {
             checkState = CheckState.WARNED
-            const notifyBackupTime = getTimeForBackup(
-                notifyBackupGuards,
-                undefined,
-                lastCheckDate,
-            )
-            if (notifyBackupTime.date! <= new Date()) {
-                checkState = CheckState.BACKUP
-            }
+        }
+
+        const notifyBackupTime = getTimeForBackup(
+            notifyBackupGuards,
+            undefined,
+            lastCheckDate,
+        )
+        if (notifyBackupTime.date! <= new Date()) {
+            checkState = CheckState.BACKUP
         }
     } else {
         const nextCheckDate = await getNextCheckDate(userId)

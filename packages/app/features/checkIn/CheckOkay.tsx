@@ -8,6 +8,7 @@ import { trpc } from 'app/provider/trpc-client'
 import { Cog6Tooth } from '@nandorojo/heroicons/24/solid'
 import { SetupChecks } from 'app/features/checkIn/SetupChecks'
 import { Skeleton } from 'moti/skeleton'
+import { CheckState } from 'app/provider/app-context/types/guardedUser'
 
 export function CheckOkay() {
     const checkOkay = trpc.checks.checkOkay.useMutation()
@@ -40,7 +41,16 @@ export function CheckOkay() {
                 {user.data && (
                     <>
                         {isSetup() && (
-                            <Card className="w-full">
+                            <Card
+                                className={
+                                    'w-full' +
+                                    (user.data.state == CheckState.OK
+                                        ? 'bg-lime-200'
+                                        : user.data.state == CheckState.NOTIFIED
+                                          ? 'bg-amber-300'
+                                          : 'bg-orange-400')
+                                }
+                            >
                                 <Row className="items-center justify-between">
                                     <H1 className="text-primary my-0">
                                         Ist alles okay?

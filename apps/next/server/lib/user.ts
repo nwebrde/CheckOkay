@@ -4,9 +4,6 @@ import { convertLastCheckOkay, toChecks } from './checks/check'
 import { toGuardedUsers, toGuards } from './guard'
 import { db } from 'db'
 import { users } from 'db/schema/auth'
-import { checks } from 'db/schema/checks'
-import { and } from 'drizzle-orm/index'
-import { updateEventTiming } from './services/cronicleClient'
 
 type UserDB = typeof users.$inferSelect
 

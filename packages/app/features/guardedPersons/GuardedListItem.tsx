@@ -22,7 +22,11 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
         <Card
             className={
                 'flex-col p-2 ' +
-                (item.state == CheckState.OK ? '' : 'bg-red-500')
+                (item.state == CheckState.OK
+                    ? 'bg-lime-200'
+                    : item.state == CheckState.NOTIFIED
+                      ? 'bg-amber-300'
+                      : 'bg-orange-400')
             }
         >
             <View className="flex-row items-center justify-between">
