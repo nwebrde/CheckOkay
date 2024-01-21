@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
             status: 200,
         })
     } else {
-        const url = encodeURIComponent(req.nextUrl.toString())
+        const url = encodeURIComponent('/api/invite?code=' + code)
         return redirect(`/api/auth/signin?callbackUrl=${url}`)
     }
 }
