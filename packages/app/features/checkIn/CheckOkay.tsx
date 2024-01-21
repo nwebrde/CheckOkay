@@ -41,18 +41,9 @@ export function CheckOkay() {
                 {user.data && (
                     <>
                         {isSetup() && (
-                            <Card
-                                className={`w-full ${
-                                    user.data?.state == CheckState.OK
-                                        ? 'bg-ok'
-                                        : user.data?.state ==
-                                            CheckState.NOTIFIED
-                                          ? 'bg-amber-300'
-                                          : 'bg-orange-400'
-                                }`}
-                            >
+                            <Card className={`w-full bg-green-500`}>
                                 <Row className="items-center justify-between">
-                                    <H1 className="text-primary my-0 text-blue-700">
+                                    <H1 className="text-primary my-0">
                                         Ist alles okay?
                                     </H1>
                                     <AnimatedLink href="/settings">
@@ -64,7 +55,7 @@ export function CheckOkay() {
                                     <AnimatedPressable onClick={check}>
                                         <Text
                                             selectable={false}
-                                            className="text-base font-bold"
+                                            className="text- text-base font-bold"
                                         >
                                             Ja &#128077;
                                         </Text>
