@@ -47,8 +47,8 @@ export function CheckOkay() {
                                         ? 'bg-lime-200'
                                         : user.data?.state ==
                                             CheckState.NOTIFIED
-                                          ? 'bg-amber-300'
-                                          : 'bg-orange-400'
+                                          ? 'bg-amber-200'
+                                          : 'bg-orange-200'
                                 }`}
                             >
                                 <Row className="items-center justify-between">

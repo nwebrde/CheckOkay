@@ -24,8 +24,8 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
                 item.state == CheckState.OK
                     ? 'bg-lime-200'
                     : item.state == CheckState.NOTIFIED
-                      ? 'bg-amber-300'
-                      : 'bg-orange-400'
+                      ? 'bg-amber-200'
+                      : 'bg-orange-200'
             }`}
         >
             <View className="flex-row items-center justify-between">
