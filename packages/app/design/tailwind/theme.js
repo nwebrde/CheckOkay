@@ -17,6 +17,10 @@ const theme = {
                 light: '#CBA780',
                 DEFAULT: '#CBA780',
             },
+            ok: {
+                light: '#d9f99d',
+                DEFAULT: '#d9f99d',
+            },
         },
     },
 }

@@ -44,7 +44,7 @@ export function CheckOkay() {
                             <Card
                                 className={`w-full ${
                                     user.data?.state == CheckState.OK
-                                        ? 'bg-lime-200'
+                                        ? 'bg-ok'
                                         : user.data?.state ==
                                             CheckState.NOTIFIED
                                           ? 'bg-amber-300'
@@ -52,7 +52,7 @@ export function CheckOkay() {
                                 }`}
                             >
                                 <Row className="items-center justify-between">
-                                    <H1 className="text-primary my-0">
+                                    <H1 className="text-primary my-0 text-blue-700">
                                         Ist alles okay?
                                     </H1>
                                     <AnimatedLink href="/settings">
