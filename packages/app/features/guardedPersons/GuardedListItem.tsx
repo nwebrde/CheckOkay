@@ -29,7 +29,7 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
             }`}
         >
             <View className="flex-row items-center justify-between">
-                <H1 className="my-0 mb-0 mt-0 text-xl">
+                <H1 className="my-0 mb-0 mt-0 text-xl opacity-75">
                     {item.guardedUser.name
                         ? item.guardedUser.name
                         : item.guardedUser.email}

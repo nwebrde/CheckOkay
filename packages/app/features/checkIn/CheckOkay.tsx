@@ -52,7 +52,7 @@ export function CheckOkay() {
                                 }`}
                             >
                                 <Row className="items-center justify-between">
-                                    <H1 className="text-primary my-0">
+                                    <H1 className="my-0 opacity-75">
                                         Ist alles okay?
                                     </H1>
                                     <AnimatedLink href="/settings">
