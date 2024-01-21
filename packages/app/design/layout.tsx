@@ -9,7 +9,7 @@ export const Row = styled(View, 'flex-row')
 export const VSpacer = styled(View, 'h-12')
 export const HSpacer = styled(View, 'w-12')
 
-export const Card = styled(View, 'p-5 rounded-xl shadow-sm bg-secondary')
+export const Card = styled(View, 'p-5 rounded-xl shadow-sm')
 
 export const Screen = ({
     children,

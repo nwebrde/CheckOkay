@@ -8,7 +8,7 @@ import { Cog6Tooth } from '@nandorojo/heroicons/24/solid'
 export function SetupChecks() {
     return (
         <View className="w-full">
-            <Card className="w-full">
+            <Card className="bg-secondary w-full">
                 <H1 className="text-primary my-0">Richte CheckOkay ein</H1>
 
                 <Text className="mt-5">
