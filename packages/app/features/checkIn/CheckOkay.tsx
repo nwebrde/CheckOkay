@@ -42,16 +42,14 @@ export function CheckOkay() {
                     <>
                         {isSetup() && (
                             <Card
-                                className={
-                                    'w-full' +
-                                    ' ' +
-                                    (user.data?.state == CheckState.OK
+                                className={`w-full ${
+                                    user.data?.state == CheckState.OK
                                         ? 'bg-lime-200'
                                         : user.data?.state ==
                                             CheckState.NOTIFIED
                                           ? 'bg-amber-300'
-                                          : 'bg-orange-400')
-                                }
+                                          : 'bg-orange-400'
+                                }`}
                             >
                                 <Row className="items-center justify-between">
                                     <H1 className="text-primary my-0">
