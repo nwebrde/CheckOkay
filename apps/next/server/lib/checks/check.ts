@@ -218,20 +218,15 @@ export async function getState(
     })
     const previousState = user!.state
 
-    console.log('prevState', previousState)
-
     let checkState: CheckState = CheckState.OK
 
     const lastCheckDate = await getPreviousCheckDate(userId)
-    console.log('lastCheckDate', lastCheckDate)
     if (!lastCheckDate) {
         return undefined
     }
 
     const prevCheckDate = await getPreviousCheckDate(userId, lastCheckDate)
-    console.log('prevCheckDate', prevCheckDate)
     const lastCheckOkay = await getLastCheckOkay(userId)
-    console.log('lastCheckOkay', lastCheckOkay)
 
     if (!lastCheckOkay || !lastCheckOkay.latestCheck || !prevCheckDate) {
         return undefined
@@ -239,7 +234,6 @@ export async function getState(
 
     if (!notifyBackupGuards || !reminderBeforeCheck) {
         const checkSettings = await getCheckSettings(userId)
-        console.log('checkSettings', checkSettings)
         if (!checkSettings) {
             return undefined
         }
@@ -276,7 +270,6 @@ export async function getState(
         .set({ state: checkState })
         .where(eq(users.id, userId))
 
-    console.log('checkState', checkState)
     return checkState != previousState ? checkState : undefined
 }
 
@@ -376,7 +369,17 @@ async function getPreviousCheckDate(user: string, date?: Date) {
             break
         } else if (
             check.hour == currDate.getUTCHours() &&
-            check.minute <= currDate.getUTCMinutes()
+            check.minute < currDate.getUTCMinutes()
+        ) {
+            previousCheck = check
+            previousDay = false
+            break
+        }
+        // if it is compared to current date
+        else if (
+            check.hour == currDate.getUTCHours() &&
+            check.minute == currDate.getUTCMinutes() &&
+            !date
         ) {
             previousCheck = check
             previousDay = false
