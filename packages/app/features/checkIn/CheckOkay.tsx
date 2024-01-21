@@ -44,9 +44,11 @@ export function CheckOkay() {
                             <Card
                                 className={
                                     'w-full' +
-                                    (user.data.state == CheckState.OK
+                                    ' ' +
+                                    (user.data?.state == CheckState.OK
                                         ? 'bg-lime-200'
-                                        : user.data.state == CheckState.NOTIFIED
+                                        : user.data?.state ==
+                                            CheckState.NOTIFIED
                                           ? 'bg-amber-300'
                                           : 'bg-orange-400')
                                 }
