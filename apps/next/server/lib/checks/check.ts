@@ -266,11 +266,6 @@ export async function getState(
         }
     }
 
-    await db
-        .update(users)
-        .set({ state: checkState })
-        .where(eq(users.id, userId))
-
     return checkState != previousState ? checkState : undefined
 }
 
@@ -287,7 +282,6 @@ export async function updateState(
     notifyBackupGuards?: Time,
     reminderBeforeCheck?: Time,
 ) {
-    let state = newState
     if (!newState) {
         newState = await getState(
             userId,
