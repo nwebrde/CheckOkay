@@ -242,9 +242,7 @@ export async function getState(
     }
 
     if (lastCheckOkay!.latestCheck! < prevCheckDate) {
-        if (previousState != CheckState.BACKUP) {
-            checkState = CheckState.WARNED
-        }
+        checkState = CheckState.WARNED
 
         const notifyBackupTime = getTimeForBackup(
             notifyBackupGuards,
