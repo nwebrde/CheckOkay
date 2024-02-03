@@ -96,7 +96,7 @@ dokku config:set checkokay CONTENT
 ```
 9. Deploy first version of app manually (important! Github Actions only pushes changes)
 ```sh
-dokku git:from-image checkokay ghcr.io/nikwebr/checkokay:latest
+dokku git:from-image checkokay ghcr.io/nwebrde/checkokay:latest
 ```
 10. Setup env Variables in GitHub to enable GitHub Actions to push changes to dokku server
 
