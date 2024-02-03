@@ -3,7 +3,7 @@ version: "2.4"
 services:
   web:
     platform: linux/arm64/v8
-    image: ghcr.io/nikwebr/checkokay:latest
+    image: ghcr.io/nwebrde/checkokay:latest
     container_name: next
     build:
       context: .
