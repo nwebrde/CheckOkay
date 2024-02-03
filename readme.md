@@ -17,18 +17,18 @@ Also, the image includes an executable migrate.js that applies migration files t
 
 To run a built image, execute
 ```sh
-docker run -p 3000:3000 ghcr.io/nikwebr/checkokay
+docker run -p 3000:3000 ghcr.io/nwebrde/checkokay
 ```
 
 To deploy a built docker image to the hosting dokku server, run
 ```sh
-docker image save ghcr.io/nikwebr/checkokay:latest | ssh -i /Users/niklasweber/.ssh/dokku.key ubuntu@dokku-ssh.nweber.de dokku git:load-image checkokay ghcr.io/nikwebr/checkokay:latest
+docker image save ghcr.io/nwebrde/checkokay:latest | ssh -i /Users/niklasweber/.ssh/dokku.key ubuntu@dokku-ssh.nweber.de dokku git:load-image checkokay ghcr.io/nwebrde/checkokay:latest
 ```
 
 To upload to ghcr, run
 ```sh
 echo $CR_PAT | docker login ghcr.io -u nikwebr --password-stdin
-docker push ghcr.io/nikwebr/checkokay:latest
+docker push ghcr.io/nwebrde/checkokay:latest
 ```
 
 ## Database migrations
