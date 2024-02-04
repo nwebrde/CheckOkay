@@ -1,8 +1,5 @@
 # CheckOkay
 
-## TODO
-!! Cronicle setzt sich immer zurück wenn der Server neu gestartet wird (da dann sqlite verloren) !!
-
 Localhost is running MySQL.
 To start MySQL: Use the launcher in System settings
 
@@ -102,6 +99,30 @@ dokku config:set checkokay CONTENT
 dokku git:from-image checkokay ghcr.io/nwebrde/checkokay:latest
 ```
 10. Setup env Variables in GitHub to enable GitHub Actions to push changes to dokku server
+
+
+## Setup cronicle scheduler
+1. Download [docker image](https://github.com/soulteary/docker-cronicle) and deploy with dokku
+2. Run
+```sh
+dokku storage:ensure-directory cronicle
+```
+3. Setup data directory (to ensure that cronicle config is persisted)
+```sh
+cd /var/lib/dokku/data/storage/cronicle && sudo mkdir data
+```
+4. Mount dir using
+```sh
+dokku storage:mount cronicle /var/lib/dokku/data/storage/cronicle/data:/opt/cronicle/data
+```
+5. Apply permissions on dir
+```sh
+sudo chmod -R 777 /var/lib/dokku/data/storage/cronicle
+```
+6. Restart app
+```sh
+dokku ps:restart cronicle
+```
 
 # Solito + NativeWind Example Monorepo 🕴
 
