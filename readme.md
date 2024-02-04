@@ -1,5 +1,8 @@
 # CheckOkay
 
+## TODO
+!! Cronicle setzt sich immer zurück wenn der Server neu gestartet wird (da dann sqlite verloren) !!
+
 Localhost is running MySQL.
 To start MySQL: Use the launcher in System settings
 
