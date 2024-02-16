@@ -1,5 +1,5 @@
 import Check from './check'
-import Guard, { Guarded } from './gaurd'
+import Guard, { Guarded } from './guard'
 import { CheckState } from 'app/lib/types/check'
 import UserProfile from 'app/lib/types/userProfile'
 

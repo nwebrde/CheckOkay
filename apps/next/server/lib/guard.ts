@@ -1,4 +1,4 @@
-import Guard from './types/gaurd'
+import Guard from './types/guard'
 import { getUser, toUser } from './user'
 import { guards } from 'db/schema/guards'
 import type { users } from 'db/schema/auth'
@@ -9,7 +9,7 @@ import { sendNewGuard, sendWarning } from './services/sendEmail'
 import moment from 'moment/moment'
 import User from './types/user'
 import { and, eq } from 'drizzle-orm'
-import { Guarded } from './types/gaurd'
+import { Guarded } from './types/guard'
 import { convertLastCheckOkay, getLastCheckOkay } from './checks/check'
 import {GuardType} from "app/lib/types/guardUser";
 
