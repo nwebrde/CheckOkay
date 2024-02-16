@@ -1,5 +1,7 @@
 # CheckOkay
 
+TODO: Extract a mono-starter repo template and push it to github
+
 Localhost is running MySQL.
 To start MySQL: Use the launcher in System settings
 
