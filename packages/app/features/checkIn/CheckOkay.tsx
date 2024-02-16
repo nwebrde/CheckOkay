@@ -83,11 +83,7 @@ export function CheckOkay() {
                                         <Moment
                                             element={Text}
                                             locale="de"
-                                            date={
-                                                new Date(
-                                                    user.data.nextRequiredCheckDate,
-                                                )
-                                            }
+                                            date={user.data.nextRequiredCheckDate}
                                             fromNow
                                         />
                                         {'\n'}

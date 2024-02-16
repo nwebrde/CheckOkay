@@ -51,7 +51,7 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
                     <Moment
                         element={Text}
                         locale="de"
-                        date={new Date(item.lastCheckOkay)}
+                        date={item.lastCheckOkay}
                         fromNow
                     />
                 </Text>
@@ -62,7 +62,7 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
                     <Moment
                         element={Text}
                         locale="de"
-                        date={new Date(item.nextRequiredCheckDate)}
+                        date={item.nextRequiredCheckDate}
                         fromNow
                     />
                 </Text>
