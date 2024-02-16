@@ -5,6 +5,8 @@ import { useState } from 'react'
 import type { AppRouter } from 'next-app/server/routers/_app'
 import { useAuth } from 'app/provider/auth-context/index.native'
 import { jwtDecode } from 'jwt-decode'
+import superjson from 'superjson';
+
 
 //polyfill needed for jwtDecode
 import atob from 'core-js-pure/stable/atob'
@@ -78,7 +80,6 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                 },
                 fetchAccessToken: async (query) => {
                     // if true is returned from tokenRefreshNeeded, this function will be called
-
                     // do your magic to fetch a refresh token here
                     // example:
                     try {
@@ -96,10 +97,11 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
             httpBatchLink({
                 url: 'http://localhost:3000/api/trpc',
                 headers: () => {
-                    return { authorization: localAccessToken! }
-                },
+                    return {authorization: localAccessToken!}
+                }
             }),
         ],
+        transformer: superjson
     })
 
     const [queryClient] = useState(

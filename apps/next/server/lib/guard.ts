@@ -1,4 +1,4 @@
-import Guard, { GuardType } from './types/gaurd'
+import Guard from './types/gaurd'
 import { getUser, toUser } from './user'
 import { guards } from 'db/schema/guards'
 import type { users } from 'db/schema/auth'
@@ -11,6 +11,7 @@ import User from './types/user'
 import { and, eq } from 'drizzle-orm'
 import { Guarded } from './types/gaurd'
 import { convertLastCheckOkay, getLastCheckOkay } from './checks/check'
+import {GuardType} from "app/lib/types/guardUser";
 
 type GuardDB = typeof guards.$inferSelect
 type UserDB = typeof users.$inferSelect

@@ -4,8 +4,8 @@ import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
 import { StyledPressable } from 'app/design/button'
 import { Text } from 'app/design/typography'
-import Guard, { GuardType } from 'app/provider/app-context/types/guardUser'
 import { BellAlert, BellSnooze } from '@nandorojo/heroicons/20/solid'
+import {Guard, GuardType} from "app/lib/types/guardUser";
 
 const renderItem = ({ item }: { item: Guard }) => {
     const switchTypeMutation = trpc.guards.switchType.useMutation()

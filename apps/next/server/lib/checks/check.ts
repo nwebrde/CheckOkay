@@ -8,7 +8,7 @@ import {
     updateEventTiming,
 } from '../services/cronicleClient'
 import { users } from 'db/schema/auth'
-import { CheckState } from 'app/lib/types/checks'
+import { CheckState } from 'app/lib/types/check'
 import {
     getTimeForBackup,
     getTimeForReminder,
@@ -19,8 +19,8 @@ import { localMoment, Time } from 'app/lib/time'
 import { sendReminder } from '../services/sendEmail'
 import { getUser } from '../user'
 import { warn } from '../guard'
-import { GuardType } from '../types/gaurd'
 import moment from 'moment'
+import {GuardType} from "app/lib/types/guardUser";
 
 type CheckDB = typeof checks.$inferSelect
 

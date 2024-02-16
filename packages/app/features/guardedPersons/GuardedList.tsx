@@ -3,10 +3,10 @@ import React from 'react'
 import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
 import { FlatList } from 'react-native'
-import GuardedUser from 'app/provider/app-context/types/guardedUser'
 import GuardedListItem from 'app/features/guardedPersons/GuardedListItem'
 import { EmptyItem } from 'app/features/guardedPersons/EmptyItem'
 import { Skeleton } from 'moti/skeleton'
+import GuardedUser from "app/lib/types/guardedUser";
 
 const GuardedList = () => {
     const guardedUsers = trpc.getUser.useQuery()

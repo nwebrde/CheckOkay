@@ -3,11 +3,11 @@ import React, { useRef } from 'react'
 import { TimePicker } from 'app/design/timepicker/timepicker'
 import { XMark } from '@nandorojo/heroicons/20/solid'
 import { View } from 'app/design/view'
-import type Check from 'app/provider/app-context/types/check'
 import { trpc } from 'app/provider/trpc-client'
 import { StyledPressable } from 'app/design/button'
 import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { Text } from 'app/design/typography'
+import {Check} from "app/lib/types/check";
 
 const renderItem = ({
     item,

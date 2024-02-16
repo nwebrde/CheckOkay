@@ -4,9 +4,9 @@ import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
 import { FlatList } from 'react-native'
 import GuardsListItem from 'app/features/settings/guards/GuardsListItem'
-import Guard from 'app/provider/app-context/types/guardUser'
 import { Skeleton } from 'moti/skeleton'
 import { EmptyItem } from 'app/features/settings/guards/EmptyItem'
+import {Guard} from "app/lib/types/guardUser";
 
 const GuardsList = ({ invite }: { invite: () => void }) => {
     const guards = trpc.getUser.useQuery()

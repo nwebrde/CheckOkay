@@ -15,7 +15,7 @@ import {
 import { mySqlTable } from './_table'
 import { checks } from './checks'
 import { guards } from './guards'
-import { CheckState } from 'app/lib/types/checks'
+import { CheckState } from 'app/lib/types/check'
 
 export const users = mySqlTable('user', {
     id: varchar('id', { length: 255 }).notNull().primaryKey(),

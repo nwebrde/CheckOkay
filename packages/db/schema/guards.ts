@@ -8,7 +8,7 @@ import {
 
 import { mySqlTable } from './_table'
 import { users } from './auth'
-import { GuardType } from 'next-app/server/lib/types/gaurd'
+import {GuardType} from "app/lib/types/guardUser";
 
 export const guards = mySqlTable(
     'guards',

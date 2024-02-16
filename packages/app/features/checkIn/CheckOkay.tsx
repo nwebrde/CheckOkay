@@ -8,7 +8,7 @@ import { trpc } from 'app/provider/trpc-client'
 import { Cog6Tooth } from '@nandorojo/heroicons/24/solid'
 import { SetupChecks } from 'app/features/checkIn/SetupChecks'
 import { Skeleton } from 'moti/skeleton'
-import { CheckState } from 'app/provider/app-context/types/guardedUser'
+import {CheckState} from "app/lib/types/check";
 
 export function CheckOkay() {
     const checkOkay = trpc.checks.checkOkay.useMutation()

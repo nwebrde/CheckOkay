@@ -1,23 +1,11 @@
 import User from './user'
-import { CheckState } from 'app/lib/types/checks'
+import GuardedUser from "app/lib/types/guardedUser";
+import {Guard as GuardUser} from "app/lib/types/guardUser";
 
-export default interface Guard {
-    priority: GuardType
-    since: Date
+export default interface Guard extends GuardUser {
     guardUser: User
 }
 
-export interface Guarded {
-    priority: GuardType
-    since: Date
+export interface Guarded extends GuardedUser {
     guardedUser: User
-    state: CheckState
-    step?: boolean
-    lastCheckOkay?: Date
-    nextRequiredCheckDate?: Date
-}
-
-export enum GuardType {
-    IMPORTANT = 'important',
-    BACKUP = 'backup',
 }

@@ -4487,6 +4487,7 @@ __metadata:
     react-native-reanimated: ~3.3.0
     react-native-svg: ^14.1.0
     solito: 4.0.1
+    superjson: ^2.2.1
   languageName: unknown
   linkType: soft
 

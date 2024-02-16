@@ -4,11 +4,10 @@ import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
 import { StyledPressable } from 'app/design/button'
 import { H1, Text } from 'app/design/typography'
-import GuardedUser, {
-    CheckState,
-} from 'app/provider/app-context/types/guardedUser'
 import { Card, VSpacer } from 'app/design/layout'
 import Moment from 'react-moment'
+import {CheckState} from "app/lib/types/check";
+import GuardedUser from "app/lib/types/guardedUser";
 
 const renderItem = ({ item }: { item: GuardedUser }) => {
     const deleteMutation = trpc.guards.deleteGuardedUser.useMutation()

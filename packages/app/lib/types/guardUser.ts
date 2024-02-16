@@ -1,8 +1,8 @@
-import UserProfile from 'app/provider/app-context/types/userProfile'
+import type UserProfile from "app/lib/types/userProfile";
 
-export default interface Guard {
+export interface Guard {
     priority: GuardType
-    since: string
+    since: Date
     guardUser: UserProfile
 }
 

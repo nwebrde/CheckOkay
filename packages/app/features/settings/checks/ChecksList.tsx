@@ -1,13 +1,13 @@
 import React from 'react'
 
 import ChecksListItem from './ChecksListItem'
-import type Check from 'app/provider/app-context/types/check'
 import { View } from 'app/design/view'
 import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { trpc } from 'app/provider/trpc-client'
 import { EmptyItem } from 'app/features/settings/checks/EmptyItem'
 import { FlatList } from 'react-native'
 import { Skeleton } from 'moti/skeleton'
+import {Check} from "app/lib/types/check";
 
 function pushNewButton(checks?: Check[]) {
     if (!checks) {

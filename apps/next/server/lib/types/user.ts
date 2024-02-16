@@ -1,14 +1,10 @@
 import Check from './check'
 import Guard, { Guarded } from './gaurd'
-import { CheckState } from 'app/lib/types/checks'
+import { CheckState } from 'app/lib/types/check'
+import UserProfile from 'app/lib/types/userProfile'
 
-export default interface User {
-    id: string
-    name?: string
-    email: string
+export default interface User extends UserProfile {
     emailVerified: boolean
-    image?: string
-
     state: CheckState
     step?: boolean
     lastCheckOkay?: Date

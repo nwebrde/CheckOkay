@@ -3,6 +3,8 @@ import { httpBatchLink, loggerLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
 import { useState } from 'react'
 import type { AppRouter } from 'next-app/server/routers/_app'
+import superjson from 'superjson';
+
 
 export const trpc = createTRPCReact<AppRouter>({
     unstable_overrides: {
@@ -42,6 +44,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                     url: `${getBaseUrl()}/api/trpc`,
                 }),
             ],
+            transformer: superjson
         }),
     )
     return (
