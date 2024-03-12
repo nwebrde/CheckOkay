@@ -11,6 +11,8 @@ jobs:
       contents: read
       packages: write
     steps:
+      - name: need to free space?
+        run: test $(df --total | grep total | awk '{print $4}') -lt 5000000 && docker system prune -a -f || echo false
       - name: Install cloudflared
         run: |
           curl -L https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-archive-keyring.gpg >/dev/null
