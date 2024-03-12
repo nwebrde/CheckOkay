@@ -22,6 +22,8 @@ COPY --from=builder /app/out/yarn.lock ./yarn.lock
 RUN yarn install
 
 # Build nextjs and migration executable
+
+# Must be after install, to not trigger a reinstall on code changes
 COPY --from=builder /app/out/full/ .
 COPY --from=builder /app/Procfile ./Procfile
 RUN yarn turbo run build
