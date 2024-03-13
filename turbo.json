@@ -3,7 +3,7 @@
     "build": {
       "dependsOn": ["^build"],
       "dotEnv": ["apps/next/.env"],
-      "outputs": [".next/**"]
+      "outputs": [".next/**", "dist/**"]
     }
   }
 }

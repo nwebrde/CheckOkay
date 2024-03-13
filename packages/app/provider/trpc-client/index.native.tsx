@@ -18,7 +18,7 @@ global.atob = atob
 global.btoa = btoa
 
 export const trpc = createTRPCReact<AppRouter>({
-    unstable_overrides: {
+    overrides: {
         useMutation: {
             async onSuccess(opts) {
                 await opts.originalFn()
