@@ -5,7 +5,6 @@ module.exports = function (api) {
         presets: [['babel-preset-expo', { jsxRuntime: 'automatic' }]],
         plugins: [
             'nativewind/babel',
-            'expo-router/babel',
             'react-native-reanimated/plugin',
         ],
     }
