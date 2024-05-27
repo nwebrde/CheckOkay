@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM --platform=linux/arm64/v8 node:18-alpine AS base
 
 FROM base AS start
 RUN apk add --no-cache libc6-compat
