@@ -1,18 +1,12 @@
-import { H1, Text, TextLink } from 'app/design/typography'
+import { H1 } from 'app/design/typography'
 import { View } from 'app/design/view'
-import { Card, HSpacer, Row } from 'app/design/layout'
+import { Row } from 'app/design/layout'
 import {
-    AnimatedLink,
     AnimatedPressable,
-    Button,
-    MotiPressable,
 } from 'app/design/button'
-import React, { useEffect, useState } from 'react'
-import Moment from 'react-moment'
-import { trpc } from 'app/provider/trpc-client'
-import { Cog6Tooth, PlusCircle } from '@nandorojo/heroicons/24/solid'
-import { ShareButton } from 'app/design/sharebutton/sharebutton'
-import { Alert, Modal, Pressable, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { PlusCircle } from '@nandorojo/heroicons/24/solid'
+import { StyleSheet } from 'react-native'
 import { InviteModal } from 'app/features/settings/guards/InviteModal'
 import GuardsList from 'app/features/settings/guards/GuardsList'
 

@@ -16,6 +16,7 @@ import { mySqlTable } from './_table'
 import { checks } from './checks'
 import { guards } from './guards'
 import { CheckState } from 'app/lib/types/check'
+import { notificationChannels } from "./notificationChannels";
 
 export const users = mySqlTable('user', {
     id: varchar('id', { length: 255 }).notNull().primaryKey(),
@@ -26,8 +27,8 @@ export const users = mySqlTable('user', {
         fsp: 3,
     }).default(sql`CURRENT_TIMESTAMP(3)`),
     image: varchar('image', { length: 255 }),
-
     nextRequiredCheckDate: datetime('nextRequiredCheckDate'),
+    currentCheckId: int("currentCheckId"),
     lastManualCheck: datetime('lastManualCheck'),
     lastStepCheck: datetime('lastStepCheck'),
     state: mysqlEnum('state', [
@@ -46,11 +47,16 @@ export const users = mySqlTable('user', {
         .default(sql`'00:25' CHECK (HOUR(reminderBeforeCheck) < 24)`),
 })
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
     accounts: many(accounts),
     checks: many(checks),
     guards: many(guards, { relationName: 'guardedUser' }),
     guardedUsers: many(guards, { relationName: 'guardUser' }),
+    notificationChannels: many(notificationChannels),
+    currentCheck: one(checks, {
+        fields: [users.currentCheckId],
+        references: [checks.id],
+    }),
 }))
 
 export const accounts = mySqlTable(

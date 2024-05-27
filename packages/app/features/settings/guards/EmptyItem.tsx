@@ -1,7 +1,6 @@
-import { H1, Text } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Button } from 'app/design/button'
-import { VSpacer } from 'app/design/layout'
 
 export function EmptyItem({ invite }: { invite: () => void }) {
     return (

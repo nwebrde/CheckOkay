@@ -12,21 +12,19 @@ const renderItem = ({ item }: { item: Guard }) => {
     const deleteMutation = trpc.guards.deleteGuard.useMutation()
     const switchType = () => {
         switchTypeMutation.mutate({
-            guardUserId: item.guardUser.id,
+            guardUserId: item.id,
         })
     }
     const remove = () => {
         deleteMutation.mutate({
-            guardUserId: item.guardUser.id,
+            guardUserId: item.id,
         })
     }
 
     return (
         <View className="m-2 flex-row items-center justify-around rounded-full bg-gray-200 p-1.5 pl-3">
             <Text>
-                {item.guardUser.name
-                    ? item.guardUser.name
-                    : item.guardUser.email}
+                {item.name ?? item.email}
             </Text>
             <StyledPressable
                 onPress={switchType}

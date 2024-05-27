@@ -31,6 +31,9 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: true,
     },
+    experimental: {
+        instrumentationHook: true,
+    },
 }
 
 module.exports = withExpo(nextConfig)

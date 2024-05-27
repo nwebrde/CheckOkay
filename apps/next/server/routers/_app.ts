@@ -1,12 +1,22 @@
-import { authorizedProcedure, router } from '../trpc'
-import { checksRouter } from './checks'
-import { guardsRouter } from './guards'
-import { getUser } from '../lib/user'
-import { TRPCError } from '@trpc/server'
+import {authorizedProcedure, router} from '../trpc'
+import {checksRouter} from './checks'
+import {guardsRouter} from './guards'
+import {TRPCError} from '@trpc/server'
+import {z} from "zod";
+import {ZUser} from "app/lib/types/user";
+import {getUser} from "../adapters/db/users";
+import {ZGuard} from "app/lib/types/guardUser";
+import {ZGuarded} from "app/lib/types/guardedUser";
 
 export const appRouter = router({
-    getUser: authorizedProcedure.query(async (opts) => {
-        const result = await getUser(opts.ctx.userId!, false, true, true)
+    getUser: authorizedProcedure.output(
+        ZUser.merge(z.object({
+            guards: z.array(ZGuard),
+            guardedUsers: z.array(ZGuarded)
+        })),
+    ).query(async (opts) => {
+        const result = await getUser(opts.ctx.userId!, true, true)
+
         if (!result) {
             throw new TRPCError({
                 code: 'INTERNAL_SERVER_ERROR',

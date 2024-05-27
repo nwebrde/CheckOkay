@@ -30,5 +30,5 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
     guardedUser: one(users, {
         fields: [invitations.guardedUserId],
         references: [users.id],
-    }),
+    })
 }))

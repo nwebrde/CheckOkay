@@ -7,13 +7,13 @@ import { H1, Text } from 'app/design/typography'
 import { Card, VSpacer } from 'app/design/layout'
 import Moment from 'react-moment'
 import {CheckState} from "app/lib/types/check";
-import GuardedUser from "app/lib/types/guardedUser";
+import {Guarded} from "app/lib/types/guardedUser";
 
-const renderItem = ({ item }: { item: GuardedUser }) => {
+const renderItem = ({ item }: { item: Guarded }) => {
     const deleteMutation = trpc.guards.deleteGuardedUser.useMutation()
     const remove = () => {
         deleteMutation.mutate({
-            guardedUserId: item.guardedUser.id,
+            guardedUserId: item.id,
         })
     }
 
@@ -29,9 +29,7 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
         >
             <View className="flex-row items-center justify-between">
                 <H1 className="my-0 mb-0 mt-0 text-xl opacity-75">
-                    {item.guardedUser.name
-                        ? item.guardedUser.name
-                        : item.guardedUser.email}
+                    {item.name ?? item.email}
                 </H1>
 
                 <StyledPressable
@@ -44,25 +42,25 @@ const renderItem = ({ item }: { item: GuardedUser }) => {
                 </StyledPressable>
             </View>
             <VSpacer />
-            {item.lastCheckOkay && (
+            {item.lastCheckIn && (
                 <Text>
                     Letzte {item.step ? 'automatische ' : 'manuelle '}
                     Rückmeldung{' '}
                     <Moment
                         element={Text}
                         locale="de"
-                        date={item.lastCheckOkay}
+                        date={item.lastCheckIn}
                         fromNow
                     />
                 </Text>
             )}
-            {item.nextRequiredCheckDate && (
+            {item.nextRequiredCheckIn && (
                 <Text>
                     Nächste Rückmeldung bis{' '}
                     <Moment
                         element={Text}
                         locale="de"
-                        date={item.nextRequiredCheckDate}
+                        date={item.nextRequiredCheckIn}
                         fromNow
                     />
                 </Text>

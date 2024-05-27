@@ -4,10 +4,16 @@
     "slug": "solito-nativewind",
     "version": "1.0.0",
     "scheme": "solito-nativewind",
-    "platforms": ["ios", "android"],
-    "icon":"https://www.google.com/logos/fnbx/christmas/present.png",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "icon": "https://www.google.com/logos/fnbx/christmas/present.png",
     "ios": {
       "bundleIdentifier": "com.solito.nativewind"
-    }
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }

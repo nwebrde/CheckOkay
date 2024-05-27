@@ -1,0 +1,92 @@
+<diagram program="umletino" version="15.1"><zoom_level>12</zoom_level><element><id>UMLClass</id><coordinates><x>12</x><y>684</y><w>312</w><h>156</h></coordinates><panel_attributes>&lt;&lt;class&gt;&gt;
+Package::apps/next/server
+Check
+--
+-hour: 0-23
+-minute: 0-59
+-id: string
+--
++isFullfilled(lastCheckIn: Date): bool
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>216</x><y>0</y><w>312</w><h>156</h></coordinates><panel_attributes>&lt;&lt;class&gt;&gt;
+Package::apps/next/server
+User
+--
+-id: string
+-name: string
+-emailVerified: boolean
+-image: string
+--
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>252</y><w>312</w><h>228</h></coordinates><panel_attributes>&lt;&lt;class&gt;&gt;
+Package::apps/next/server
+GuardedUser
+--
+--
++invite()
++isOK():
+
+state: OK | NOTIFIED | WARNED | BACKUP
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>492</x><y>252</y><w>312</w><h>144</h></coordinates><panel_attributes>&lt;&lt;class&gt;&gt;
+Package::apps/next/server
+Guard
+--
+-type: GuardType
+--
++switchType()
++warn()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>372</x><y>144</y><w>216</w><h>132</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;160;90</additional_attributes></element><element><id>Relation</id><coordinates><x>240</x><y>144</y><w>132</w><h>132</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>90;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>468</y><w>96</w><h>240</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..*
+m2=1
+checks ▼</panel_attributes><additional_attributes>10;180;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>288</y><w>216</w><h>60</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+m2=0..*
+guards ►</panel_attributes><additional_attributes>160;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>792</x><y>612</y><w>312</w><h>228</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Package::apps/next/server
+StateStrategy
+--
+-step: boolean
+-lastCheckIn: Date
+--
++refresh()
++warn()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>432</x><y>948</y><w>312</w><h>228</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Package::apps/next/server
+OK
+--
+--
++refresh()
++warn()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>792</x><y>948</y><w>312</w><h>228</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Package::apps/next/server
+NOTIFIED
+--
+--
++refresh()
++warn()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1152</x><y>948</y><w>312</w><h>228</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Package::apps/next/server
+WARNED
+--
+--
++refresh()
++warn()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>936</x><y>828</y><w>36</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>672</x><y>828</y><w>228</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>170;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>1044</x><y>828</y><w>216</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;160;100</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>432</y><w>576</w><h>204</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+m2=1
+state ►</panel_attributes><additional_attributes>450;150;450;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1524</x><y>948</y><w>312</w><h>228</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+Package::apps/next/server
+BACKUP
+--
+--
++refresh()
++warn()
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1092</x><y>744</y><w>504</w><h>228</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;400;170</additional_attributes></element><element><id>UMLClass</id><coordinates><x>816</x><y>1356</y><w>312</w><h>276</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Package::apps/next/server
+NotificationService
+--
+
+--
+templateMethod()
+addToQueue()
+send()
+
+</panel_attributes><additional_attributes></additional_attributes></element></diagram>

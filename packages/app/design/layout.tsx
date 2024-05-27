@@ -1,5 +1,5 @@
 import { styled } from 'nativewind'
-import { CheckOkay } from 'app/features/checkIn/CheckOkay'
+import { CheckIn } from 'app/features/checkIn/CheckIn'
 import { Guards } from 'app/features/settings/guards/Guards'
 import { ReactNode } from 'react'
 import { View } from 'app/design/view'

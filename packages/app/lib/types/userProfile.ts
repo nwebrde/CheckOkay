@@ -1,6 +1,11 @@
-export default interface UserProfile {
-  id: string
-  name?: string
-  email: string
-  image?: string
-}
+import {z} from "zod";
+import {ZUser} from "app/lib/types/user";
+
+export const ZProfile = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  email: z.string(),
+  image: z.string().optional()
+});
+
+export type Profile = z.infer<typeof ZProfile>;

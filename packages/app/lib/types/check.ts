@@ -1,8 +1,12 @@
-export interface Check {
-    hour: number // 0 - 23
-    minute: number // 0 - 59
-    checkId: string
-}
+import {z} from "zod";
+
+export const ZCheck = z.object({
+    hour: z.number().gte(0).lt(24),
+    minute: z.number().gte(0).lt(60),
+    id: z.number()
+})
+
+export type Check = z.infer<typeof ZCheck>;
 
 export enum CheckState {
     OK = 'OK', // else

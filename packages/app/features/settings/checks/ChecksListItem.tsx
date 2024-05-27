@@ -1,5 +1,5 @@
 import { Pressable } from 'react-native'
-import React, { useRef } from 'react'
+import React from 'react'
 import { TimePicker } from 'app/design/timepicker/timepicker'
 import { XMark } from '@nandorojo/heroicons/20/solid'
 import { View } from 'app/design/view'
@@ -23,12 +23,12 @@ const renderItem = ({
         modifyMutation.mutate({
             hour: hour,
             minute: minute,
-            checkId: item.checkId,
+            checkId: item.id,
         })
     }
     const remove = () => {
         removeMutation.mutate({
-            checkId: item.checkId,
+            checkId: item.id,
         })
     }
 
@@ -46,7 +46,7 @@ const renderItem = ({
         addMutation.mutate({ hour: hour, minute: minute })
     }
 
-    if (item.checkId === LAST_ITEM_ID) {
+    if (item.id === LAST_ITEM_ID) {
         return (
             <Pressable>
                 <View className="m-2 flex-row items-center justify-center p-2">

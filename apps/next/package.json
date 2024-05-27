@@ -16,6 +16,8 @@
     "@trpc/server": "^10.44.1",
     "app": "*",
     "aws-sdk": "^2.1529.0",
+    "bullmq": "^5.7.1",
+    "dayjs": "^1.11.10",
     "db": "workspace:^",
     "drizzle-orm": "^0.29.1",
     "next": "latest",

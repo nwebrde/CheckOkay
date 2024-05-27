@@ -10,15 +10,15 @@ import { SetupChecks } from 'app/features/checkIn/SetupChecks'
 import { Skeleton } from 'moti/skeleton'
 import {CheckState} from "app/lib/types/check";
 
-export function CheckOkay() {
-    const checkOkay = trpc.checks.checkOkay.useMutation()
+export function CheckIn() {
+    const checkOkay = trpc.checks.checkIn.useMutation()
     const user = trpc.getUser.useQuery()
 
     const isSetup = () => {
         if (!user.data) {
             return false
         }
-        if (!user.data.nextRequiredCheckDate) {
+        if (!user.data.nextRequiredCheckIn) {
             return false
         }
         if (!user.data.guards) {
@@ -77,19 +77,19 @@ export function CheckOkay() {
                                         Nein &#128078;
                                     </TextLink>
                                 </Row>
-                                {user.data?.nextRequiredCheckDate && (
+                                {user.data?.nextRequiredCheckIn && (
                                     <Text className="mt-5">
                                         Beantworte diese Frage bis{' '}
                                         <Moment
                                             element={Text}
                                             locale="de"
-                                            date={user.data.nextRequiredCheckDate}
+                                            date={user.data.nextRequiredCheckIn}
                                             fromNow
                                         />
                                         {'\n'}
                                     </Text>
                                 )}
-                                {user.data?.lastCheckOkay && (
+                                {user.data?.lastCheckIn && (
                                     <Text>
                                         Deine letzte Rückmeldung war{' '}
                                         {user.data?.step
@@ -100,7 +100,7 @@ export function CheckOkay() {
                                             locale="de"
                                             date={
                                                 new Date(
-                                                    user.data?.lastCheckOkay,
+                                                    user.data?.lastCheckIn,
                                                 )
                                             }
                                             fromNow

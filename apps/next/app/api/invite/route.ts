@@ -2,8 +2,8 @@ import { NextRequest } from 'next/server'
 import { redirect } from 'next/navigation'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
-import { acceptInvitation } from '../../../server/lib/guard'
 import { authOptions } from '../../../server/lib/nextAuthOptions'
+import {acceptInvitation} from "../../../server/controllers/invitations";
 
 export async function GET(req: NextRequest) {
     const code = req.nextUrl.searchParams.get('code')

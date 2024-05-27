@@ -1,15 +1,16 @@
 import {CheckState} from "app/lib/types/check";
-import {GuardType} from "app/lib/types/guardUser";
-import UserProfile from "app/lib/types/userProfile";
-
-export default interface GuardedUser {
-    since: Date
-    priority: GuardType
-    guardedUser: UserProfile
-    state: CheckState
-    lastCheckOkay?: Date
-    step?: boolean
-    nextRequiredCheckDate?: Date
-}
+import {GuardType, ZGuard} from "app/lib/types/guardUser";
+import {z} from "zod";
+import {ZProfile} from "app/lib/types/userProfile";
 
 
+export const ZGuarded = ZProfile.merge(z.object({
+    since: z.date(),
+    priority: z.nativeEnum(GuardType),
+    state: z.nativeEnum(CheckState),
+    lastCheckIn: z.date().optional(),
+    step: z.boolean().optional(),
+    nextRequiredCheckIn: z.date().optional()
+}))
+
+export type Guarded = z.infer<typeof ZGuarded>;

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "5cffd0d2-820c-4910-a2dd-4c9045e6ef25",
+  "id": "1dd43855-9f47-4560-a7aa-b8561514c917",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bwell_account": {
@@ -197,6 +197,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "currentCheckId": {
+          "name": "currentCheckId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "lastManualCheck": {
           "name": "lastManualCheck",
           "type": "datetime",
@@ -218,6 +225,30 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'OK'"
+        },
+        "notified": {
+          "name": "notified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "warned": {
+          "name": "warned",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "warnedBackup": {
+          "name": "warnedBackup",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         },
         "notifyBackupAfter": {
           "name": "notifyBackupAfter",
@@ -306,24 +337,10 @@
         },
         "id": {
           "name": "id",
-          "type": "varchar(255)",
+          "type": "int",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "notifyId": {
-          "name": "notifyId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "backupId": {
-          "name": "backupId",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "autoincrement": true
         }
       },
       "indexes": {},
@@ -356,18 +373,6 @@
           "name": "bwell_checks_id_unique",
           "columns": [
             "id"
-          ]
-        },
-        "bwell_checks_notifyId_unique": {
-          "name": "bwell_checks_notifyId_unique",
-          "columns": [
-            "notifyId"
-          ]
-        },
-        "bwell_checks_backupId_unique": {
-          "name": "bwell_checks_backupId_unique",
-          "columns": [
-            "backupId"
           ]
         }
       }
@@ -492,6 +497,64 @@
           "name": "bwell_invitations_code",
           "columns": [
             "code"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_notificationChannel": {
+      "name": "bwell_notificationChannel",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "type": {
+          "name": "type",
+          "type": "enum('email','push')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_notificationChannel_userId_bwell_user_id_fk": {
+          "name": "bwell_notificationChannel_userId_bwell_user_id_fk",
+          "tableFrom": "bwell_notificationChannel",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_notificationChannel_id": {
+          "name": "bwell_notificationChannel_id",
+          "columns": [
+            "id"
           ]
         }
       },

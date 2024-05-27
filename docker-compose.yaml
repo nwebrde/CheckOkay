@@ -2,12 +2,68 @@ version: "2.4"
 
 services:
   web:
-    platform: linux/arm64/v8
-    image: ghcr.io/nwebrde/checkokay:latest
+    image: checkokay
     container_name: next
     build:
       context: .
-      dockerfile: ./apps/next/Dockerfile
+      dockerfile: ./apps/next/docker/dev/Dockerfile
     restart: always
+    command: sh -c "yarn migrations:push;yarn web"
+    volumes:
+      - .:/app
+      - /app/apps/next/.next
     ports:
       - 3000:3000
+    environment:
+      REDIS_URL: "redis://:eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81@cache:6379/0"
+      DATABASE_HOST: "db"
+      DATABASE_USER: "root"
+      DATABASE_PASSWORD: "mauFJcuf5dhRMQrjj"
+      DATABASE: "initio"
+    depends_on:
+      cache:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+  db:
+    container_name: co-database-dev
+    image: mysql:8.2
+    restart: always
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_DATABASE: initio
+      MYSQL_ROOT_PASSWORD: mauFJcuf5dhRMQrjj
+    ports:
+      - '3306:3306'
+    volumes:
+      - './data/db-dev/data:/var/lib/mysql'
+      - './data/db-dev/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './data/db-dev/sql:/docker-entrypoint-initdb.d'
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - ./data/db-dev/cache:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      timeout: 20s
+      retries: 10
+
+  bull-monitor:
+    image: ejhayes/nodejs-bull-monitor:latest
+    ports:
+      - 4000:4000
+    environment:
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      BULL_WATCH_QUEUE_PREFIXES: bull
+      PORT: 4000
+      UI: bull-master

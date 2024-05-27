@@ -1,1 +1,1 @@
-export const LAST_ITEM_ID = 'LAST_ITEM'
+export const LAST_ITEM_ID = 0

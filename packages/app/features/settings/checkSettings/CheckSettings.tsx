@@ -3,7 +3,6 @@ import { TimePicker } from 'app/design/timepicker/timepicker'
 import { Label } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
-import { MotiView } from 'moti'
 import { StyleSheet } from 'react-native'
 
 export function CheckSettings() {

@@ -4,7 +4,6 @@ import ChecksListItem from './ChecksListItem'
 import { View } from 'app/design/view'
 import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
 import { trpc } from 'app/provider/trpc-client'
-import { EmptyItem } from 'app/features/settings/checks/EmptyItem'
 import { FlatList } from 'react-native'
 import { Skeleton } from 'moti/skeleton'
 import {Check} from "app/lib/types/check";
@@ -13,12 +12,12 @@ function pushNewButton(checks?: Check[]) {
     if (!checks) {
         return undefined
     }
-    if (checks.some((e) => e.checkId === LAST_ITEM_ID)) {
+    if (checks.some((e) => e.id === LAST_ITEM_ID)) {
         return checks
     }
     const returnData = checks
     returnData.push({
-        checkId: LAST_ITEM_ID,
+        id: LAST_ITEM_ID,
         hour: 1,
         minute: 1,
     })
@@ -39,7 +38,7 @@ const ChecksList = () => {
 
     const getLatestItem = (items: Check[] | undefined) => {
         if (items) {
-            if (items[items.length - 1]!.checkId == LAST_ITEM_ID) {
+            if (items[items.length - 1]!.id == LAST_ITEM_ID) {
                 return items[items.length - 2]!
             }
             return items[items.length - 1]!
@@ -59,7 +58,7 @@ const ChecksList = () => {
                     numColumns={5}
                     // This prop is necessary to uniquely identify the elements in the list.
                     keyExtractor={(item: Check) => {
-                        return item.checkId
+                        return (item.id).toString()
                     }}
                     scrollEnabled={false}
                     columnWrapperStyle={{

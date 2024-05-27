@@ -24,9 +24,7 @@ export const checks = mySqlTable(
         time: time('time')
             .notNull()
             .default(sql`'00:00' CHECK (HOUR(time) < 24)`),
-        checkId: varchar('id', { length: 255 }).notNull().unique(),
-        notifyId: varchar('notifyId', { length: 255 }).unique(),
-        backupId: varchar('backupId', { length: 255 }).unique(),
+        id: int('id').notNull().unique().autoincrement(),
     },
     (table) => {
         return {

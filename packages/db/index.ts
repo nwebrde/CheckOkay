@@ -12,6 +12,7 @@ import * as checks from './schema/checks'
 import * as guards from './schema/guards'
 import * as oauthserver from './schema/oauthserver'
 import * as invitations from './schema/invitations'
+import * as notificationChannels from "./schema/notificationChannels";
 
 export const schema = {
     ...auth,
@@ -19,6 +20,7 @@ export const schema = {
     ...guards,
     ...invitations,
     ...oauthserver,
+    ...notificationChannels
 }
 
 export { mySqlTable as tableCreator } from './schema/_table'

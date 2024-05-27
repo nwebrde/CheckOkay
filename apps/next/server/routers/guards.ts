@@ -1,12 +1,11 @@
 import { authorizedProcedure, router } from '../trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import { deleteRelation, invite, switchType } from '../lib/guard'
-import { getChecks } from '../lib/checks/check'
-import { getUser } from '../lib/user'
+import {deleteRelation, switchType} from "../adapters/db/guards";
+import {invite} from "../controllers/invitations";
 
 export const guardsRouter = router({
-    invite: authorizedProcedure.mutation(async (opts) => {
+    invite: authorizedProcedure.output(z.string()).mutation(async (opts) => {
         const result = await invite(opts.ctx.userId!)
         if (!result) {
             throw new TRPCError({
@@ -15,31 +14,12 @@ export const guardsRouter = router({
         }
         return process.env.API_ENDPOINT + '/invite?code=' + result
     }),
-    getGuardedUsers: authorizedProcedure.query(async (opts) => {
-        const result = await getUser(opts.ctx.userId!, false, false, true)
-        if (!result) {
-            throw new TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-            })
-        }
-        return result.guardedUsers!
-    }),
-    getGuards: authorizedProcedure.query(async (opts) => {
-        const result = await getUser(opts.ctx.userId!, false, true)
-        if (!result) {
-            throw new TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-            })
-        }
-        return result.guards!
-    }),
     deleteGuard: authorizedProcedure
         .input(
             z.object({
                 guardUserId: z.string(),
             }),
-        )
-        .mutation(async (opts) => {
+        ).output(z.boolean()).mutation(async (opts) => {
             const result = await deleteRelation(
                 opts.input.guardUserId,
                 opts.ctx.userId!,
@@ -56,7 +36,7 @@ export const guardsRouter = router({
             z.object({
                 guardedUserId: z.string(),
             }),
-        )
+        ).output(z.boolean())
         .mutation(async (opts) => {
             const result = await deleteRelation(
                 opts.ctx.userId!,
@@ -74,7 +54,7 @@ export const guardsRouter = router({
             z.object({
                 guardUserId: z.string(),
             }),
-        )
+        ).output(z.boolean())
         .mutation(async (opts) => {
             const result = await switchType(
                 opts.input.guardUserId,

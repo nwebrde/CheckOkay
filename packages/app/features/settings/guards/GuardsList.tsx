@@ -23,7 +23,7 @@ const GuardsList = ({ invite }: { invite: () => void }) => {
                     numColumns={5}
                     // This prop is necessary to uniquely identify the elements in the list.
                     keyExtractor={(item: Guard) => {
-                        return item.guardUser.id
+                        return item.id
                     }}
                     scrollEnabled={false}
                     ListEmptyComponent={<EmptyItem invite={invite} />}

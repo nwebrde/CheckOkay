@@ -9,7 +9,7 @@ import { useAuth } from 'app/provider/auth-context'
 import { Button } from 'app/design/button'
 
 import { useRouter } from 'solito/navigation'
-import { CheckOkay } from 'app/features/checkIn/CheckOkay'
+import { CheckIn } from 'app/features/checkIn/CheckIn'
 import { Guards } from 'app/features/settings/guards/Guards'
 import { Guarded } from 'app/features/guardedPersons/Guarded'
 
@@ -19,7 +19,7 @@ export function HomeScreen() {
 
     return (
         <Screen width="max-w-xl">
-            <CheckOkay />
+            <CheckIn />
             <VSpacer />
             <Guarded />
         </Screen>

@@ -1,11 +1,10 @@
 'use client'
-import { A, H1, P, Text, TextLink } from 'app/design/typography'
+import { H1} from 'app/design/typography'
 import { View } from 'app/design/view'
 
 import ChecksList from 'app/features/settings/checks/ChecksList'
 import { CheckSettings } from 'app/features/settings/checkSettings/CheckSettings'
 import { Screen, VSpacer } from 'app/design/layout'
-import GuardsList from 'app/features/settings/guards/GuardsList'
 import { Guards } from 'app/features/settings/guards/Guards'
 
 export function SettingsScreen() {

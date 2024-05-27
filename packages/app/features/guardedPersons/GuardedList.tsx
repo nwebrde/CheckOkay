@@ -6,12 +6,12 @@ import { FlatList } from 'react-native'
 import GuardedListItem from 'app/features/guardedPersons/GuardedListItem'
 import { EmptyItem } from 'app/features/guardedPersons/EmptyItem'
 import { Skeleton } from 'moti/skeleton'
-import GuardedUser from "app/lib/types/guardedUser";
+import {Guarded} from "app/lib/types/guardedUser";
 
 const GuardedList = () => {
     const guardedUsers = trpc.getUser.useQuery()
 
-    const renderItem = ({ item }: { item: GuardedUser }) => {
+    const renderItem = ({ item }: { item: Guarded }) => {
         return <GuardedListItem item={item} />
     }
 
@@ -26,8 +26,8 @@ const GuardedList = () => {
                     // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
                     numColumns={2}
                     // This prop is necessary to uniquely identify the elements in the list.
-                    keyExtractor={(item: GuardedUser) => {
-                        return item.guardedUser.id
+                    keyExtractor={(item: Guarded) => {
+                        return item.id
                     }}
                     columnWrapperStyle={{
                         flexWrap: 'wrap',

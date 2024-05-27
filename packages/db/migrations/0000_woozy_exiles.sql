@@ -27,9 +27,13 @@ CREATE TABLE `bwell_user` (
 	`emailVerified` timestamp(3) DEFAULT CURRENT_TIMESTAMP(3),
 	`image` varchar(255),
 	`nextRequiredCheckDate` datetime,
+	`currentCheckId` int,
 	`lastManualCheck` datetime,
 	`lastStepCheck` datetime,
 	`state` enum('OK','WARNED','BACKUP','NOTIFIED') NOT NULL DEFAULT 'OK',
+	`notified` boolean NOT NULL DEFAULT false,
+	`warned` boolean NOT NULL DEFAULT false,
+	`warnedBackup` boolean NOT NULL DEFAULT false,
 	`notifyBackupAfter` time NOT NULL DEFAULT '03:00' CHECK (HOUR(notifyBackupAfter) < 24),
 	`reminderBeforeCheck` time NOT NULL DEFAULT '00:25' CHECK (HOUR(reminderBeforeCheck) < 24),
 	CONSTRAINT `bwell_user_id` PRIMARY KEY(`id`)
@@ -45,13 +49,9 @@ CREATE TABLE `bwell_verificationToken` (
 CREATE TABLE `bwell_checks` (
 	`guardedUserId` varchar(255) NOT NULL,
 	`time` time NOT NULL DEFAULT '00:00' CHECK (HOUR(time) < 24),
-	`id` varchar(255) NOT NULL,
-	`notifyId` varchar(255),
-	`backupId` varchar(255),
+	`id` int AUTO_INCREMENT NOT NULL,
 	CONSTRAINT `bwell_checks_guardedUserId_time_pk` PRIMARY KEY(`guardedUserId`,`time`),
-	CONSTRAINT `bwell_checks_id_unique` UNIQUE(`id`),
-	CONSTRAINT `bwell_checks_notifyId_unique` UNIQUE(`notifyId`),
-	CONSTRAINT `bwell_checks_backupId_unique` UNIQUE(`backupId`)
+	CONSTRAINT `bwell_checks_id_unique` UNIQUE(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `bwell_guards` (
@@ -67,6 +67,14 @@ CREATE TABLE `bwell_invitations` (
 	`guardedUserId` varchar(255) NOT NULL,
 	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT `bwell_invitations_code` PRIMARY KEY(`code`)
+);
+--> statement-breakpoint
+CREATE TABLE `bwell_notificationChannel` (
+	`userId` varchar(255) NOT NULL,
+	`address` varchar(255) NOT NULL,
+	`id` int AUTO_INCREMENT NOT NULL,
+	`type` enum('email','push') NOT NULL,
+	CONSTRAINT `bwell_notificationChannel_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `bwell_authCodes` (
@@ -98,5 +106,6 @@ ALTER TABLE `bwell_checks` ADD CONSTRAINT `bwell_checks_guardedUserId_bwell_user
 ALTER TABLE `bwell_guards` ADD CONSTRAINT `bwell_guards_guardedUserId_bwell_user_id_fk` FOREIGN KEY (`guardedUserId`) REFERENCES `bwell_user`(`id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE `bwell_guards` ADD CONSTRAINT `bwell_guards_guardUserId_bwell_user_id_fk` FOREIGN KEY (`guardUserId`) REFERENCES `bwell_user`(`id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE `bwell_invitations` ADD CONSTRAINT `bwell_invitations_guardedUserId_bwell_user_id_fk` FOREIGN KEY (`guardedUserId`) REFERENCES `bwell_user`(`id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE `bwell_notificationChannel` ADD CONSTRAINT `bwell_notificationChannel_userId_bwell_user_id_fk` FOREIGN KEY (`userId`) REFERENCES `bwell_user`(`id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE `bwell_authCodes` ADD CONSTRAINT `bwell_authCodes_userId_bwell_user_id_fk` FOREIGN KEY (`userId`) REFERENCES `bwell_user`(`id`) ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
 ALTER TABLE `bwell_refreshTokens` ADD CONSTRAINT `bwell_refreshTokens_userId_bwell_user_id_fk` FOREIGN KEY (`userId`) REFERENCES `bwell_user`(`id`) ON DELETE cascade ON UPDATE cascade;
