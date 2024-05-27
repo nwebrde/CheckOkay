@@ -5,6 +5,7 @@ import {Notification} from "../../entities/notifications/Notifications";
 import {db} from "db";
 import {eq} from "drizzle-orm";
 import {users} from "db/schema/auth";
+import { getLastCheckIn } from '../../adapters/db/users'
 
 export const enum ConcreteNotificationType {
     REMINDER_NOTIFICATION = "REMINDER_NOTIFICATION",
@@ -22,7 +23,7 @@ export class ReminderNotification extends Notification {
         dayjs.locale('de')
         dayjs.extend(relativeTime)
 
-        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow()} zu beantworten.`)
+        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`)
         this.nextRequiredCheckIn = nextRequiredCheckIn
         this.userId = userId
     }
@@ -44,7 +45,7 @@ export class ReminderNotification extends Notification {
 
         this.nextRequiredCheckIn = data.nextRequiredCheckDate
 
-        this.text = `denke bitte daran die Frage in spätestens ${dayjs(this.nextRequiredCheckIn).toNow()} zu beantworten.`
+        this.text = `denke bitte daran die Frage in spätestens ${dayjs(this.nextRequiredCheckIn).toNow(true)} zu beantworten.`
 
         return true
     }
@@ -53,16 +54,16 @@ export class ReminderNotification extends Notification {
 export class WarningNotification extends Notification {
     guardedUserId: string
     guardedPersonName: string
-    nextRequiredCheckIn: Date
+    lastCheckIn: Date
 
-    constructor(guardedPersonName: string, guardedUserId: string, nextRequiredCheckIn: Date) {
+    constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date) {
         dayjs.locale('de')
         dayjs.extend(relativeTime)
 
-        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(nextRequiredCheckIn).fromNow()} statt. `)
+        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `)
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
-        this.nextRequiredCheckIn = nextRequiredCheckIn
+        this.lastCheckIn = lastCheckIn
     }
 
     async refresh() {
@@ -81,12 +82,16 @@ export class WarningNotification extends Notification {
             return false
         }
 
-        this.nextRequiredCheckIn = data.nextRequiredCheckDate
+        if(!data.lastStepCheck && !data.lastManualCheck) {
+            return false
+        }
+
+        this.lastCheckIn = getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!
 
         dayjs.locale('de')
         dayjs.extend(relativeTime)
 
-        this.text = `Es scheint ein Problem bei ${this.guardedPersonName} zu geben. ${this.guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(this.nextRequiredCheckIn).fromNow()} statt. `
+        this.text = `Es scheint ein Problem bei ${this.guardedPersonName} zu geben. ${this.guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(this.lastCheckIn).fromNow(true)} statt. `
 
         return true
     }
