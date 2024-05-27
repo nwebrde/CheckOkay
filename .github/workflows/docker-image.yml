@@ -37,9 +37,7 @@ jobs:
             ssh-private-key: ${{ secrets.SSH_KEY }}
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker-compose build web
-      - name: Rename image
-        run: docker image tag checkokay:latest ${{ vars.IMAGE_NAME }}
+        run: docker build . -t ${{ vars.IMAGE_NAME }} -f apps/next/docker/prod/Dockerfile
       - name: Publish image
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
