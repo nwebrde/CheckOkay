@@ -45,6 +45,9 @@ export class ReminderNotification extends Notification {
 
         this.nextRequiredCheckIn = data.nextRequiredCheckDate
 
+        dayjs.locale('de')
+        dayjs.extend(relativeTime)
+
         this.text = `denke bitte daran die Frage in spätestens ${dayjs(this.nextRequiredCheckIn).toNow(true)} zu beantworten.`
 
         return true
@@ -119,9 +122,9 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             break;
         case ConcreteNotificationType.NEW_GUARD_NOTIFICATION:
             result = new NewGuardNotification(plainObject.guardName)
+            break;
         default:
             throw new Error("Concrete notification is not correctly implemented")
-            break;
     }
 
     return result
