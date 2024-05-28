@@ -48,16 +48,12 @@ export class Check {
      * Converts check to a UTC datetime object with current day, month and year
      * @param dayOffset
      */
-    toUTCDate(dayOffset: number = 0) {
-        let date = new Date()
+    toUTCDate(dayOffset: number = 0, referenceDate: Date = new Date()) {
+        let date = referenceDate
         date.setUTCHours(this.hour)
         date.setUTCMinutes(this.minute)
         date.setUTCMilliseconds(0)
         date.setUTCSeconds(0)
-
-
-
-
 
         date = new Date(date.getTime() + dayOffset * 86400000)
 

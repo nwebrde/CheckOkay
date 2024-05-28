@@ -28,8 +28,6 @@ export const checkIn = async (userId: string, step: boolean) => {
 
     const checksController = toChecksController(data.checks)
 
-    const nextRequired = checksController.getNextRequiredCheck()
-
     let res = undefined;
     if(step) {
         res = await db.update(users).set({state: CheckState.OK, lastStepCheck: new Date()}).where(eq(users.id, userId))

@@ -44,7 +44,7 @@ export class ChecksController {
 
         return {
             check: nextCheck,
-            date: nextCheck.toUTCDate(nextDay ? 1 : 0)
+            date: nextCheck.toUTCDate(nextDay ? 1 : 0, date)
         }
     }
 
@@ -77,7 +77,7 @@ export class ChecksController {
 
         return {
             check: previousCheck,
-            date: previousCheck?.toUTCDate(previousDay ? -1 : 0)
+            date: previousCheck?.toUTCDate(previousDay ? -1 : 0, date)
         }
     }
 }
