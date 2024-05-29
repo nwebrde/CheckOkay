@@ -4,6 +4,8 @@ import {eq} from "drizzle-orm";
 import {users} from "db/schema/auth";
 import { getLastCheckIn } from '../../adapters/db/users'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/de'
 
 export const enum ConcreteNotificationType {
     REMINDER_NOTIFICATION = "REMINDER_NOTIFICATION",
@@ -18,6 +20,8 @@ export class ReminderNotification extends Notification {
     userId: string
 
     constructor(userId: string, nextRequiredCheckIn: Date) {
+        dayjs.locale('de')
+        dayjs.extend(relativeTime)
         super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`)
         this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
         this.userId = userId
@@ -40,6 +44,8 @@ export class ReminderNotification extends Notification {
 
         this.nextRequiredCheckIn = new Date(data.nextRequiredCheckDate)
 
+        dayjs.locale('de')
+        dayjs.extend(relativeTime)
         this.text = `denke bitte daran die Frage in spätestens ${dayjs(this.nextRequiredCheckIn).toNow(true)} zu beantworten.`
 
         return true
@@ -55,6 +61,8 @@ export class WarningNotification extends Notification {
     relatedCheckId: number // check id that fired this warning
 
     constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
+        dayjs.locale('de')
+        dayjs.extend(relativeTime)
         super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `)
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
@@ -86,6 +94,8 @@ export class WarningNotification extends Notification {
 
         this.lastCheckIn = new Date(getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!)
 
+        dayjs.locale('de')
+        dayjs.extend(relativeTime)
         this.text = `Es scheint ein Problem bei ${this.guardedPersonName} zu geben. ${this.guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(this.lastCheckIn).fromNow(true)} statt. `
 
         return true
