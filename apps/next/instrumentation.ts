@@ -2,6 +2,7 @@ import { CheckJob, NotificationJob } from './server/adapters/scheduler/config'
 export const register = async () => {
 
     if (process.env.NEXT_RUNTIME === 'nodejs') {
+        await import('./sentry.server.config');
 
         const { sendMail } = await import('./server/controllers/notifications/NotificationChannelController');
         const { Worker } = await import('bullmq');
@@ -85,6 +86,10 @@ export const register = async () => {
             removeOnComplete: { count: 100 },
             removeOnFail: { count: 5000 },
         });
+    }
+
+    if (process.env.NEXT_RUNTIME === 'edge') {
+        await import('./sentry.edge.config');
     }
 };
 

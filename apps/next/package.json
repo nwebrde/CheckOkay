@@ -12,6 +12,7 @@
     "@auth/drizzle-adapter": "^0.3.12",
     "@expo/next-adapter": "5.0.2",
     "@jmondi/oauth2-server": "^3.0.2",
+    "@sentry/nextjs": "^8",
     "@trpc/next": "^10.44.1",
     "@trpc/server": "^10.44.1",
     "app": "*",
