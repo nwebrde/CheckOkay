@@ -58,8 +58,9 @@ export class WarningNotification extends Notification {
     guardedUserId: string
     guardedPersonName: string
     lastCheckIn: Date
+    relatedCheckId: number // check id that fired this warning
 
-    constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date) {
+    constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date, relatedCheckId: number) {
         dayjs.locale('de')
         dayjs.extend(relativeTime)
 
@@ -67,6 +68,7 @@ export class WarningNotification extends Notification {
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
+        this.relatedCheckId = relatedCheckId
     }
 
     async refresh() {
@@ -82,7 +84,7 @@ export class WarningNotification extends Notification {
         }
 
         // check if still needs warning
-        if(!data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
+        if(data.currentCheckId != this.relatedCheckId || !data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
             return false
         }
 
@@ -119,7 +121,7 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             result = new ReminderNotification(plainObject.userId, plainObject.nextRequiredCheckIn)
             break;
         case ConcreteNotificationType.WARNING_NOTIFICATION:
-            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.nextRequiredCheckIn)
+            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.nextRequiredCheckIn, plainObject.relatedCheckId)
             break;
         case ConcreteNotificationType.NEW_GUARD_NOTIFICATION:
             result = new NewGuardNotification(plainObject.guardName)

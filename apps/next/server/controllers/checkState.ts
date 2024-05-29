@@ -10,6 +10,11 @@ import { StandardNotifier, WarningNotifier } from './notifications/ConcreteNotif
 import { getMainSubmitters } from './notifications/NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
 
+/**
+ * Triggered by check queue
+ * checks whether a reminder is necessary and performs the reminder
+ * @param userId
+ */
 export const remind = async (userId: string) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
@@ -39,6 +44,11 @@ export const remind = async (userId: string) => {
     }
 }
 
+/**
+ * Triggered by check queue
+ * checks whether a warning is necessary and performs the warning
+ * @param userId
+ */
 export const warn = async (userId: string, backup: boolean) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
@@ -66,7 +76,7 @@ export const warn = async (userId: string, backup: boolean) => {
     const stateController = new CheckStateController(data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), data.state)
 
     if((!backup && stateController.needsWarning()) || (backup && stateController.needsBackupWarning())) {
-        const notification = new WarningNotification(data.name ?? "", userId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!)
+        const notification = new WarningNotification(data.name ?? "", userId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!, data.currentCheckId!)
         const notifier = new WarningNotifier(userId, backup ? GuardType.BACKUP : GuardType.IMPORTANT, notification)
         await notifier.submit()
         await updateCheckState(userId, CheckState.WARNED)
