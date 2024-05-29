@@ -1,12 +1,5 @@
 import { CheckJob, NotificationJob } from './server/adapters/scheduler/config'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import 'dayjs/locale/de'
-
 export const register = async () => {
-
-    dayjs.locale('de')
-    dayjs.extend(relativeTime)
 
     if (process.env.NEXT_RUNTIME === 'nodejs') {
 
