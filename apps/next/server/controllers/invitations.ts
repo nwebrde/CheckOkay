@@ -48,7 +48,7 @@ export const acceptInvitation = async (code: string, guardUserId: string) => {
         return false
     }
 
-    const expDate = invitation.createdAt
+    const expDate = new Date(invitation.createdAt)
     expDate.setUTCDate(expDate.getUTCDate() + INVITATION_EXPIRATION_DAYS)
 
     if (new Date() > expDate) {

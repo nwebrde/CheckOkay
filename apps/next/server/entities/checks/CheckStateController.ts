@@ -39,13 +39,13 @@ export class CheckStateController {
     }
 
     getReminderTime() {
-        const date = this.nextCheckInRequiredAt
+        const date = new Date(this.nextCheckInRequiredAt)
         date.setUTCSeconds(date.getUTCSeconds() - this.reminderBeforeCheck)
         return date
     }
 
     getTimeToWarnBackupGuards() {
-        const date = this.nextCheckInRequiredAt
+        const date = new Date(this.nextCheckInRequiredAt)
         date.setUTCSeconds(date.getUTCSeconds() + this.notifyBackupGuards)
         return date
     }

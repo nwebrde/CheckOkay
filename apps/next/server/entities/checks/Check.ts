@@ -49,7 +49,7 @@ export class Check {
      * @param dayOffset
      */
     toUTCDate(dayOffset: number = 0, referenceDate: Date = new Date()) {
-        let date = referenceDate
+        let date = new Date(referenceDate)
         date.setUTCHours(this.hour)
         date.setUTCMinutes(this.minute)
         date.setUTCMilliseconds(0)

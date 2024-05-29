@@ -24,7 +24,7 @@ export class ReminderNotification extends Notification {
         dayjs.extend(relativeTime)
 
         super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`)
-        this.nextRequiredCheckIn = nextRequiredCheckIn
+        this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
         this.userId = userId
     }
     async refresh() {
@@ -43,7 +43,7 @@ export class ReminderNotification extends Notification {
             return false
         }
 
-        this.nextRequiredCheckIn = data.nextRequiredCheckDate
+        this.nextRequiredCheckIn = new Date(data.nextRequiredCheckDate)
 
         dayjs.locale('de')
         dayjs.extend(relativeTime)
@@ -66,7 +66,7 @@ export class WarningNotification extends Notification {
         super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `)
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
-        this.lastCheckIn = lastCheckIn
+        this.lastCheckIn = new Date(lastCheckIn)
     }
 
     async refresh() {
@@ -90,7 +90,7 @@ export class WarningNotification extends Notification {
             return false
         }
 
-        this.lastCheckIn = getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!
+        this.lastCheckIn = new Date(getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!)
 
         dayjs.locale('de')
         dayjs.extend(relativeTime)
