@@ -50,14 +50,17 @@ export class WarningNotification extends Notification {
     guardedUserId: string
     guardedPersonName: string
     lastCheckIn: Date
+
+    relatedRequiredCheckInDate: Date
     relatedCheckId: number // check id that fired this warning
 
-    constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date, relatedCheckId: number) {
+    constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
         super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert.<br/><br/>\nDie letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `)
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
         this.relatedCheckId = relatedCheckId
+        this.relatedRequiredCheckInDate = new Date(relatedRequiredCheckInDate)
     }
 
     async refresh() {
@@ -73,7 +76,7 @@ export class WarningNotification extends Notification {
         }
 
         // check if still needs warning
-        if(data.currentCheckId != this.relatedCheckId || !data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
+        if(data.nextRequiredCheckDate != this.relatedRequiredCheckInDate || data.currentCheckId != this.relatedCheckId || !data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
             return false
         }
 
@@ -107,7 +110,7 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             result = new ReminderNotification(plainObject.userId, plainObject.nextRequiredCheckIn)
             break;
         case ConcreteNotificationType.WARNING_NOTIFICATION:
-            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.nextRequiredCheckIn, plainObject.relatedCheckId)
+            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.nextRequiredCheckIn, plainObject.relatedCheckId, plainObject.relatedRequiredCheckInDate)
             break;
         case ConcreteNotificationType.NEW_GUARD_NOTIFICATION:
             result = new NewGuardNotification(plainObject.guardName)
