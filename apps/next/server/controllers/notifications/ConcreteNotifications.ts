@@ -81,6 +81,7 @@ export class WarningNotification extends Notification {
             return false
         }
 
+        // check if still needs warning
         if(!data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
             return false
         }

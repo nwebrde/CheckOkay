@@ -2,7 +2,7 @@ import {CheckState} from "app/lib/types/check";
 
 export class CheckStateController {
     constructor(nextCheckInRequiredAt: Date, reminderBeforeCheck: number, notifyBackupGuards: number, state: CheckState) {
-        this.nextCheckInRequiredAt = nextCheckInRequiredAt;
+        this.nextCheckInRequiredAt = new Date(nextCheckInRequiredAt);
         this.reminderBeforeCheck = reminderBeforeCheck;
         this.notifyBackupGuards = notifyBackupGuards;
         this.state = state;
