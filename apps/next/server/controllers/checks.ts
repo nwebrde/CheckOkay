@@ -201,7 +201,10 @@ const reschedule = async (userId: string, checksController: ChecksController, cu
             if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id)) {
                 throw new Error("Error while updating the next required check in date")
             }
-            return await updateCheckInQueue(nextRequired.check.id, nextRequired.date, reminder, backup)
+            if(!await updateCheckInQueue(nextRequired.check.id, nextRequired.date, reminder, backup)) {
+                return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, reminder, backup)
+            }
+            return true
         }
     }
 

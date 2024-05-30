@@ -1,8 +1,15 @@
 import { CheckJob, NotificationJob } from './server/adapters/scheduler/config'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/de'
+import dayjs from 'dayjs'
+
 export const register = async () => {
 
     if (process.env.NEXT_RUNTIME === 'nodejs') {
         await import('./sentry.server.config');
+
+        dayjs.locale('de')
+        dayjs.extend(relativeTime)
 
         const { sendMail } = await import('./server/controllers/notifications/NotificationChannelController');
         const { Worker } = await import('bullmq');

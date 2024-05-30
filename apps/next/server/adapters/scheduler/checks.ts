@@ -53,6 +53,11 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
         return false
     }
 
+    const state = await job.getState();
+    if(state == "completed" || state == "failed" || state == "unknown" || state == "active") {
+        return false
+    }
+
     let delay = 0;
 
     let backupTime = new Date(checkDate)
