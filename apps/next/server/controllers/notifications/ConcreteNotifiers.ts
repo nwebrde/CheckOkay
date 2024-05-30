@@ -8,6 +8,9 @@ import {repeat} from "../../adapters/scheduler/repeatingNotifiers";
 import { getAllSubmitters } from './NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
 
+import * as Sentry from "@sentry/nextjs";
+
+
 /**
  * Sends notification only once to all provided NotificationSubmitters.
  * The notification is not refreshed when it is send (as this is assumed to happen directly)
@@ -54,14 +57,22 @@ export abstract class RepeatingNotifier extends Notifier {
     }
 
     async submit() {
+
+        Sentry.captureMessage("submit, " + this.repeatTimes);
+
         if (this.repeatTimes > 1 && !await this.notification.refresh()) {
             return;
         }
 
+        Sentry.captureMessage("passed");
+
         const notifier = new StandardNotifier(this.notification, await this.getSubmitters())
         await notifier.submit();
 
+        Sentry.captureMessage("submitted");
+
         if (this.currentRound <= this.repeatTimes) {
+            Sentry.captureMessage("passed cond");
             this.currentRound++;
             await repeat(this, this.repeatInterval * 60 * Math.pow(this.multiplicativeBackoffFactor, this.currentRound - 2))
         }
