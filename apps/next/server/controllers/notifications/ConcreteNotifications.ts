@@ -84,7 +84,7 @@ export class WarningNotification extends Notification {
         }
 
         // check if still needs warning
-        if(data.nextRequiredCheckDate != this.relatedRequiredCheckInDate || data.currentCheckId != this.relatedCheckId || !data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
+        if(!data.nextRequiredCheckDate || data.nextRequiredCheckDate.getTime() != this.relatedRequiredCheckInDate.getTime() || data.currentCheckId != this.relatedCheckId || !data.nextRequiredCheckDate || data.nextRequiredCheckDate > new Date()) {
             return false
         }
 

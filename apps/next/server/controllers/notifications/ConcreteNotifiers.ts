@@ -60,7 +60,7 @@ export abstract class RepeatingNotifier extends Notifier {
 
         Sentry.captureMessage("submit, " + this.repeatTimes);
 
-        if (this.repeatTimes > 1 && !await this.notification.refresh()) {
+        if (this.currentRound > 1 && !await this.notification.refresh()) {
             return;
         }
 
