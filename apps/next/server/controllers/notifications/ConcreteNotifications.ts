@@ -68,7 +68,7 @@ export class WarningNotification extends Notification {
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
         this.relatedCheckId = relatedCheckId
-        this.relatedRequiredCheckInDate = relatedRequiredCheckInDate
+        this.relatedRequiredCheckInDate = new Date(relatedRequiredCheckInDate)
     }
 
     async refresh() {
