@@ -10,6 +10,9 @@ import { StandardNotifier, WarningNotifier } from './notifications/ConcreteNotif
 import { getMainSubmitters } from './notifications/NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
 
+import * as Sentry from "@sentry/nextjs";
+
+
 /**
  * Triggered by check queue
  * checks whether a reminder is necessary and performs the reminder
@@ -69,16 +72,32 @@ export const warn = async (userId: string, backup: boolean) => {
         throw new Error("User not found. Check was not added.")
     }
 
+    Sentry.captureMessage("s1");
+
     if(!data.nextRequiredCheckDate) {
         return
     }
 
-    const stateController = new CheckStateController(data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), data.state)
+    Sentry.captureMessage("s2, " + data.nextRequiredCheckDate);
 
-    if((!backup && stateController.needsWarning()) || (backup && stateController.needsBackupWarning())) {
-        const notification = new WarningNotification(data.name ?? "", userId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!, data.currentCheckId!, data.nextRequiredCheckDate)
-        const notifier = new WarningNotifier(userId, backup ? GuardType.BACKUP : GuardType.IMPORTANT, notification)
-        await notifier.submit()
-        await updateCheckState(userId, CheckState.WARNED)
+    try {
+        const stateController = new CheckStateController(data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), data.state)
+
+        Sentry.captureMessage("s3, " + data.nextRequiredCheckDate)
+
+        if((!backup && stateController.needsWarning()) || (backup && stateController.needsBackupWarning())) {
+            Sentry.captureMessage("s4, " + data.nextRequiredCheckDate)
+            const notification = new WarningNotification(data.name ?? "", userId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!, data.currentCheckId!, data.nextRequiredCheckDate)
+            Sentry.captureMessage("s5, " + data.nextRequiredCheckDate)
+            const notifier = new WarningNotifier(userId, backup ? GuardType.BACKUP : GuardType.IMPORTANT, notification)
+            Sentry.captureMessage("s6, " + data.nextRequiredCheckDate)
+            await notifier.submit()
+            Sentry.captureMessage("s7, " + data.nextRequiredCheckDate)
+            await updateCheckState(userId, CheckState.WARNED)
+        }
+    } catch (err) {
+        Sentry.captureException(err);
     }
+
+
 }
