@@ -1,10 +1,5 @@
-import {Notification, Recipient} from "./Notifications";
+import {Notification} from "./Notifications";
 
-export abstract class NotificationSubmitter {
-    recipient: Recipient
-    protected constructor(recipient: Recipient) {
-        this.recipient = recipient
-    }
-
-    abstract submit(notification: Notification): Promise<void>
+export interface NotificationSubmitter {
+    submit(notification: Notification): Promise<void>
 }

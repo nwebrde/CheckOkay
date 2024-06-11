@@ -9,10 +9,17 @@ export abstract class Notification {
     public subject: string
     public text: string
 
-    constructor(notificationType: ConcreteNotificationType, subject: string, text: string) {
+    public pushCategoryIdentifier: string | undefined
+    public pushOnlyText: string | undefined
+    public mailOnlyText: string | undefined
+
+    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string) {
         this.notificationType = notificationType
         this.subject = subject
         this.text = text
+        this.mailOnlyText = mailOnlyText
+        this.pushOnlyText = pushOnlyText
+        this.pushCategoryIdentifier = pushCategoryIdentifier
     }
 
     /**

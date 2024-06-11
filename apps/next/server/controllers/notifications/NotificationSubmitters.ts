@@ -9,11 +9,12 @@ import { users } from 'db/schema/auth'
 type ChannelDB = typeof notificationChannels.$inferSelect
 
 
-export class EmailSubmitter extends NotificationSubmitter {
+export class EmailSubmitter implements NotificationSubmitter {
+    recipient: Recipient
     email: string
 
     constructor(recipient: Recipient, email: string) {
-        super(recipient)
+        this.recipient = recipient
         this.email = email;
     }
 
@@ -22,16 +23,15 @@ export class EmailSubmitter extends NotificationSubmitter {
     }
 }
 
-export class PushSubmitter extends NotificationSubmitter {
-    token: string
+export class PushSubmitter implements NotificationSubmitter {
+    tokens: string[]
 
-    constructor(recipient: Recipient, token: string) {
-        super(recipient)
-        this.token = token;
+    constructor(tokens: string[]) {
+        this.tokens = tokens;
     }
 
    async submit(notification: Notification) {
-        await addPush(this.token, this.recipient, notification);
+        await addPush(this.tokens, notification);
     }
 }
 
@@ -80,6 +80,8 @@ export const getSubmitters = async (recipient: Recipient, includedTypes: Channel
         submitters.push(new EmailSubmitter(recipient, primaryMail))
     }
 
+    const pushTokens: string[] = [];
+
     for (const channel of channels) {
         switch (channel.type) {
             case ChannelType.EMAIL:
@@ -89,12 +91,16 @@ export const getSubmitters = async (recipient: Recipient, includedTypes: Channel
                 break;
             case ChannelType.PUSH:
                 if(includedTypes.includes(ChannelType.PUSH)) {
-                    submitters.push(new PushSubmitter(recipient, channel.address))
+                    pushTokens.push(channel.address)
                 }
                 break;
             default:
                 throw new Error("parsing DB email channel failed. Channel is not correctly implemented")
         }
+    }
+
+    if(pushTokens.length > 0) {
+        submitters.push(new PushSubmitter(pushTokens))
     }
 
     return submitters

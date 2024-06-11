@@ -27,12 +27,18 @@ export const notificationChannels = mySqlTable(
                 onUpdate: 'cascade',
             }),
         address: varchar('address', { length: 255 }).notNull(),
-        id: int('id').autoincrement().notNull().primaryKey(),
         type: mysqlEnum('type', [
             ChannelType.EMAIL,
             ChannelType.PUSH,
         ]).notNull(),
-    }
+    },
+    (table) => {
+        return {
+            pk: primaryKey({
+                columns: [table.userId, table.address],
+            }),
+        }
+    },
 )
 
 export const notificationChannelRelation = relations(notificationChannels, ({ one }) => ({

@@ -16,7 +16,7 @@
   },
   "scripts": {
     "native": "cd apps/expo && yarn start",
-    "web": "cd apps/next && yarn next",
+    "web": "cd apps/next && yarn dev",
     "lint": "eslint ."
   },
   "resolutions": {

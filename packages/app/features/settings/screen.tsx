@@ -6,6 +6,8 @@ import ChecksList from 'app/features/settings/checks/ChecksList'
 import { CheckSettings } from 'app/features/settings/checkSettings/CheckSettings'
 import { Screen, VSpacer } from 'app/design/layout'
 import { Guards } from 'app/features/settings/guards/Guards'
+import { Notifications } from 'app/features/settings/notifications/notifications'
+import EmailList from 'app/features/settings/notifications/emailList'
 
 export function SettingsScreen() {
     return (
@@ -18,6 +20,7 @@ export function SettingsScreen() {
                 <VSpacer />
                 <H1>Weitere Einstellungen</H1>
                 <CheckSettings />
+                <Notifications />
             </View>
         </Screen>
     )

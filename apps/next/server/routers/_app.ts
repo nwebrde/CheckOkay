@@ -7,6 +7,7 @@ import {ZUser} from "app/lib/types/user";
 import {getUser} from "../adapters/db/users";
 import {ZGuard} from "app/lib/types/guardUser";
 import {ZGuarded} from "app/lib/types/guardedUser";
+import { channelsRouter } from './channels'
 
 export const appRouter = router({
     getUser: authorizedProcedure.output(
@@ -26,6 +27,7 @@ export const appRouter = router({
     }),
     checks: checksRouter,
     guards: guardsRouter,
+    channels: channelsRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter

@@ -1,5 +1,6 @@
-import {emailQueue, pushQueue} from "./config";
+import { emailQueue, pushQueue, queue, STANDARD_QUEUE_JOBS } from './config'
 import {Notification, Recipient} from "../../entities/notifications/Notifications";
+import { Ticket } from '../notificationChannels/push'
 
 
 /**
@@ -22,10 +23,29 @@ export const addEmail = async (email: string, recipient: Recipient, notification
  * @param notification
  * @param delay in seconds
  */
-export const addPush = async (token: string, recipient: Recipient, notification: Notification, delay: number = 0) => {
+export const addPush = async (tokens: string[], notification: Notification, delay: number = 0, checkTickets: boolean = true) => {
     await pushQueue.add('push', {
         notification: notification,
-        recipient: recipient,
-        address: token
+        tokens: tokens,
+        checkTickets: checkTickets
     }, { delay: delay * 1000 });
+}
+
+/**
+ *
+ * @param token
+ * @param notification
+ * @param delay in seconds
+ */
+export const addTickets = async(tickets: Ticket[], notification: Notification, delay: number = 0) => {
+    await queue.add(STANDARD_QUEUE_JOBS.PUSH_TICKET, {
+        tickets,
+        notification,
+    }, {
+        delay: delay * 1000,
+        attempts: 4,
+        backoff: {
+            type: 'exponential',
+            delay: 15 * 60000, // 15 minutes, spans 3,75 hours
+        }});
 }

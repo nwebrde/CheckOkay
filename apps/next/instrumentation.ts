@@ -1,4 +1,4 @@
-import { CheckJob, NotificationJob } from './server/adapters/scheduler/config'
+import { CheckJob, EmailJob, PushJob } from './server/adapters/scheduler/config'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/de'
 import dayjs from 'dayjs'
@@ -11,16 +11,17 @@ export const register = async () => {
         dayjs.locale('de')
         dayjs.extend(relativeTime)
 
-        const { sendMail } = await import('./server/controllers/notifications/NotificationChannelController');
+        const { sendMail, sendPush, checkPush } = await import('./server/controllers/notifications/NotificationChannelController');
         const { Worker } = await import('bullmq');
         const { redisConnection } = await import('./server/adapters/scheduler/config');
 
         const { WarningNotifier } = await import('./server/controllers/notifications/ConcreteNotifiers');
         const { toConcreteNotification } = await import('./server/controllers/notifications/ConcreteNotifications');
-        const { STANDARD_QUEUE_JOBS } = await import('./server/adapters/scheduler/repeatingNotifiers');
-        const { CHECK_QUEUE, EMAIL_QUEUE, STANDARD_QUEUE } = await import('./server/adapters/scheduler/config');
+        const { STANDARD_QUEUE_JOBS } = await import('./server/adapters/scheduler/config');
+        const { CHECK_QUEUE, EMAIL_QUEUE, STANDARD_QUEUE, PUSH_QUEUE } = await import('./server/adapters/scheduler/config');
         const { remind, warn } = await import('./server/controllers/checkState');
         const {CheckSteps} = await import('./server/adapters/scheduler/config');
+        const { checkTickets } = await import('./server/adapters/notificationChannels/push');
         const { DelayedError } = await import('bullmq');
 
         new Worker<CheckJob>(CHECK_QUEUE, async (job, token?: string) => {
@@ -68,8 +69,25 @@ export const register = async () => {
             removeOnFail: { count: 5000 },
         });
 
-        new Worker<NotificationJob>(EMAIL_QUEUE, async (job) => {
-            await sendMail(job.data.address, job.data.recipient, job.data.notification)
+        new Worker<EmailJob>(EMAIL_QUEUE, async (job) => {
+            await sendMail(job.data.address, job.data.recipient!, job.data.notification)
+        }, {
+            connection: redisConnection,
+            concurrency: 1,
+            removeOnComplete: { count: 100 },
+            removeOnFail: { count: 5000 },
+        });
+
+        new Worker<PushJob>(PUSH_QUEUE, async (job) => {
+            const failedJobs = await sendPush(job.data.tokens, job.data.notification);
+            if(failedJobs.length > 0) {
+                await job.updateData({
+                    notification: job.data.notification,
+                    tokens: failedJobs,
+                    checkTickets: job.data.checkTickets
+                })
+                throw new Error("Some push notifications could not be send")
+            }
         }, {
             connection: redisConnection,
             concurrency: 1,
@@ -83,6 +101,16 @@ export const register = async () => {
                     // TODO switch for different repeating notifier implementations
                     const notifier = new WarningNotifier(job.data.notifier.userId, job.data.notifier.guardType, toConcreteNotification(job.data.notifier.notification), job.data.notifier.currentRound)
                     await notifier.submit()
+                    break;
+                case STANDARD_QUEUE_JOBS.PUSH_TICKET:
+                    const failedReceipts = await checkPush(job.data.tickets, job.data.notification)
+                    if(failedReceipts.length > 0) {
+                        await job.updateData({
+                            notification: job.data.notification,
+                            tickets: failedReceipts
+                        })
+                        throw new Error("Some push notification receipts could not be checked")
+                    }
                     break;
                 default:
                     break;

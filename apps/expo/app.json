@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "solito-nativewind",
-    "slug": "solito-nativewind",
+    "slug": "checkokay",
     "version": "1.0.0",
     "scheme": "solito-nativewind",
     "platforms": [
@@ -12,8 +12,17 @@
     "ios": {
       "bundleIdentifier": "com.solito.nativewind"
     },
+    "android": {
+      "useNextNotificationsApi": true
+    },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0af8bd29-1d23-41c1-9b6d-ba66ed48a23d"
+      }
+    },
+    "owner": "nikweb"
   }
 }

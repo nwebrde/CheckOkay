@@ -15,6 +15,13 @@
       "when": 1716827852191,
       "tag": "0001_swift_pestilence",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1717963405097,
+      "tag": "0002_needy_carmella_unuscione",
+      "breakpoints": true
     }
   ]
 }

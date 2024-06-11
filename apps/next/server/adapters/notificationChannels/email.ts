@@ -48,11 +48,12 @@ export const send = async (
     recipient: Recipient,
     notification: Notification
 ) => {
-    const response = await transporter.sendMail({
-        from: process.env.FROM_MAIL,
-        to: toMail,
-        subject: notification.subject,
-        html: `
+    try {
+        const response = await transporter.sendMail({
+            from: process.env.FROM_MAIL,
+            to: toMail,
+            subject: notification.subject,
+            html: `
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
@@ -64,13 +65,16 @@ export const send = async (
 <h2>${notification.subject}</h2>
 <p>
 Hi ${recipient.name},<br/><br/>
-${notification.text}
+${(notification.mailOnlyText) ? notification.mailOnlyText : notification.text}
 </p>
 </div>
 </div>
 </body>
 </html>
 `,
-    })
-    return response?.messageId
+        })
+    } catch (e) {
+        console.error(e);
+        throw new Error("email delivery failed")
+    }
 }

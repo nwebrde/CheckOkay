@@ -46,10 +46,21 @@ export type CheckJob = {
     userId: string;
 }
 
-export interface NotificationJob {
+export interface EmailJob {
     notification: Notification,
     recipient: Recipient,
     address: string
+}
+
+export interface PushJob {
+    notification: Notification,
+    tokens: string[]
+    checkTickets: boolean
+}
+
+export enum STANDARD_QUEUE_JOBS {
+    REPEATING_NOTIFIER = "REPEATING_NOTIFIER",
+    PUSH_TICKET = "PUSH_TICKET"
 }
 
 export const checkQueue = new Queue<CheckJob>(CHECK_QUEUE, {
@@ -65,20 +76,16 @@ export const checkQueue = new Queue<CheckJob>(CHECK_QUEUE, {
 
 /**
  * Standard queue
- * currently used for RepeatingNotifier
  */
 export const queue = new Queue(STANDARD_QUEUE, {
     connection,
     defaultJobOptions: {
-        attempts: 18, // spans in sum three months
-        backoff: {
-            type: 'exponential',
-            delay: 30000, // half minute
-        },
+        attempts: 1
     },
 });
 
-export const emailQueue = new Queue<NotificationJob>(EMAIL_QUEUE, {
+
+export const emailQueue = new Queue<EmailJob>(EMAIL_QUEUE, {
     connection,
     defaultJobOptions: {
         attempts: 13, // spans 2.8 days
@@ -89,7 +96,7 @@ export const emailQueue = new Queue<NotificationJob>(EMAIL_QUEUE, {
     },
 });
 
-export const pushQueue = new Queue<NotificationJob>(PUSH_QUEUE, {
+export const pushQueue = new Queue<PushJob>(PUSH_QUEUE, {
     connection,
     defaultJobOptions: {
         attempts: 13, // spans 2.8 days

@@ -21,6 +21,7 @@
     "dayjs": "^1.11.10",
     "db": "workspace:^",
     "drizzle-orm": "^0.29.1",
+    "expo-server-sdk": "^3.10.0",
     "next": "latest",
     "next-auth": "^4.24.5",
     "nodemailer": "^6.9.8",
