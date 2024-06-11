@@ -39,7 +39,7 @@ function getBaseUrl() {
         // reference for render.com
         return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`
     // assume localhost
-    return `http://localhost:${process.env.PORT ?? 3000}`
+    return process.env.EXPO_PUBLIC_API_URL
 }
 
 export function TRPCProvider(props: { children: React.ReactNode }) {
@@ -66,7 +66,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                         signOut()
                     }
 
-                    if (!decodedToken) {
+                    if (!decodedToken || !decodedToken.exp) {
                         return true
                     }
 
@@ -95,7 +95,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
             }),
 
             httpBatchLink({
-                url: 'http://localhost:3000/api/trpc',
+                url: process.env.EXPO_PUBLIC_API_URL,
                 headers: () => {
                     return {authorization: localAccessToken!}
                 }

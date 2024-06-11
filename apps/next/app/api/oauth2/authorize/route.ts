@@ -3,8 +3,7 @@ import {
     handleError,
     handleResponse,
 } from '../../../../server/lib/typescirpt-node-oauth-server'
-import { NextRequest } from 'next/server'
-import { redirect } from 'next/navigation'
+import { NextRequest, NextResponse } from 'next/server'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../../../server/lib/nextAuthOptions'
@@ -37,7 +36,7 @@ export async function GET(req: NextRequest) {
             return handleResponse(oauthResponse)
         } else {
             const url = encodeURIComponent(req.nextUrl.toString())
-            redirect(`/api/auth/signin?callbackUrl=${url}`)
+            NextResponse.redirect(`/api/auth/signin?callbackUrl=${url}`)
         }
     } catch (e) {
         console.error(e)

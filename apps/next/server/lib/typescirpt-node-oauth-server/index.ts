@@ -16,7 +16,7 @@ import {
   AuthCodeRepository,
 } from './repositories'
 import { OAuthResponse } from '@jmondi/oauth2-server/src/responses/response'
-import { redirect } from 'next/navigation'
+import { NextResponse } from 'next/server'
 
 export const ACCESS_TOKEN_INTERVAL = new DateInterval('1min')
 export const REFRESH_TOKEN_INTERVAL = new DateInterval('5y')
@@ -60,7 +60,7 @@ export function handleResponse(oauthResponse: OAuthResponse): Response {
   if (oauthResponse.status === 302) {
     if (!oauthResponse.headers.location)
       throw new Error('missing redirect location')
-    redirect(oauthResponse.headers.location)
+    return NextResponse.redirect(oauthResponse.headers.location)
   } else {
     return new Response(JSON.stringify(oauthResponse.body), {
       status: oauthResponse.status,
