@@ -9,30 +9,33 @@ const nextConfig = {
     // once that gets fixed, set this back to true
     reactStrictMode: false,
     transpilePackages: [
+        'app',
+        'expo-router',
+        'moti',
+        'nativewind',
         'react-native',
+        'react-native-css-interop',
+        'react-native-reanimated',
+        'react-native-gesture-handler',
         'react-native-web',
         'solito',
-        'moti',
-        'app',
-        'react-native-reanimated',
-        'nativewind',
-        'react-native-gesture-handler',
     ],
     output: 'standalone',
     eslint: {
         // Warning: This allows production builds to successfully complete even if
         // your project has ESLint errors.
-        ignoreDuringBuilds: true,
+        ignoreDuringBuilds: false,
     },
     typescript: {
         // !! WARN !!
         // Dangerously allow production builds to successfully complete even if
         // your project has type errors.
         // !! WARN !!
-        ignoreBuildErrors: true,
+        ignoreBuildErrors: false,
     },
     experimental: {
         instrumentationHook: true,
+        forceSwcTransforms: true
     },
 }
 

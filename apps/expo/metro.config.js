@@ -3,6 +3,7 @@
 /**
  * @type {import('expo/metro-config')}
  */
+const { withNativeWind } = require('nativewind/metro');
 const { getDefaultConfig } = require('expo/metro-config')
 const path = require('path')
 
@@ -12,6 +13,12 @@ const projectRoot = __dirname
 const workspaceRoot = path.resolve(projectRoot, '../..')
 
 const config = getDefaultConfig(projectRoot)
+const globalCSS = path.resolve(
+    workspaceRoot,
+    'packages/app/global.css'
+)
+const tailwindConfigPath = path.resolve(projectRoot, 'tailwind.config.js')
+
 
 // 1. Watch all files within the monorepo
 config.watchFolders = [workspaceRoot]
@@ -23,4 +30,7 @@ config.resolver.nodeModulesPaths = [
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true
 
-module.exports = config
+module.exports = withNativeWind(config, { input: globalCSS,
+  // This is optional
+  configPath: tailwindConfigPath,
+  projectRoot })

@@ -256,6 +256,7 @@ export class ClientRepository implements OAuthClientRepository {
                     'exp://192.168.178.150:8081',
                     'exp://192.168.0.247:8081',
                     'exp://172.17.119.171:8081',
+                    'exp://192.168.178.117:8081',
                     'exp://172.20.10.3:8081',
                     'http://localhost',
                 ],

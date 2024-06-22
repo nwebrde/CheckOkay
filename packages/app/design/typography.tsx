@@ -1,25 +1,33 @@
-import { ComponentProps, forwardRef } from 'react'
+import React, { ComponentProps, forwardRef } from 'react'
 import { Text as NativeText, Platform, Linking, TextStyle } from 'react-native'
-import { styled, StyledProps } from 'nativewind'
 import { TextLink as SolitoTextLink } from 'solito/link'
+import { MotiLink as MLink } from 'solito/build/moti/app'
 
-export const Text = styled(NativeText)
+export function Text({ className, ...props }) {
+    return (<NativeText className={className} {...props } />)
+}
 
 /**
  * You can use this pattern to create components with default styles
  */
-export const P = styled(NativeText, 'text-base text-black my-4')
+export function P({ className, ...props }) {
+    return (<NativeText className={'text-base text-black my-4 ' + className} {...props } />)
+}
 
 /**
  * Components can have defaultProps and styles
  */
-export const H1 = styled(NativeText, 'text-3xl font-extrabold my-7')
+export function H1({ className, ...props }) {
+    return (<NativeText className={'text-3xl font-extrabold my-7 ' + className} {...props } />)
+}
 H1.defaultProps = {
     accessibilityLevel: 1,
     accessibilityRole: 'header',
 }
 
-export const Label = styled(NativeText, 'text-xl font-extrabold my-1')
+export function Label({ className, ...props }) {
+    return (<NativeText className={'text-xl font-extrabold my-1 ' + className} {...props } />)
+}
 
 /**
  * This is a more advanced component with custom styles and per-platform functionality
@@ -29,7 +37,7 @@ export interface AProps extends ComponentProps<typeof Text> {
     target?: '_blank'
 }
 
-export const A = forwardRef<NativeText, StyledProps<AProps>>(function A(
+export const A = forwardRef<NativeText, AProps>(function A(
     { className = '', href, target, ...props },
     ref,
 ) {
@@ -67,6 +75,7 @@ export const A = forwardRef<NativeText, StyledProps<AProps>>(function A(
  * Solito's TextLink doesn't work directly with styled() since it has a textProps prop
  * By wrapping it in a function, we can forward style down properly.
  */
+/*
 export const TextLink = styled<
     ComponentProps<typeof SolitoTextLink> & { style?: TextStyle }
 >(function TextLink({ style, textProps, ...props }) {
@@ -77,3 +86,9 @@ export const TextLink = styled<
         />
     )
 }, 'text-base font-bold hover:underline text-blue-500')
+
+ */
+
+export function TextLink({ className, ...props }) {
+    return (<SolitoTextLink {...props } />)
+}

@@ -1,3 +1,6 @@
+/** @type {import('tailwindcss').Config} */
+
+
 // This is a dummy tailwind config file used to provide intellisense.
 // To configure your global tailwind settings, modify the imported theme object.
 const { theme } = require('app/design/tailwind/theme')
@@ -7,6 +10,9 @@ module.exports = {
   content: [
     './**/*.{js,jsx,ts,tsx}',
   ],
+  presets: [require("nativewind/preset")],
+  important: 'html',
+  darkMode: ['class'],
   theme: {
     ...theme,
   },

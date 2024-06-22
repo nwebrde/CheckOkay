@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.12",
-    "@expo/next-adapter": "5.0.2",
+    "@expo/next-adapter": "6.0.0",
     "@jmondi/oauth2-server": "^3.0.2",
     "@sentry/nextjs": "^8",
     "@trpc/next": "^10.44.1",
@@ -22,14 +22,12 @@
     "db": "workspace:^",
     "drizzle-orm": "^0.29.1",
     "expo-server-sdk": "^3.10.0",
-    "next": "latest",
+    "next": "14.2.4",
     "next-auth": "^4.24.5",
     "nodemailer": "^6.9.8",
     "raf": "^3.4.1",
     "randomstring": "^1.3.0",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-native-web": "^0.19.10",
+    "react-native-web": "0.19.12",
     "react-time-picker": "^6.6.0",
     "react-web-share": "^2.0.2",
     "setimmediate": "^1.0.5",
@@ -40,9 +38,9 @@
     "@types/node": "17.0.21",
     "@types/nodemailer": "^6.4.14",
     "@types/randomstring": "^1.1.11",
-    "autoprefixer": "^10.4.7",
-    "eslint-config-next": "latest",
-    "tailwindcss": "3.3.2"
+    "@types/react": "18.3.3",
+    "autoprefixer": "^10.4.17",
+    "eslint-config-next": "14.1.3"
   },
   "packageManager": "yarn@3.4.1"
 }

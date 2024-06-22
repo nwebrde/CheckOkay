@@ -1,6 +1,11 @@
+/** @jsxImportSource react */
+
+import 'app/global.css';
+
 import { StylesProvider } from './styles-provider'
-import '../global.css'
 import { Provider } from 'app/provider'
+import 'setimmediate'
+import 'raf/polyfill'
 
 export const metadata = {
     title: 'Create Solito App',

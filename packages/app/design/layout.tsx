@@ -1,15 +1,24 @@
-import { styled } from 'nativewind'
 import { CheckIn } from 'app/features/checkIn/CheckIn'
 import { Guards } from 'app/features/settings/guards/Guards'
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { View } from 'app/design/view'
+import { MotiLink as MLink } from 'solito/build/moti/app'
 
-export const Row = styled(View, 'flex-row')
+export function Row({ className, ...props }) {
+    return (<View className={"flex-row " + className} {...props } />)
+}
 
-export const VSpacer = styled(View, 'h-12')
-export const HSpacer = styled(View, 'w-12')
+export function VSpacer({ className, ...props }) {
+    return (<View className={"h-12 " + className} {...props } />)
+}
 
-export const Card = styled(View, 'p-5 rounded-xl shadow-sm')
+export function HSpacer({ className, ...props }) {
+    return (<View className={"w-12 " + className} {...props } />)
+}
+
+export function Card({ className, ...props }) {
+    return (<View className={"p-5 rounded-xl shadow-sm " + className} {...props } />)
+}
 
 export const Screen = ({
     children,

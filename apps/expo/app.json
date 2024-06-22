@@ -13,10 +13,10 @@
       "bundleIdentifier": "com.solito.nativewind"
     },
     "android": {
-      "useNextNotificationsApi": true
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-router"
     ],
     "extra": {
       "eas": {

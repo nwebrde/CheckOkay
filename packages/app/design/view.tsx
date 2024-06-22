@@ -1,4 +1,6 @@
 import { View as ReactNativeView } from 'react-native'
-import { styled } from 'nativewind'
+import React from 'react'
 
-export const View = styled(ReactNativeView)
+export function View({ className, ...props }) {
+    return (<ReactNativeView className={className} {...props } />)
+}

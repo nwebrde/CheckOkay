@@ -11,7 +11,7 @@ services:
     command: sh -c "yarn migrations:push;yarn web"
     volumes:
       - .:/app
-      #- /app/apps/next/.next
+      - /app/apps/next/.next
     ports:
       - 3000:3000
     environment:

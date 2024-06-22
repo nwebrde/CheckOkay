@@ -1,12 +1,19 @@
 import React, { ReactNode } from 'react'
-
 import { Text, Pressable, GestureResponderEvent } from 'react-native'
-import { styled } from 'nativewind'
 import { MotiLink as MLink } from 'solito/moti/app'
-import { MotiPressable as MPressable } from 'moti/interactions'
+import { MotiPressable } from 'moti/interactions'
 
-export const StyledPressable = styled(Pressable)
-const StyledText = styled(Text)
+export function StyledPressable({ className, ...props }) {
+    return(<Pressable className={className}{...props } />)
+}
+function StyledText({ className, ...props }) {
+    return (
+        <Text
+            className={className}
+            {...props }
+        />
+    );
+}
 
 export interface ButtonProps {
     text: string
@@ -28,8 +35,10 @@ export function Button({ text, onClick }: ButtonProps) {
     )
 }
 
-export const MotiPressable = styled(MPressable)
-export const MotiLink = styled(MLink)
+export function MotiLink({ className, ...props }) {
+    return (<MLink className={className} {...props } />)
+}
+
 
 export function AnimatedLink({
     children,
