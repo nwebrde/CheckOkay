@@ -8,8 +8,6 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from '@backpackapp-io/react-native-toast'
 
 
 //  To toggle LTR/RTL change to `true`

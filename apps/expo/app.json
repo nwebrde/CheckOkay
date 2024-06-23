@@ -1,18 +1,21 @@
 {
   "expo": {
-    "name": "solito-nativewind",
+    "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "1.0.0",
-    "scheme": "solito-nativewind",
+    "version": "0.0.1",
+    "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
+    "scheme": "checkokay",
     "platforms": [
       "ios",
       "android"
     ],
-    "icon": "https://www.google.com/logos/fnbx/christmas/present.png",
+    "icon": "./icon.png",
     "ios": {
-      "bundleIdentifier": "com.solito.nativewind"
+      "bundleIdentifier": "de.nweber.checkokay"
     },
-    "android": {},
+    "android": {
+      "package": "de.nweber.checkokay"
+    },
     "plugins": [
       "expo-secure-store",
       "expo-router",
