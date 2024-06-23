@@ -35,8 +35,8 @@ export async function GET(req: NextRequest) {
                 )
             return handleResponse(oauthResponse)
         } else {
-            const url = encodeURIComponent(req.nextUrl.toString())
-            NextResponse.redirect(`/api/auth/signin?callbackUrl=${url}`)
+            const url = encodeURIComponent(process.env.NEXTAUTH_URL + req.nextUrl.pathname + req.nextUrl.search)
+            return NextResponse.redirect(process.env.NEXTAUTH_URL + `/api/auth/signin?callbackUrl=${url}`)
         }
     } catch (e) {
         console.error(e)
