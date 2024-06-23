@@ -62,12 +62,15 @@ export const channelsRouter = router({
             z.boolean()
         )
         .mutation(async (opts) => {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+            })
             return await removeChannel(
                 opts.ctx.userId,
                 opts.input.address,
             )
         }),
     get: authorizedProcedure.output(z.array(ZNotificationChannel)).query(async (opts) => {
-        return await getChannels(opts.ctx.userId!)
+        return getChannels(opts.ctx.userId!)
     }),
 })

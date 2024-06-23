@@ -2,9 +2,11 @@
   "dependencies": {
     "@react-native-community/datetimepicker": "8.0.1",
     "app": "*",
+    "burnt": "^0.12.2",
     "core-js-pure": "^3.35.0",
     "expo": "51",
     "expo-auth-session": "~5.5.2",
+    "expo-build-properties": "~0.12.3",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
     "expo-device": "~6.0.2",

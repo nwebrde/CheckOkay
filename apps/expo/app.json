@@ -12,11 +12,11 @@
     "ios": {
       "bundleIdentifier": "com.solito.nativewind"
     },
-    "android": {
-    },
+    "android": {},
     "plugins": [
       "expo-secure-store",
-      "expo-router"
+      "expo-router",
+      "expo-build-properties"
     ],
     "extra": {
       "eas": {

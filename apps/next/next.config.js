@@ -19,6 +19,7 @@ const nextConfig = {
         'react-native-gesture-handler',
         'react-native-web',
         'solito',
+        'burnt'
     ],
     output: 'standalone',
     eslint: {

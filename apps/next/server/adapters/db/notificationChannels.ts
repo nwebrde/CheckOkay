@@ -27,8 +27,18 @@ export const removePushTokens = async (tokens: string[]) => {
 }
 
 export const getChannels = async (userId: string) => {
-    return db.select({
-        address: notificationChannels.address,
-        type: notificationChannels.type
-    }).from(notificationChannels).where(eq(notificationChannels.userId, userId))
+    const res = await db.query.notificationChannels.findMany({
+        where: eq(notificationChannels.userId, userId)
+    })
+
+    const returnArray = [];
+    for (const elem of res) {
+        returnArray.push(
+            {
+                address: elem.address,
+                type: elem.type
+            }
+        )
+    }
+    return returnArray;
 }

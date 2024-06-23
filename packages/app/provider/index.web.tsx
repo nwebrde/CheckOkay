@@ -6,6 +6,7 @@ import { TRPCProvider } from 'app/provider/trpc-client'
 import { SessionProvider } from 'next-auth/react'
 import { localMoment } from 'app/lib/time'
 import { NotificationsProvider } from 'app/provider/notifications'
+import { Toaster } from "burnt/web";
 
 export function Provider({ children }: { children: React.ReactNode }) {
     localMoment.locale('de')
@@ -16,6 +17,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
                     <TRPCProvider>
                         <NotificationsProvider>
                         {children}
+                            <Toaster position='bottom-right' />
                         </NotificationsProvider></TRPCProvider>
                 </AuthProvider>
             </SessionProvider>

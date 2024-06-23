@@ -1,15 +1,14 @@
-import { View } from 'app/design/view'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
+import EmailsList from 'app/features/settings/notifications/emailsList'
 
 export function Notifications() {
     return (
-        <View>
-            <SettingsGroup title="Notifications">
-                <SettingsRow label="Zusätzliche Emails" fullsize={true}>
-                    <></>
+            <SettingsGroup title="Benachrichtigungen">
+                <SettingsRow label="Zusätzliche Emails für Warnungen" fullsize={true}>
+                    <EmailsList />
                 </SettingsRow>
             </SettingsGroup>
-        </View>
     )
 }
+
