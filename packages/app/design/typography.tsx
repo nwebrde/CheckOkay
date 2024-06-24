@@ -20,10 +20,13 @@ export function P({ className, ...props }) {
 export function H1({ className, ...props }) {
     return (<NativeText className={'text-3xl font-extrabold my-7 ' + className} {...props } />)
 }
+/*
 H1.defaultProps = {
     accessibilityLevel: 1,
     accessibilityRole: 'header',
 }
+
+ */
 
 export function Label({ className, ...props }) {
     return (<NativeText className={'text-xl font-extrabold my-1 ' + className} {...props } />)

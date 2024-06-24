@@ -95,7 +95,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
             }),
 
             httpBatchLink({
-                url: process.env.EXPO_PUBLIC_API_URL,
+                url: process.env.EXPO_PUBLIC_API_URL!,
                 headers: () => {
                     return {authorization: localAccessToken!}
                 }
