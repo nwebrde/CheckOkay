@@ -1,6 +1,8 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db, tableCreator } from 'db'
 import DiscordProvider from 'next-auth/providers/discord'
+import AppleProvider from "next-auth/providers/apple";
+
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { Session, User } from 'next-auth'
 
@@ -26,6 +28,10 @@ export const authOptions = {
         DiscordProvider({
             clientId: process.env.AUTH_DISCORD_ID!,
             clientSecret: process.env.AUTH_DISCORD_SECRET!,
+        }),
+        AppleProvider({
+            clientId: process.env.APPLE_CLIENT_ID!,
+            clientSecret: process.env.APPLE_CLIENT_SECRET!
         }),
         {
             id: 'ses',
