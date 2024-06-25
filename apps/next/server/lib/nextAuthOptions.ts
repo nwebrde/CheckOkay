@@ -147,6 +147,17 @@ export const authOptions = {
             },
         }),
     ],
+    cookies: {
+        pkceCodeVerifier: {
+            name: 'next-auth.pkce.code_verifier',
+            options: {
+                httpOnly: true,
+                sameSite: 'none',
+                path: '/',
+                secure: true
+            }
+        }
+    },
     callbacks: {
         async session(param: SessionCallbackParam) {
             // Send properties to the client, like an access_token and user id from a provider.
