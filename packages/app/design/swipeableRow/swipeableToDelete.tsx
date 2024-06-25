@@ -7,8 +7,7 @@ import { StyledPressable } from 'app/design/button'
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-export function SwipeableToDelete({ children, action, deleted }) {
-    const [deleteTriggered, setDeleteTriggered] = useState(false)
+export function SwipeableToDelete({ children, action, isDeleting }) {
     const renderRightActions = (
         _progress: Animated.AnimatedInterpolation<number>,
         dragX: Animated.AnimatedInterpolation<number>
@@ -22,10 +21,10 @@ export function SwipeableToDelete({ children, action, deleted }) {
             <StyledPressable className="flex text-white pr-5 flex-row-reverse items-center bg-red-500 w-full h-full"
                              onPress={action}>
                 <AnimatedView style={[{ transform: [{ scale }] }]}>
-                    { !deleted &&
+                    { !isDeleting &&
                     <Trash />
                     }
-                    { deleted &&
+                    { isDeleting &&
                         <ActivityIndicator size="small" color="white" />
                     }
                 </AnimatedView>
@@ -42,17 +41,12 @@ export function SwipeableToDelete({ children, action, deleted }) {
 
      */
 
-    const deleteRow = () => {
-        setDeleteTriggered(true);
-        action();
-    }
-
     return (
         <Swipeable
             ref={rowRef}
             friction={2}
             enableTrackpadTwoFingerGesture
-            onSwipeableOpen={deleteRow}
+            onSwipeableOpen={action}
             renderRightActions={renderRightActions}>
             {children}
         </Swipeable>

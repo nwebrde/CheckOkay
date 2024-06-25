@@ -62,9 +62,6 @@ export const channelsRouter = router({
             z.boolean()
         )
         .mutation(async (opts) => {
-            throw new TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-            })
             return await removeChannel(
                 opts.ctx.userId,
                 opts.input.address,

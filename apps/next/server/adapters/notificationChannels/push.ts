@@ -48,7 +48,8 @@ export const send = async (
         body: notification.pushOnlyText ? notification.pushOnlyText : notification.text,
         title: notification.subject,
         data: { withSome: 'data' },
-        categoryId: notification.pushCategoryIdentifier
+        categoryId: notification.pushCategoryIdentifier,
+        ttl: 604800 // one week
     };
 
 // The Expo push notification service accepts batches of notifications so

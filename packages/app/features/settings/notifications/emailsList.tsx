@@ -71,7 +71,7 @@ export default function EmailsList() {
         return (
             <SwipeableToDelete action={() => {deleteChannel.mutate({
                 address: item.address
-            })}} deleted={item.deleted}>
+            })}} isDeleting={item.deleted}>
                 <Row text={item.address} />
             </SwipeableToDelete>
         );
