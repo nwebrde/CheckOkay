@@ -25,7 +25,7 @@ export async function createContext({
                 }
             }
         } else {
-            const session = await getServerSession(authOptions)
+            const session = await getServerSession(authOptions())
             if (session && session.user.id) {
                 userId = session.user.id
             }

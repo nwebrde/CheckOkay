@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     if (!code) {
         return redirect(`/`)
     }
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions())
     if (session) {
         const user = session.user
         if (await acceptInvitation(code, user.id)) {

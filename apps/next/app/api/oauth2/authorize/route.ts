@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
                 query: query,
             })
 
-        const session = await getServerSession(authOptions)
+        const session = await getServerSession(authOptions())
         if (session) {
             // Signed in
             authRequest.user = session.user
