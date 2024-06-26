@@ -1,7 +1,9 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db, tableCreator } from 'db'
 import DiscordProvider from 'next-auth/providers/discord'
-import AppleProvider from "next-auth/providers/apple";
+import AppleProvider from "next-auth/providers/apple"
+import GoogleProvider from "next-auth/providers/google"
+
 
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { Session, User } from 'next-auth'
@@ -52,6 +54,10 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
                 };
             },
         }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+        })
     ],
     cookies: {
         pkceCodeVerifier: {
