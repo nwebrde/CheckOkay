@@ -8,6 +8,8 @@ To start MySQL: Use the launcher in System settings
 Database must be configured to use UTC timeformat (for auto filled values like createdAt)!
 All Dates stored are in UTC timeformat.
 
+Native packages must be added to /apps/expo and /apps/next. Only adding to /packages/app is not possible as android builds do not find them there.
+
 ## Deployment of Server & Website
 To build a docker image, run in repo root
 ```sh
