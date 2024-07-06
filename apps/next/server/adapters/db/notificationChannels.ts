@@ -5,11 +5,16 @@ import { checks } from 'db/schema/checks'
 
 
 export const addChannel = async (userId: string, address: string, type: ChannelType) => {
-    const res = await db.insert(notificationChannels).values({
-        userId: userId,
-        address: address,
-        type: type
-    })
+    let res;
+    try {
+        res = await db.insert(notificationChannels).values({
+            userId: userId,
+            address: address,
+            type: type
+        })
+    } catch (e) {
+        return false
+    }
 
     return res[0].affectedRows > 0
 }
