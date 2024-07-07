@@ -13,7 +13,7 @@ export function SettingsScreen() {
 
     return (
         <Screen width="max-w-xl">
-            <SettingsNavigator header={false} currentPath="" />
+            <SettingsNavigator header={false} currentPath="" useRelative />
         </Screen>
     )
 

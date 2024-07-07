@@ -10,14 +10,10 @@ import Toast from 'react-native-toast-message';
 import { Input } from 'app/design/input'
 import { TimePicker } from 'app/design/timepicker/timepicker'
 import { Skeleton } from 'moti/skeleton'
+import { HandlerRef } from 'app/design/modal/types'
+import { View } from 'app/design/view'
 
-
-export type SetReminderHandle = {
-    done: () => Promise<boolean>
-    state: "idle" | "loading" | "error" | "success"
-};
-export type Props = {
-};
+type Props = {}
 
 /**
  * Only shown on small devices.
@@ -25,7 +21,7 @@ export type Props = {
  * (see nextjs and expo layouts)
  * @constructor
  */
-export const SetReminder = forwardRef<SetReminderHandle, Props>((props, ref) => {
+export const SetReminder = forwardRef<HandlerRef, Props>((props, ref) => {
     const checkSettings = trpc.checks.getSettings.useQuery()
     const reminderMutation = trpc.checks.modifyReminderBeforeCheck.useMutation({
         onError: () => {Toast.show({
@@ -53,22 +49,23 @@ export const SetReminder = forwardRef<SetReminderHandle, Props>((props, ref) => 
 
     useImperativeHandle(ref, () => {
         return {
-            done,
+            proceedHandler,
             state: reminderMutation.status
         }
     }, [hour, minute, reminderMutation.status])
 
-    const done = async () => {
+    const proceedHandler = async () => {
         return reminderMutation.mutateAsync({ hour: hour, minute: minute })
     }
 
     return (
-        <>
+            <View className="self-center p-5 pt-10">
             <Skeleton colorMode="light" width={'100%'}>
                 {checkSettings.data &&
             <TimePicker onChange={(hour, minute) => {setHour(hour); setMinute(minute)}} displayTimeInLocalFormat={false} hour={checkSettings.data.reminderBeforeCheck.hour} minute={checkSettings.data.reminderBeforeCheck.minute} />
                 }
             </Skeleton>
-        </>
+                <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern rückzumelden. Ziehe dafür die Zahlen an die gewünschte Position</Text>
+            </View>
     )
 } )

@@ -2,8 +2,9 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { ChevronRight } from 'app/design/icons'
 import { cn } from 'app/lib/utils'
-import { StyledPressable } from 'app/design/button'
-import { useRelativePush } from 'app/lib/router-push/push'
+import { StyledLink } from 'app/design/button'
+import { useRelativePush } from 'app/lib/routing/push'
+import Link from 'app/lib/routing/Link'
 
 type Props = {
     children: React.ReactNode
@@ -13,10 +14,11 @@ type Props = {
     fullsize: boolean
     active: boolean
     link: string | undefined,
-    linkTitle: string | undefined
+    linkTitle: string | undefined,
+    useRelative: boolean
 }
 
-export function SettingsRow({children, label, description, separator = true, fullsize = false, link, linkTitle, active = false}: Props) {
+export function SettingsRow({children, label, description, separator = true, fullsize = false, link, linkTitle, useRelative = true, active = false}: Props) {
     const push = useRelativePush()
 
     const Row = () => {
@@ -59,9 +61,9 @@ export function SettingsRow({children, label, description, separator = true, ful
     return (
         <>
             {(link && !active) &&
-            <StyledPressable className="active:bg-white hover:bg-white" onPress={() => {push(link)}}>
+            <StyledLink className="active:bg-white hover:bg-white" useRelative={useRelative} href={link}>
                 <Row />
-            </StyledPressable>
+            </StyledLink>
             }
             {(!link || active) &&
                 <Row />

@@ -32,7 +32,7 @@ export function ReminderAndBackupScreen() {
     return(
         <Screen width="max-w-xl">
             <SettingsGroup>
-                <SettingsRow label="Erinnerungen" link="reminder_delay/setReminder" linkTitle="Anpassen" fullsize>
+                <SettingsRow label="Erinnerungen" link="setReminder" linkTitle="Anpassen" fullsize>
                     <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data &&
                             <>

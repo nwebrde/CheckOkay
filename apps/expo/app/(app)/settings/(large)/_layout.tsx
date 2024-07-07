@@ -26,9 +26,12 @@ export default function SettingsLayout() {
                             contentStyle: {
                                 backgroundColor: "#ffffff"
                             },
+                            headerBackVisible: false
                         }}
                     >
-                        <Stack.Screen name="addMail" options={{presentation: "modal", headerShown:true, animation: "slide_from_bottom",
+                        <Stack.Screen name="channels/addMail" options={{presentation: "modal", headerShown:true, animation: "slide_from_bottom",
+                            animationDuration: 100, gestureEnabled: true}} />
+                        <Stack.Screen name="reminder_delay/setReminder" options={{presentation: "modal", headerShown:true, animation: "slide_from_bottom",
                             animationDuration: 100, gestureEnabled: true}} />
                     </Stack>
                 </View>

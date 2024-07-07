@@ -8,6 +8,7 @@ import { trpc } from 'app/provider/trpc-client'
 import { Button } from 'app/design/button'
 import Toast from 'react-native-toast-message';
 import { Input } from 'app/design/input'
+import { HandlerRef } from 'app/design/modal/types'
 
 
 export type AddMailHandle = {
@@ -23,7 +24,7 @@ export type Props = {
  * (see nextjs and expo layouts)
  * @constructor
  */
-export const AddMail = forwardRef<AddMailHandle, Props>((props, ref) => {
+export const AddMail = forwardRef<HandlerRef, Props>((props, ref) => {
 
     const addEmail = trpc.channels.addEmail.useMutation({
         onError: () => {Toast.show({
@@ -36,12 +37,12 @@ export const AddMail = forwardRef<AddMailHandle, Props>((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            add,
+            proceedHandler,
             state: addEmail.status
         }
     }, [email, addEmail.status])
 
-    const add = async () => {
+    const proceedHandler = async () => {
         return addEmail.mutateAsync({ address: email })
     }
 
@@ -50,7 +51,6 @@ export const AddMail = forwardRef<AddMailHandle, Props>((props, ref) => {
         <Screen width="max-w-xl">
             <Text>Gebe eine weitere Emailadresse an, an die Warnungen über den Zustand deiner Freunde geschickt werden</Text>
             <Input onChangeText={setEmail} value={email} />
-            <Button text="sss" onClick={add} />
         </Screen>
             <Toast />
         </>

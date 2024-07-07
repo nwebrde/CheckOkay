@@ -2,6 +2,9 @@ import React, { ReactNode } from 'react'
 import { Text, Pressable, GestureResponderEvent } from 'react-native'
 import { MotiLink as MLink } from 'solito/moti/app'
 import { MotiPressable } from 'moti/interactions'
+import { classed } from 'app/classed.config'
+import { View } from 'app/design/view'
+import Link from 'app/lib/routing/Link'
 
 export function StyledPressable({ className, ...props }) {
     return(<Pressable className={className}{...props } />)
@@ -39,6 +42,9 @@ export function MotiLink({ className, ...props }) {
     return (<MLink className={className} {...props } />)
 }
 
+export function StyledLink({ children, className, ...props }) {
+    return(<Link className={className} {...props }>{children}</Link>)
+}
 
 export function AnimatedLink({
     children,

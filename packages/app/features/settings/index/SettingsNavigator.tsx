@@ -5,7 +5,7 @@ import React from 'react'
 import { Text } from 'app/design/typography'
 import { Link } from 'solito/link'
 
-export function SettingsNavigator({ header, currentPath }: { header: boolean, currentPath: string }) {
+export function SettingsNavigator({ header, currentPath, useRelative }: { header: boolean, currentPath: string, useRelative: boolean }) {
     return (
         <View>
             {header &&
@@ -21,8 +21,8 @@ export function SettingsNavigator({ header, currentPath }: { header: boolean, cu
                 <SettingsRow label="Deine Beschützer" separator={false} />
             </SettingsGroup>
             <SettingsGroup title="Benachrichtigungen">
-                <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} />
-                <SettingsRow label="Erhalte Benachrichtigungen über" active={currentPath.includes("channels")} link={"channels"} separator={false} />
+                <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} useRelative={useRelative} />
+                <SettingsRow label="Erhalte Benachrichtigungen über" active={currentPath.includes("channels")} link={"channels"} separator={false} useRelative={useRelative} />
             </SettingsGroup>
 
         </View>

@@ -8,8 +8,8 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
-import { StyledPressable } from 'app/design/button'
-import { useRelativePush } from 'app/lib/router-push/push'
+import { StyledLink, StyledPressable } from 'app/design/button'
+import { useRelativePush } from 'app/lib/routing/push'
 import { Plus } from '@nandorojo/heroicons/24/outline'
 
 
@@ -76,11 +76,11 @@ export default function EmailsList() {
     const push = useRelativePush()
 
     const Header = () => (
-        <StyledPressable onPress={() => push("addMail")}>
+        <StyledLink useRelative href="addMail">
             <View className="flex flex-col w-full p-2 border-b border-[#c9ba97]" >
                 <Text><Plus className="stroke-2 text-[#c9ba97]" /> Hinzufügen</Text>
             </View>
-        </StyledPressable>
+        </StyledLink>
     );
 
     const renderItem = ({item}) => {
