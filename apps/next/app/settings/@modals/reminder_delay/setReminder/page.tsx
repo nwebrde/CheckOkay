@@ -9,6 +9,28 @@ import { useRouter } from 'next/navigation'
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
 import { TimePicker } from 'app/design/timepicker/timepicker'
 import { View } from 'app/design/view'
+import { SetReminder, SetReminderHandle } from 'app/features/settings/notifications/SetReminder'
+import { Button, StyledPressable } from 'app/design/button'
+import { ActivityIndicator } from 'react-native'
+
+type ProceedProps = {
+    state: "idle" | "loading" | "error" | "success"
+    handleProceed: () => void
+}
+
+const Proceed = ({ state, handleProceed } : ProceedProps) => {
+    return (
+        <>
+            {state == 'idle' &&
+                <Button text="Fertig" onClick={handleProceed} />
+            }
+            {state == 'loading' &&
+                <ActivityIndicator />
+            }
+        </>
+
+    )
+}
 
 export default function Page() {
 
@@ -34,6 +56,17 @@ export default function Page() {
             openModal()
         }
     }, [pathname]);
+
+
+    const ref = useRef<SetReminderHandle>(null);
+
+    async function handleDone() {
+        try {
+            await ref.current?.done()
+            closeModal();
+        } catch (error) {
+        }
+    }
     return (
         <>
             <Transition appear show={isOpen} afterLeave={afterLeave} as={Fragment} >
@@ -67,23 +100,18 @@ export default function Page() {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        Email
+                                        Erinnerungen
                                     </Dialog.Title>
                                     <div className="mt-2">
                                         <View className="self-center p-5 pt-10">
-                                            <TimePicker />
+                                            <SetReminder ref={ref} />
                                             <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern rückzumelden. Ziehe dafür die Zahlen an die gewünschte Position</Text>
                                         </View>
                                     </div>
 
-                                    <div className="mt-4">
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={closeModal}
-                                        >
-                                            Got it, thanks!
-                                        </button>
+                                    <div className="mt-4 flex flex-row justify-around">
+                                        <Button text="Abbrechen" onClick={() => router.push(".")} />
+                                        <Proceed state={ref.current!.state} handleProceed={handleDone} />
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
