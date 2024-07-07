@@ -1,6 +1,6 @@
 import { ActivityIndicator, Modal, StyleSheet } from 'react-native'
 import { View } from 'app/design/view'
-import { H1, Text } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { ShareButton } from 'app/design/sharebutton/sharebutton'
 import { trpc } from 'app/provider/trpc-client'
 import { useEffect } from 'react'
@@ -32,9 +32,9 @@ export const InviteModal = ({
         >
             <View className="flex-1 items-center justify-center backdrop-blur-md">
                 <View className="w-4/5 max-w-md rounded-xl bg-white p-5 text-center shadow-lg">
-                    <H1 className="my-0 mt-0 text-2xl">
+                    <Text type="H2" className="my-0 mt-0 text-2xl">
                         Lade einen Guard ein, {'\n'}der dich beschützt
-                    </H1>
+                    </Text>
                     <Text className="mt-3">
                         Die Person wird benachrichtigt, wenn du nicht mehr
                         reagierst. Sie sieht nur, wann du dich zuletzt gemeldet

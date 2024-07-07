@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { TimepickerUI } from 'timepicker-ui'
 import './style.css'
-import { Props } from 'app/design/timepicker/timepicker'
+import { Props } from 'app/design/timepicker/timepickerOld'
 import { P, Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { localToUTC, UTCToLocal } from 'app/lib/time'

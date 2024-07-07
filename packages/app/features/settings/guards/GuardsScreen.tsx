@@ -1,16 +1,17 @@
-import { H1 } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Row } from 'app/design/layout'
 import {
-    AnimatedPressable,
+    AnimatedPressable, MotiLink
 } from 'app/design/button'
 import React, { useState } from 'react'
 import { PlusCircle } from '@nandorojo/heroicons/24/solid'
 import { StyleSheet } from 'react-native'
 import { InviteModal } from 'app/features/settings/guards/InviteModal'
 import GuardsList from 'app/features/settings/guards/GuardsList'
+import { Link } from 'solito/link'
 
-export function Guards() {
+export function GuardsScreen() {
     const [shareVisible, setShareVisible] = useState(false)
 
     const onShareClose = () => {
@@ -18,10 +19,13 @@ export function Guards() {
     }
 
     return (
-        <>
-            <View className="w-full">
+       <>
+            <View>
+                <Link href="/settings/emergency"><Text>test</Text></Link>
+                <Text>Diese Personen werden gewarnt, wenn du dich nicht rechtzeitig zu einem Check-In Zeitpunkt meldest. Lade
+                Personen ein denen du diese Aufgabe anvertrauen möchtest.</Text>
                 <Row className="items-center justify-between">
-                    <H1>Deine Guards</H1>
+                    <Text type="H1">Deine Guards</Text>
                     <AnimatedPressable onClick={() => setShareVisible(true)}>
                         <PlusCircle className="h-14" />
                     </AnimatedPressable>
@@ -29,7 +33,7 @@ export function Guards() {
                 <GuardsList invite={() => setShareVisible(true)} />
             </View>
             <InviteModal visible={shareVisible} onClose={onShareClose} />
-        </>
+           </>
     )
 }
 

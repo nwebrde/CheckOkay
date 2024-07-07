@@ -8,13 +8,16 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
+import { StyledPressable } from 'app/design/button'
+import { useRelativePush } from 'app/lib/router-push/push'
+import { Plus } from '@nandorojo/heroicons/24/outline'
 
 
 //  To toggle LTR/RTL change to `true`
 I18nManager.allowRTL(false);
 
 const Row = ({text}) => (
-    <View className="flex flex-col w-full p-2 bg-white" >
+    <View className="flex flex-col w-full p-2" >
         <Text>{text}</Text>
     </View>
     );
@@ -46,6 +49,7 @@ export default function EmailsList() {
         },
         onError: (err, _, context) => {
             utils.channels.get.setData(undefined, context!.previousChannels)
+            /*
             Burnt.toast({
                 title: "Fehler", // required
 
@@ -61,11 +65,23 @@ export default function EmailsList() {
 
                 from: "top", // "top" or "bottom"
             });
+
+             */
         },
         onSettled: () => {
             utils.channels.get.invalidate()
         }
     })
+
+    const push = useRelativePush()
+
+    const Header = () => (
+        <StyledPressable onPress={() => push("addMail")}>
+            <View className="flex flex-col w-full p-2 border-b border-[#c9ba97]" >
+                <Text><Plus className="stroke-2 text-[#c9ba97]" /> Hinzufügen</Text>
+            </View>
+        </StyledPressable>
+    );
 
     const renderItem = ({item}) => {
         return (
@@ -85,7 +101,8 @@ export default function EmailsList() {
             >
             <FlatList
                 data={query.data}
-                ItemSeparatorComponent={() => <View className="border-b-1" />}
+                ListHeaderComponent={Header}
+                ItemSeparatorComponent={() => <View className="border-b border-[#c9ba97]" />}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.address}
                 extraData={state}

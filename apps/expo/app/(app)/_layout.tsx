@@ -1,7 +1,8 @@
-import { Redirect, Stack } from 'expo-router'
+import { Link, Redirect, Stack } from 'expo-router'
 import { Text } from 'react-native'
 import { useAuth } from 'app/provider/auth-context/index.native'
-import {Logo} from "app/design/logo";
+import React from 'react'
+import { Logo } from 'app/design/logo'
 
 
 export default function AppLayout() {
@@ -27,12 +28,18 @@ export default function AppLayout() {
                 headerStyle: {
                     backgroundColor: '#F1EDE1',
                 },
-                headerTintColor: '#fff',
+                headerTintColor: '#2F5651',
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
-              headerTitle: props => <Logo className="w-10 top-0 mt-0 p-0" />,
+                headerTransparent: false,
+                contentStyle: {
+                    backgroundColor: "#ffffff"
+                },
             }}
-        />
+        >
+            <Stack.Screen name="settings/(small)/channels/addMail" options={{presentation: "modal", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
+            <Stack.Screen name="settings/(small)/reminder_delay/setReminder" options={{presentation: "modal", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
+        </Stack>
     )
 }

@@ -1,4 +1,4 @@
-import { H1 } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Row } from 'app/design/layout'
 import React from 'react'
@@ -9,7 +9,7 @@ export function Guarded() {
         <>
             <View className="w-full">
                 <Row className="items-center justify-between">
-                    <H1>Zustand deiner Freunde</H1>
+                    <Text type="H1">Zustand deiner Freunde</Text>
                 </Row>
                 <GuardedList />
             </View>

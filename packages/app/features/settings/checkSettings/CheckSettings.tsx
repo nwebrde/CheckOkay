@@ -1,5 +1,5 @@
 import { View } from 'app/design/view'
-import { TimePicker } from 'app/design/timepicker/timepicker'
+import { TimepickerOld } from 'app/design/timepicker/timepickerOld'
 import { Label } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
@@ -28,7 +28,7 @@ export function CheckSettings() {
                     <Label>Warne Backup Guards nach</Label>
                     <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data && (
-                            <TimePicker
+                            <TimepickerOld
                                 hour={checkSettings.data.notifyBackupAfter.hour}
                                 minute={
                                     checkSettings.data.notifyBackupAfter.minute
@@ -43,7 +43,7 @@ export function CheckSettings() {
                     <Label>Benachrichtige mich vor Checks</Label>
                     <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data && (
-                            <TimePicker
+                            <TimepickerOld
                                 hour={
                                     checkSettings.data.reminderBeforeCheck.hour
                                 }

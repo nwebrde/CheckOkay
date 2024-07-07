@@ -2,10 +2,28 @@ import React, { ComponentProps, forwardRef } from 'react'
 import { Text as NativeText, Platform, Linking, TextStyle } from 'react-native'
 import { TextLink as SolitoTextLink } from 'solito/link'
 import { MotiLink as MLink } from 'solito/build/moti/app'
+import { classed } from 'app/classed.config'
 
-export function Text({ className, ...props }) {
+function StyledText({ className, ...props }) {
     return (<NativeText className={className} {...props } />)
 }
+
+export const Text = classed(StyledText, {
+
+    variants: {
+        type: {
+            H1: "text-red-500 text-3xl font-extrabold my-7 text-slate-900",
+            H2: "text-xl font-semibold my-3 text-slate-900",
+            base: "text-xl font-normal text-slate-900",
+            label: "text-xl font-medium text-black",
+            labelDescription: "text-lg font-normal text-black leading-snug",
+            unstyled: ""
+        }
+    },
+    defaultVariants: {
+        type: "base",
+    }
+})
 
 /**
  * You can use this pattern to create components with default styles
@@ -13,20 +31,6 @@ export function Text({ className, ...props }) {
 export function P({ className, ...props }) {
     return (<NativeText className={'text-base text-black my-4 ' + className} {...props } />)
 }
-
-/**
- * Components can have defaultProps and styles
- */
-export function H1({ className, ...props }) {
-    return (<NativeText className={'text-3xl font-extrabold my-7 ' + className} {...props } />)
-}
-/*
-H1.defaultProps = {
-    accessibilityLevel: 1,
-    accessibilityRole: 'header',
-}
-
- */
 
 export function Label({ className, ...props }) {
     return (<NativeText className={'text-xl font-extrabold my-1 ' + className} {...props } />)

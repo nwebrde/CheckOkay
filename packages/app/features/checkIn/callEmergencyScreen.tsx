@@ -1,14 +1,18 @@
 'use client'
-import { A, H1, P, Text } from 'app/design/typography'
+import {  P, Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 
 import { Linking } from 'react-native'
 import { MotiPressable } from 'moti/interactions'
+import { SettingsGroup } from 'app/design/settings/group'
+import { SettingsRow } from 'app/design/settings/row'
+import { Portal } from '@gorhom/portal'
+import React from 'react'
 
 export function CallEmergencyScreen() {
     return (
         <View className="flex-1 items-center justify-center p-3">
-            <H1>Bitte rufe die lokalen Notfalldienste an</H1>
+            <Text type="H1">Bitte rufe die lokalen Notfalldienste an</Text>
             <P className="mb-10">
                 Zu deiner eigenen Sicherheit solltest du den Notfalldienst oder
                 deine Familie anrufen. {'\n'}

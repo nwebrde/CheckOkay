@@ -1,5 +1,5 @@
 import React from 'react'
-import { XMark } from '@nandorojo/heroicons/20/solid'
+import { XMark } from 'app/design/icons'
 import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
 import { StyledPressable } from 'app/design/button'
@@ -39,13 +39,17 @@ const renderItem = ({ item }: { item: Guard }) => {
                     <BellSnooze color="#4f36c9" />
                 )}
             </StyledPressable>
+            <Text className="text-red-400">
+                <XMark className="text-red-400" />
+            </Text>
+
             <StyledPressable
                 onPress={remove}
                 className={`
-      ml-2 mr-2 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
+      ml-2 mr-2 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-red-500 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
     `}
             >
-                <XMark />
+                <XMark className="text-red-400" />
             </StyledPressable>
         </View>
     )

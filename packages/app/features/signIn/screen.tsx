@@ -1,4 +1,4 @@
-import { H1, P } from 'app/design/typography'
+import { P, Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 
 import { useAuth } from 'app/provider/auth-context'
@@ -18,9 +18,9 @@ export function SignInScreen() {
         <View className="bg-secondary flex-1 items-center justify-center p-3">
             <Logo doAnimate={true} />
             <View className="max-w-xl">
-                <H1 className="mb-0 text-center text-lg">
+                <Text type="H1" className="mb-0 text-center text-lg">
                     Hallo, Fremder! {'\n'}Sag uns doch wer du bist.
-                </H1>
+                </Text>
                 <P className="mt-3 text-center text-lg">
                     Du musst dich anmelden um die App zu nutzen. Melde dich bei
                     einem bestehenden Konto an oder registriere dich.

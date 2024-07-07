@@ -1,4 +1,4 @@
-import { H1, Text, TextLink } from 'app/design/typography'
+import { Text, TextLink } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Card, HSpacer, Row } from 'app/design/layout'
 import { AnimatedLink, AnimatedPressable } from 'app/design/button'
@@ -52,9 +52,9 @@ export function CheckIn() {
                                 }`}
                             >
                                 <Row className="items-center justify-between">
-                                    <H1 className="my-0 opacity-75">
+                                    <Text type="H1" className="my-0 opacity-75">
                                         Ist alles okay?
-                                    </H1>
+                                    </Text>
                                     <AnimatedLink href="/settings">
                                         <Cog6Tooth />
                                     </AnimatedLink>

@@ -1,4 +1,4 @@
-import { H1, Text, TextLink } from 'app/design/typography'
+import { Text, TextLink } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Card, Row } from 'app/design/layout'
 import { AnimatedLink } from 'app/design/button'
@@ -9,7 +9,7 @@ export function SetupChecks() {
     return (
         <View className="w-full">
             <Card className="bg-secondary w-full">
-                <H1 className="text-primary my-0">Richte CheckOkay ein</H1>
+                <Text type="H1" className="text-primary my-0">Richte CheckOkay ein</Text>
 
                 <Text className="mt-5">
                     Damit du die App nutzen kannst, lege bitte

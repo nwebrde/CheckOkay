@@ -1,13 +1,15 @@
-import { H1 } from 'app/design/typography'
 import { Button } from 'app/design/button'
 import { useNotifications } from 'app/provider/notifications'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
 import { Switch } from 'react-native'
 import { trpc } from 'app/provider/trpc-client'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import EmailsList from 'app/features/settings/notifications/emailsList'
+import { Screen } from 'app/design/layout'
+import { Link } from 'expo-router'
+import { Text } from 'app/design/typography'
 
 function Notificationss() {
     const notifications = useNotifications()
@@ -49,22 +51,43 @@ function Notificationss() {
             setPushState(false)
         }
     }, [notifications, notifications?.token, channels.data])
+
     return (
-            <>
-                <EmailsList />
+        <Screen width="max-w-xl">
+            <SettingsGroup>
+                <SettingsRow separator={false} label="Push Benachrichtigungen" description="Aktiviere Push Benachrichtigungen auf diesem Gerät für alle Mitteilungsarten">
+                    <Switch
+                        onValueChange={toggle}
+                        value={pushState}
+                    />
+                </SettingsRow>
+            </SettingsGroup>
+            <SettingsGroup>
+                <SettingsRow separator={false} label="Zusätzliche Emails für Warnungen" description="Erhalte Warnungen über den Zustand deiner Freunde über folgende weitere Email Adressen" fullsize={true}>
+                    <EmailsList />
+                </SettingsRow>
+            </SettingsGroup>
+        </Screen>
+    )
+
+    /*
+    return (
+        <Screen width="max-w-xl">
                 <SettingsGroup title="Benachrichtigungen">
-                    <SettingsRow label="Push Benachrichtigungen">
+                    <SettingsRow label="Push Benachrichtigungen" description="Aktiviere Push Benachrichtigungen auf diesem Gerät für alle Mitteilungsarten">
                         <Switch
                             onValueChange={toggle}
                             value={pushState}
                         />
                     </SettingsRow>
-                    <SettingsRow label="Zusätzliche Emails für Warnungen" fullsize={true}>
+                    <SettingsRow label="Zusätzliche Emails für Warnungen" description="Erhalte Warnungen über den Zustand deiner Freunde über folgende weitere Email Adressen" fullsize={true}>
                         <EmailsList />
                     </SettingsRow>
                 </SettingsGroup>
-                </>
+                </Screen>
     )
+
+     */
 }
 
 export const Notifications = gestureHandlerRootHOC(Notificationss)

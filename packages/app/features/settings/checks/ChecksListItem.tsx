@@ -1,6 +1,6 @@
 import { Pressable } from 'react-native'
 import React from 'react'
-import { TimePicker } from 'app/design/timepicker/timepicker'
+import { TimepickerOld } from 'app/design/timepicker/timepickerOld'
 import { XMark } from '@nandorojo/heroicons/20/solid'
 import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
@@ -66,7 +66,7 @@ const renderItem = ({
     return (
         <Pressable>
             <View className="m-2 flex-row items-center justify-around rounded-full bg-gray-200 p-1.5 pl-3">
-                <TimePicker
+                <TimepickerOld
                     hour={item.hour}
                     minute={item.minute}
                     onChange={modify}

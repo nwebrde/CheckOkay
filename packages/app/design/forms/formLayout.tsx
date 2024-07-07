@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { Children } from 'react'
 
-import { H1 } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 
 export interface FormLayoutProps {
@@ -29,5 +29,5 @@ export function FormLabel({ label }: { label?: string }) {
     if (!label) {
         return <></>
     }
-    return <H1>{label}</H1>
+    return <Text type="H1">{label}</Text>
 }

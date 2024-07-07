@@ -5,7 +5,7 @@ import { P, Text } from 'app/design/typography'
 import { localToUTC, UTCToLocal } from 'app/lib/time'
 import 'react-time-picker/dist/TimePicker.css'
 import './style.css'
-import { Props } from 'app/design/timepicker/timepicker'
+import { Props } from 'app/design/timepicker/timepickerOld'
 
 import { TimePicker as TimePickerComponent } from 'react-time-picker'
 

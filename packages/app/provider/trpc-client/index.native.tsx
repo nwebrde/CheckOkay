@@ -112,7 +112,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                         retry: 3,
                     },
                     mutations: {
-                        retry: 3,
+                        retry: 0,
                     },
                 },
             }),

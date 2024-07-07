@@ -1,5 +1,5 @@
 import { SignInScreen } from 'app/features/signIn/screen'
 
-export default function SignIn() {
+export default function Page() {
     return <SignInScreen />
 }

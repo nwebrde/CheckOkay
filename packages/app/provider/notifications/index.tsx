@@ -4,7 +4,7 @@ import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { NotificationsContextType } from 'app/provider/notifications/types'
-import { H1, Text } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 import Constants from 'expo-constants'
 import { Button } from 'app/design/button'
@@ -157,9 +157,9 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
                 {props.children}
                 <BottomSheet ref={sheetRef} style={styles.container}>
                     <View className="bg-white w-full h-full p-2">
-                        <H1>
+                        <Text type="H1">
                             Aktiviere Benachrichtigungen in den Einstellungen
-                        </H1>
+                        </Text>
                         <Text>
                             Damit dich CheckOkay benachrichtigen kann, musst du in den Einstellungen von deinem Gerät Benachrichtigungen aktivieren. Navigiere dazu zu Einstellungen > Mitteilungen > CheckOkay
                         </Text>

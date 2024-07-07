@@ -3,7 +3,7 @@ import { XMark } from '@nandorojo/heroicons/20/solid'
 import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
 import { StyledPressable } from 'app/design/button'
-import { H1, Text } from 'app/design/typography'
+import { Text } from 'app/design/typography'
 import { Card, VSpacer } from 'app/design/layout'
 import Moment from 'react-moment'
 import {CheckState} from "app/lib/types/check";
@@ -28,9 +28,9 @@ const renderItem = ({ item }: { item: Guarded }) => {
             }`}
         >
             <View className="flex-row items-center justify-between">
-                <H1 className="my-0 mb-0 mt-0 text-xl opacity-75">
+                <Text type="H2" className="my-0 mb-0 mt-0 text-xl opacity-75">
                     {item.name ?? item.email}
-                </H1>
+                </Text>
 
                 <StyledPressable
                     onPress={remove}

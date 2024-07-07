@@ -9,6 +9,7 @@ const { theme } = require('app/design/tailwind/theme')
 module.exports = {
   content: [
     './**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require("nativewind/preset")],
   important: 'html',
