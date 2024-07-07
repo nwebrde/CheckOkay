@@ -1,12 +1,8 @@
 import { Screen } from 'app/design/layout'
 import { SettingsRow } from 'app/design/settings/row'
-import EmailsList from 'app/features/settings/notifications/emailsList'
 import { SettingsGroup } from 'app/design/settings/group'
 import React from 'react'
-import { TimePicker } from 'app/design/timepicker/timepicker'
-import { P, Text, TextLink } from 'app/design/typography'
-import { Button } from 'app/design/button'
-import { View } from 'app/design/view'
+import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
 
@@ -36,7 +32,7 @@ export function ReminderAndBackupScreen() {
     return(
         <Screen width="max-w-xl">
             <SettingsGroup>
-                <SettingsRow label="Erinnerungen" link="setReminder" linkTitle="Anpassen" fullsize>
+                <SettingsRow label="Erinnerungen" link="reminder_delay/setReminder" linkTitle="Anpassen" fullsize>
                     <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data &&
                             <>

@@ -4,17 +4,15 @@ import React, { useEffect, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { Text } from 'app/design/typography'
-import { AddMail } from 'app/features/settings/notifications/AddMail'
 import { useRouter } from 'next/navigation'
-import { usePathname, useSelectedLayoutSegment } from 'next/navigation'
-import { TimePicker } from 'app/design/timepicker/timepicker'
+import { usePathname } from 'next/navigation'
 import { View } from 'app/design/view'
 import { SetReminder, SetReminderHandle } from 'app/features/settings/notifications/SetReminder'
-import { Button, StyledPressable } from 'app/design/button'
+import { Button } from 'app/design/button'
 import { ActivityIndicator } from 'react-native'
 
 type ProceedProps = {
-    state: "idle" | "loading" | "error" | "success"
+    state: "idle" | "loading" | "error" | "success" | undefined
     handleProceed: () => void
 }
 
@@ -52,7 +50,7 @@ export default function Page() {
     }
 
     useEffect(() => {
-        if(pathname.includes("addMail")) {
+        if(pathname.includes("setReminder")) {
             openModal()
         }
     }, [pathname]);
@@ -110,8 +108,8 @@ export default function Page() {
                                     </div>
 
                                     <div className="mt-4 flex flex-row justify-around">
-                                        <Button text="Abbrechen" onClick={() => router.push(".")} />
-                                        <Proceed state={ref.current!.state} handleProceed={handleDone} />
+                                        <Button text="Abbrechen" onClick={closeModal} />
+                                        <Proceed state={ref.current?.state} handleProceed={handleDone} />
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
