@@ -32,7 +32,7 @@ export function ReminderAndBackupScreen() {
     return(
         <Screen width="max-w-xl">
             <SettingsGroup>
-                <SettingsRow label="Erinnerungen" link="setReminder" linkTitle="Anpassen" fullsize>
+                <SettingsRow label="Erinnerungen" link="setReminder" linkTitle="Anpassen">
                     <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data &&
                             <>
@@ -41,7 +41,14 @@ export function ReminderAndBackupScreen() {
                         }
                     </Skeleton>
                 </SettingsRow>
-                <SettingsRow separator={false} label="Zeitverzögerte Warnungen" description="Zweitrangige Beschützer werden erst später gewarnt wenn du nicht resagierst. Lege hier die Verzögerungsdauer fest." fullsize={true}>
+                <SettingsRow separator={false} label="Zeitverzögerte Warnungen" link="setDelay" linkTitle="Anpassen">
+                    <Skeleton colorMode="light" width={'100%'}>
+                        {checkSettings.data &&
+                            <>
+                                <Text type="labelDescription">Zweitrangige Beschützer werden erst später gewarnt wenn du nicht resagierst. Wir warnen zweitrangige Beschützer <Text type="unstyled" className="font-bold">{formatReminderTime(checkSettings.data.notifyBackupAfter.hour, checkSettings.data.notifyBackupAfter.minute)}</Text> nach einer verpassten Rückmeldung</Text>
+                            </>
+                        }
+                    </Skeleton>
                 </SettingsRow>
             </SettingsGroup>
         </Screen>

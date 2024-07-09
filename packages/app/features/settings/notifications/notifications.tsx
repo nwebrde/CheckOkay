@@ -1,4 +1,4 @@
-import { Button } from 'app/design/button'
+import { Button, StyledLink } from 'app/design/button'
 import { useNotifications } from 'app/provider/notifications'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
@@ -9,7 +9,11 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import EmailsList from 'app/features/settings/notifications/emailsList'
 import { Screen } from 'app/design/layout'
 import { Link } from 'expo-router'
-import { Text } from 'app/design/typography'
+import { Text, TextLink } from 'app/design/typography'
+import { Plus } from 'app/design/icons'
+import { View } from 'app/design/view'
+
+const AddHeader = () => <StyledLink href="addMail" useRelative><View className="flex flex-row items-center gap-1"><Plus className="text-primary stroke-2" /><Text className="text-primary font-medium">Hinzufügen</Text></View></StyledLink>
 
 function Notificationss() {
     const notifications = useNotifications()
@@ -55,15 +59,13 @@ function Notificationss() {
     return (
         <Screen width="max-w-xl">
             <SettingsGroup>
-                <SettingsRow separator={false} label="Push Benachrichtigungen" description="Aktiviere Push Benachrichtigungen auf diesem Gerät für alle Mitteilungsarten">
-                    <Switch
-                        onValueChange={toggle}
-                        value={pushState}
-                    />
-                </SettingsRow>
+                <SettingsRow headerChild={<Switch
+                    onValueChange={toggle}
+                    value={pushState}
+                />} separator={false} label="Push Benachrichtigungen" description="Aktiviere Push Benachrichtigungen auf diesem Gerät für alle Mitteilungsarten" />
             </SettingsGroup>
             <SettingsGroup>
-                <SettingsRow separator={false} label="Zusätzliche Emails für Warnungen" description="Erhalte Warnungen über den Zustand deiner Freunde über folgende weitere Email Adressen" fullsize={true}>
+                <SettingsRow headerChild={<AddHeader />} separator={false} label="Zusätzliche Emails für Warnungen" description="Erhalte Warnungen über den Zustand deiner Freunde über folgende weitere Email Adressen" fullsize={true}>
                     <EmailsList />
                 </SettingsRow>
             </SettingsGroup>

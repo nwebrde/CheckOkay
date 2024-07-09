@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ActivityIndicator, I18nManager } from 'react-native'
+import { I18nManager } from 'react-native'
 import * as Burnt from "burnt";
 import { FlatList } from 'react-native-gesture-handler';
 
@@ -8,9 +8,6 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
-import { StyledLink, StyledPressable } from 'app/design/button'
-import { useRelativePush } from 'app/lib/routing/push'
-import { Plus } from '@nandorojo/heroicons/24/outline'
 
 
 //  To toggle LTR/RTL change to `true`
@@ -49,7 +46,6 @@ export default function EmailsList() {
         },
         onError: (err, _, context) => {
             utils.channels.get.setData(undefined, context!.previousChannels)
-            /*
             Burnt.toast({
                 title: "Fehler", // required
 
@@ -65,23 +61,11 @@ export default function EmailsList() {
 
                 from: "top", // "top" or "bottom"
             });
-
-             */
         },
         onSettled: () => {
             utils.channels.get.invalidate()
         }
     })
-
-    const push = useRelativePush()
-
-    const Header = () => (
-        <StyledLink useRelative href="addMail">
-            <View className="flex flex-col w-full p-2 border-b border-[#c9ba97]" >
-                <Text><Plus className="stroke-2 text-[#c9ba97]" /> Hinzufügen</Text>
-            </View>
-        </StyledLink>
-    );
 
     const renderItem = ({item}) => {
         return (
@@ -101,7 +85,6 @@ export default function EmailsList() {
             >
             <FlatList
                 data={query.data}
-                ListHeaderComponent={Header}
                 ItemSeparatorComponent={() => <View className="border-b border-[#c9ba97]" />}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.address}

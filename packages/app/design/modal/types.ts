@@ -11,7 +11,7 @@ export type ModalProps = {
     cancelLabel: string,
     children: React.ReactNode
     childRef: React.RefObject<HandlerRef>
-    // identifying part of the route when modal should be visible
+    // identifying part of the route when modal should be visible. Only needed for web
     routeIdentifier: string
 }
 

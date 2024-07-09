@@ -2,6 +2,8 @@
 import React from 'react'
 import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
 import { Screen } from 'app/design/layout'
+import { Button } from 'app/design/button'
+import { useAuth } from 'app/provider/auth-context'
 
 /**
  * Only shown on small devices.
@@ -10,10 +12,11 @@ import { Screen } from 'app/design/layout'
  * @constructor
  */
 export function SettingsScreen() {
-
+    const auth = useAuth()
     return (
         <Screen width="max-w-xl">
             <SettingsNavigator header={false} currentPath="" useRelative />
+            <Button text="Abmelden" onClick={auth?.signOut}/>
         </Screen>
     )
 

@@ -9,6 +9,7 @@ import { Button } from 'app/design/button'
 import Toast from 'react-native-toast-message';
 import { Input } from 'app/design/input'
 import { HandlerRef } from 'app/design/modal/types'
+import * as Burnt from 'burnt'
 
 
 export type AddMailHandle = {
@@ -27,11 +28,23 @@ export type Props = {
 export const AddMail = forwardRef<HandlerRef, Props>((props, ref) => {
 
     const addEmail = trpc.channels.addEmail.useMutation({
-        onError: () => {Toast.show({
-            type: 'success',
-            text1: 'Hello',
-            text2: 'This is some something 👋'
-        })}
+        onError: () => {
+            Burnt.toast({
+                title: "Fehler", // required
+
+                preset: "error", // or "error", "none", "custom"
+
+                message: "Email konnte nicht hinzugefügt werden", // optional
+
+                haptic: "error", // or "success", "warning", "error"
+
+                duration: 2, // duration in seconds
+
+                shouldDismissByDrag: true,
+
+                from: "top", // "top" or "bottom"
+            });
+        }
     })
     const [email, setEmail] = useState("");
 

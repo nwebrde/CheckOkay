@@ -1,5 +1,4 @@
 import { Stack } from 'expo-router'
-import { Notifications } from 'app/features/settings/notifications/notifications'
 import React from 'react'
 import { ReminderAndBackupScreen } from 'app/features/settings/notifications/reminderAndBackup'
 

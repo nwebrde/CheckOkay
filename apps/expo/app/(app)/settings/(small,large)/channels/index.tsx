@@ -1,6 +1,4 @@
-import { GuardsScreen } from 'app/features/settings/guards/GuardsScreen'
-import { Text } from 'app/design/typography'
-import { Link, Stack } from 'expo-router'
+import { Stack } from 'expo-router'
 import React from 'react'
 import { Notifications } from 'app/features/settings/notifications/notifications'
 

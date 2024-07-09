@@ -5,10 +5,10 @@ import { AnimatedLink, AnimatedPressable } from 'app/design/button'
 import React from 'react'
 import Moment from 'react-moment'
 import { trpc } from 'app/provider/trpc-client'
-import { Cog6Tooth } from '@nandorojo/heroicons/24/solid'
 import { SetupChecks } from 'app/features/checkIn/SetupChecks'
 import { Skeleton } from 'moti/skeleton'
 import {CheckState} from "app/lib/types/check";
+import { Cog6Tooth } from 'app/design/icons'
 
 export function CheckIn() {
     const checkOkay = trpc.checks.checkIn.useMutation()
@@ -56,7 +56,7 @@ export function CheckIn() {
                                         Ist alles okay?
                                     </Text>
                                     <AnimatedLink href="/settings">
-                                        <Cog6Tooth />
+                                        <Cog6Tooth className="text-primary stroke-primary" />
                                     </AnimatedLink>
                                 </Row>
 

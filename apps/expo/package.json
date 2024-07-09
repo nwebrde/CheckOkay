@@ -6,11 +6,12 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "core-js-pure": "^3.35.0",
     "expo": "51.0.17",
+    "expo-apple-authentication": "~6.4.1",
     "expo-auth-session": "~5.5.2",
     "expo-build-properties": "~0.12.3",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
-    "expo-dev-client": "~4.0.18",
+    "expo-dev-client": "~4.0.19",
     "expo-device": "~6.0.2",
     "expo-haptics": "~13.0.1",
     "expo-image": "~1.12.12",
@@ -43,7 +44,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
-  "main": "index.js",
+  "main": "expo-router/entry",
   "version": "1.0.0",
   "private": true,
   "name": "expo-app"

@@ -1,7 +1,8 @@
 import { cssInterop } from 'nativewind';
 import { XMark } from '@nandorojo/heroicons/24/outline'
-import { Plus } from '@nandorojo/heroicons/20/solid'
+import { Plus } from '@nandorojo/heroicons/24/outline'
 import { ChevronRight } from '@nandorojo/heroicons/24/outline'
+import { Cog6Tooth } from '@nandorojo/heroicons/24/solid'
 
 function interopIcon(icon: any) {
     cssInterop(icon, {
@@ -17,4 +18,5 @@ function interopIcon(icon: any) {
 interopIcon(XMark);
 interopIcon(ChevronRight);
 interopIcon(Plus);
-export { XMark, ChevronRight };
+interopIcon(Cog6Tooth)
+export { XMark, ChevronRight, Plus, Cog6Tooth };

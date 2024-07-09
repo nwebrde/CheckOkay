@@ -5,57 +5,62 @@ import { cn } from 'app/lib/utils'
 import { StyledLink } from 'app/design/button'
 import { useRelativePush } from 'app/lib/routing/push'
 import Link from 'app/lib/routing/Link'
+import { ReactElement } from 'react'
 
 type Props = {
-    children: React.ReactNode
     label: string
-    description: string | undefined
-    separator: boolean
-    fullsize: boolean
-    active: boolean
-    link: string | undefined,
-    linkTitle: string | undefined,
+    headerChild: React.ReactNode // placed next to label
+    description: string | undefined // placed below title
+    children: React.ReactNode // placed below description
+    separator: boolean // whether bottom border should be visible
+    active: boolean // whether current item is selected
+    link: string | undefined, // link to page on click
+    linkTitle: string | undefined, // placed left to the chevron
     useRelative: boolean
 }
 
-export function SettingsRow({children, label, description, separator = true, fullsize = false, link, linkTitle, useRelative = true, active = false}: Props) {
+export function SettingsRow({children, headerChild, label, description, separator = true, link, linkTitle, useRelative = true, active = false}: Props) {
     const push = useRelativePush()
 
     const Row = () => {
-        return <View className={cn(
-            'flex p-3 flex-wrap flex-row',
-            separator
-                ? 'border-b border-[#c9ba97]'
-                : '',
-            active
-                ? 'bg-white'
-                : ''
-        )
-        }>
-            <Text type="label" className="grow">{label}</Text>
+        return (
+            <View className={cn(
+                'flex p-3 flex-col',
+                separator
+                    ? 'border-b border-[#c9ba97]'
+                    : '',
+                active
+                    ? 'bg-white'
+                    : ''
+            )
+            }>
+                <View className="flex flex-row justify-end">
+                    <Text type="label" className="basis-1/2 grow">{label}</Text>
 
+                    {headerChild &&
+                        <View className="basis 1/2">
+                            {headerChild}
+                        </View>
+                    }
 
+                    {(link && !active) &&
+                        <>
+                            {linkTitle &&
+                                <Text type="unstyled" className="font-semibold text-lg text-[#c9ba97]">{linkTitle}</Text>
+                            }
+                            <ChevronRight className="text-[#c9ba97] stroke-2" />
+                        </>
+                    }
+                </View>
 
-            {(link && !active) &&
-                <>
-                {linkTitle &&
-                    <Text type="unstyled" className="font-semibold text-lg text-[#c9ba97]">{linkTitle}</Text>
+                {(description) &&
+                    <Text type="labelDescription" className="w-full mt-2">{description}</Text>
                 }
-                <ChevronRight className="text-[#c9ba97] stroke-2" />
-                </>
-            }
-
-            {(description && fullsize) &&
-                <Text type="labelDescription" className="w-full mt-2">{description}</Text>
-            }
-            <View>
-                {children}
+                <View>
+                    {children}
+                </View>
             </View>
-
-            {(description && !fullsize) &&
-            <Text type="labelDescription" className="basis-full w-full mt-2">{description}</Text>
-            }
-        </View>
+            )
     }
 
     return (

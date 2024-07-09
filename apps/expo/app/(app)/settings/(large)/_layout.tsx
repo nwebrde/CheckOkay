@@ -1,8 +1,6 @@
 import { Stack, usePathname } from 'expo-router'
 import React from 'react'
 import { View } from 'app/design/view'
-import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
-import { Button } from 'app/design/button'
 import { SettingsNavigatorLayout } from 'app/features/settings/index/SettingsNavigatorLayout'
 
 

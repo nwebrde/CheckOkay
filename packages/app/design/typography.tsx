@@ -14,6 +14,7 @@ export const Text = classed(StyledText, {
         type: {
             H1: "text-red-500 text-3xl font-extrabold my-7 text-slate-900",
             H2: "text-xl font-semibold my-3 text-slate-900",
+            H3: "text-large font-medium my-3 text-slate-900 underline",
             base: "text-xl font-normal text-slate-900",
             label: "text-xl font-medium text-black",
             labelDescription: "text-lg font-normal text-black leading-snug",

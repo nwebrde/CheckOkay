@@ -19,6 +19,16 @@ const Proceed = ({ state, handleProceed, label } : ProceedProps) => {
     )
 }
 
+/**
+ *
+ * @param title
+ * @param proceedLabel
+ * @param cancelLabel
+ * @param routeIdentifier only needed for nextjs, not for expo
+ * @param children
+ * @param childRef
+ * @constructor
+ */
 export default function Modal({title, proceedLabel, cancelLabel, routeIdentifier, children, childRef}: ModalProps) {
     const router = useRouter()
 

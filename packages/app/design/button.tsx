@@ -28,7 +28,7 @@ export function Button({ text, onClick }: ButtonProps) {
         <StyledPressable
             onPress={onClick}
             className={`
-      rounded border border-gray-300 bg-white bg-opacity-30 px-4 py-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
+      rounded-2xl border border-gray-300 bg-white bg-opacity-30 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
     `}
         >
             <StyledText selectable={false} className="text-slate-800">

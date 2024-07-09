@@ -8735,11 +8735,12 @@ __metadata:
     babel-plugin-module-resolver: ^5.0.2
     core-js-pure: ^3.35.0
     expo: 51.0.17
+    expo-apple-authentication: ~6.4.1
     expo-auth-session: ~5.5.2
     expo-build-properties: ~0.12.3
     expo-constants: ~16.0.2
     expo-crypto: ~13.0.2
-    expo-dev-client: ~4.0.18
+    expo-dev-client: ~4.0.19
     expo-device: ~6.0.2
     expo-haptics: ~13.0.1
     expo-image: ~1.12.12
@@ -8764,6 +8765,15 @@ __metadata:
     typescript: 5.3.3
   languageName: unknown
   linkType: soft
+
+"expo-apple-authentication@npm:~6.4.1":
+  version: 6.4.1
+  resolution: "expo-apple-authentication@npm:6.4.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 309983ad8afe3fb198176edca8036c09b0637d70b65bd0182c32ae929d7af06773e7d9caea5efb5b37a057d8913cc4b733902648c5c82eb1041a01cf1fe22eab
+  languageName: node
+  linkType: hard
 
 "expo-application@npm:~5.9.0":
   version: 5.9.1
@@ -8836,24 +8846,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-dev-client@npm:~4.0.18":
-  version: 4.0.18
-  resolution: "expo-dev-client@npm:4.0.18"
+"expo-dev-client@npm:~4.0.19":
+  version: 4.0.19
+  resolution: "expo-dev-client@npm:4.0.19"
   dependencies:
-    expo-dev-launcher: 4.0.20
+    expo-dev-launcher: 4.0.21
     expo-dev-menu: 5.0.15
     expo-dev-menu-interface: 1.8.3
     expo-manifests: ~0.14.0
     expo-updates-interface: ~0.16.2
   peerDependencies:
     expo: "*"
-  checksum: 1e7891f4ea1679c63064e6592f590c0098883b7b6014ef139e193a4df542fbf0ec1549ac89acd0fcd7c99cebe15f51ffe26e40da54b9a7be964b327915804901
+  checksum: f2b81f90b47ed2b3b3c08301ec04bc78c6430ce318dc13016aa33ce55944774d6aa57f489d9b2e2b90d186220048f30c22a5b33c86445c6bd39148a0582e627a
   languageName: node
   linkType: hard
 
-"expo-dev-launcher@npm:4.0.20":
-  version: 4.0.20
-  resolution: "expo-dev-launcher@npm:4.0.20"
+"expo-dev-launcher@npm:4.0.21":
+  version: 4.0.21
+  resolution: "expo-dev-launcher@npm:4.0.21"
   dependencies:
     ajv: 8.11.0
     expo-dev-menu: 5.0.15
@@ -8862,7 +8872,7 @@ __metadata:
     semver: ^7.6.0
   peerDependencies:
     expo: "*"
-  checksum: 1e249199afe60154fae62f5122151e009a0ed805fedf80fb346a32e3972b56e3537301da2d89b146338454a01d279fe5c81df24a3aa0846a015be51f9d4f730f
+  checksum: 808049e01b2e4231523f27c49b20021539ccd18f6a679038804c4d0a48c53c58c9d076f7066d3ce0f7f67a20b7597ae574616ffd025e8e7a1d84c918384df37e
   languageName: node
   linkType: hard
 
@@ -9059,11 +9069,11 @@ __metadata:
   linkType: hard
 
 "expo-secure-store@npm:~13.0.1":
-  version: 13.0.1
-  resolution: "expo-secure-store@npm:13.0.1"
+  version: 13.0.2
+  resolution: "expo-secure-store@npm:13.0.2"
   peerDependencies:
     expo: "*"
-  checksum: 01cafe0f3da1eed21f0629e8d8f276b1703c6b1a63f5abeb9313dcc05994c1024e834c63b935e19b12cd36fec0db493f7fe82b7b13a760b0771ea66f3df71c1a
+  checksum: 89d90bc9bbd7042ba28f15764184b672b51f0ca5dfe63b4c3f799f5280d95b79d1c2db8582f356154bf62bbcdda4560a6cc0e540a23c2cea9edeee45e97a10b3
   languageName: node
   linkType: hard
 

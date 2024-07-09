@@ -1,8 +1,7 @@
-import { Link, Redirect, Stack } from 'expo-router'
+import { Redirect, Stack } from 'expo-router'
 import { Text } from 'react-native'
 import { useAuth } from 'app/provider/auth-context/index.native'
 import React from 'react'
-import { Logo } from 'app/design/logo'
 
 
 export default function AppLayout() {
