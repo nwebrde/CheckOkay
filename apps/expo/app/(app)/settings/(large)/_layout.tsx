@@ -17,6 +17,7 @@ export default function SettingsLayout() {
                         screenOptions={{
                             headerLargeTitle: false,
                             headerTintColor: '#2F5651',
+                            headerTitleAlign: "center",
                             headerTitleStyle: {
                                 fontWeight: 'bold',
                             },
@@ -27,9 +28,9 @@ export default function SettingsLayout() {
                             headerBackVisible: false
                         }}
                     >
-                        <Stack.Screen name="channels/addMail" options={{presentation: "modal", headerShown:true, animation: "slide_from_bottom",
+                        <Stack.Screen name="channels/addMail" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
                             animationDuration: 100, gestureEnabled: true}} />
-                        <Stack.Screen name="reminder_delay/setReminder" options={{presentation: "modal", headerShown:true, animation: "slide_from_bottom",
+                        <Stack.Screen name="reminder_delay/setReminder" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
                             animationDuration: 100, gestureEnabled: true}} />
                     </Stack>
                 </View>

@@ -15,7 +15,8 @@
       "usesAppleSignIn": true
     },
     "android": {
-      "package": "de.nweber.checkokay"
+      "package": "de.nweber.checkokay",
+      "googleServicesFile": "./google-services.json"
     },
     "plugins": [
       "expo-secure-store",

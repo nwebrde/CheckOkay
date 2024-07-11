@@ -1,9 +1,9 @@
 import React, { MutableRefObject, useRef, useState } from 'react'
 import { ActivityIndicator, Animated, View } from 'react-native'
-import { Trash } from '@nandorojo/heroicons/20/solid'
 
 import { Swipeable } from 'react-native-gesture-handler';
 import { StyledPressable } from 'app/design/button'
+import { Trash } from 'app/design/icons'
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -22,7 +22,7 @@ export function SwipeableToDelete({ children, action, isDeleting }) {
                              onPress={action}>
                 <AnimatedView style={[{ transform: [{ scale }] }]}>
                     { !isDeleting &&
-                    <Trash />
+                    <Trash className="text-white" />
                     }
                     { isDeleting &&
                         <ActivityIndicator size="small" color="white" />

@@ -27,6 +27,14 @@ function handleRegistrationError(errorMessage: string) {
 }
 
 async function registerForPushNotificationsAsync(setToken: (token: string | undefined) => void, warningRef:  React.RefObject<BottomSheetMethods>) {
+    if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
     if (Device.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;

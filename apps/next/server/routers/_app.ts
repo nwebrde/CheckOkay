@@ -8,6 +8,7 @@ import {getUser} from "../adapters/db/users";
 import {ZGuard} from "app/lib/types/guardUser";
 import {ZGuarded} from "app/lib/types/guardedUser";
 import { channelsRouter } from './channels'
+import { setProfileImage } from '../controllers/profileImage'
 
 export const appRouter = router({
     getUser: authorizedProcedure.output(
@@ -17,6 +18,18 @@ export const appRouter = router({
         })),
     ).query(async (opts) => {
         const result = await getUser(opts.ctx.userId!, true, true)
+
+        if (!result) {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+            })
+        }
+        return result
+    }),
+    setProfileImage: authorizedProcedure.input(z.object({
+        key: z.string(),
+    })).output(z.boolean()).query(async (opts) => {
+        const result = await setProfileImage(opts.ctx.userId!, opts.input.key)
 
         if (!result) {
             throw new TRPCError({

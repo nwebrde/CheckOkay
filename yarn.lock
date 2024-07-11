@@ -5117,6 +5117,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/uuid@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@types/uuid@npm:10.0.0"
+  checksum: e3958f8b0fe551c86c14431f5940c3470127293280830684154b91dc7eb3514aeb79fe3216968833cf79d4d1c67f580f054b5be2cd562bebf4f728913e73e944
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 21.0.3
   resolution: "@types/yargs-parser@npm:21.0.3"
@@ -6055,9 +6062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-sdk@npm:^2.1529.0":
-  version: 2.1649.0
-  resolution: "aws-sdk@npm:2.1649.0"
+"aws-sdk@npm:^2.1658.0":
+  version: 2.1658.0
+  resolution: "aws-sdk@npm:2.1658.0"
   dependencies:
     buffer: 4.9.2
     events: 1.1.1
@@ -6069,7 +6076,7 @@ __metadata:
     util: ^0.12.4
     uuid: 8.0.0
     xml2js: 0.6.2
-  checksum: ba193a9b53f60ef541662953b7fccfb4d3acfbe42474ade8d417673cdbc608f54114580597d7a1b6a0ac926fe27c56e68af38cbb53a679e7e07259835b5ddbcd
+  checksum: aacf0039969a789cb1a7e665f02f29a88b7cd26e6f0a40f28df736fdb4195fec71dfa33d23d043bd06f1df9e36f46b6a73fa2710b6dee12f6738d6d4409e69b0
   languageName: node
   linkType: hard
 
@@ -12881,9 +12888,10 @@ __metadata:
     "@types/nodemailer": ^6.4.14
     "@types/randomstring": ^1.1.11
     "@types/react": ~18.2.79
+    "@types/uuid": ^10.0.0
     app: "*"
     autoprefixer: ^10.4.17
-    aws-sdk: ^2.1529.0
+    aws-sdk: ^2.1658.0
     bullmq: ^5.7.1
     dayjs: ^1.11.10
     db: "workspace:^"
@@ -12907,6 +12915,7 @@ __metadata:
     tailwindcss: 3.4.4
     timepicker-ui: ^2.6.1
     typescript: 5.3.3
+    uuid: ^10.0.0
     zod: ^3.22.4
   languageName: unknown
   linkType: soft
@@ -17157,6 +17166,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 56d4e23aa7ac26fa2db6bd1778db34cb8c9f5a10df1770a27167874bf6705fc8f14a4ac414af58a0d96c7653b2bd4848510b29d1c2ef8c91ccb17429c1872b5e
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "uuid@npm:10.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 4b81611ade2885d2313ddd8dc865d93d8dccc13ddf901745edca8f86d99bc46d7a330d678e7532e7ebf93ce616679fb19b2e3568873ac0c14c999032acb25869
   languageName: node
   linkType: hard
 

@@ -27,6 +27,7 @@ export default function AppLayout() {
                 headerStyle: {
                     backgroundColor: '#F1EDE1',
                 },
+                headerTitleAlign: "center",
                 headerTintColor: '#2F5651',
                 headerTitleStyle: {
                     fontWeight: 'bold',
@@ -37,8 +38,8 @@ export default function AppLayout() {
                 },
             }}
         >
-            <Stack.Screen name="settings/(small)/channels/addMail" options={{presentation: "modal", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
-            <Stack.Screen name="settings/(small)/reminder_delay/setReminder" options={{presentation: "modal", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
+            <Stack.Screen name="settings/(small)/channels/addMail" options={{presentation: "modal", headerTitleAlign: "center", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
+            <Stack.Screen name="settings/(small)/reminder_delay/setReminder" options={{presentation: "modal", headerTitleAlign: "center", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
         </Stack>
     )
 }

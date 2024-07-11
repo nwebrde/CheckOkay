@@ -52,6 +52,25 @@
         --input: 240 3.7% 15.9%;
         --ring: 240 4.9% 83.9%;
     }
+
+    a {
+        @apply text-xl font-normal text-slate-900 no-underline hover:underline text-blue-500;
+    }
+    h1 {
+        @apply text-red-500 text-3xl font-extrabold my-7 text-slate-900
+    }
+    h2 {
+        @apply text-xl font-semibold my-3 text-slate-900
+    }
+    h3 {
+        @apply text-lg font-medium my-3 text-slate-900 underline
+    }
+    p {
+        @apply text-xl font-normal text-slate-900
+    }
+    ul {
+        @apply list-disc text-xl font-normal text-slate-900
+    }
 }
 
 /**
