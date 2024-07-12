@@ -14,7 +14,7 @@ export const setProfileImage = async (userId: string, key: string) => {
     if(user && user.image) {
         s3.deleteObject({
             Bucket: process.env.S3_BUCKET!,
-            Key: user.image
+            Key: process.env.S3_PROFILE_IMAGE_DIR ?? "" + user.image
         })
     }
 
@@ -35,7 +35,7 @@ export const getUploadUrl = async () => {
 
     const url = await s3.getSignedUrlPromise("putObject", {
         Bucket: process.env.S3_BUCKET,
-        Key: key,
+        Key: process.env.S3_PROFILE_IMAGE_DIR ?? "" + key,
         ContentType: "image/jpeg",
         Expires: signedUrlExpireSeconds,
     });
@@ -54,7 +54,8 @@ const getS3 = () => {
 
     return new S3({
         credentials: access,
-        region: process.env.S3_REGION,
+        endpoint: process.env.S3_ENDPOINT,
+        region: !process.env.S3_ENDPOINT ? process.env.S3_REGION : undefined,
         signatureVersion: "v4",
     });
 }

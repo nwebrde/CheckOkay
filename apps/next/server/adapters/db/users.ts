@@ -19,14 +19,7 @@ export const getUser = async (userId: string, withGuards: boolean, withGuardedUs
 
     if (user) {
         return {
-            id: user.id,
-            name: user.name ?? undefined,
-            email: user.email,
-            image: user.image ?? undefined,
-            state: user.state,
-            step: isLastCheckInByStep(user.lastManualCheck, user.lastStepCheck),
-            lastCheckIn: getLastCheckIn(user.lastManualCheck, user.lastStepCheck),
-            nextRequiredCheckIn: user.nextRequiredCheckDate ?? undefined,
+            ...toUser(user),
             guards: toGuards(user.guards),
             guardedUsers: toGuardedUsers(user.guardedUsers)
         }
@@ -53,7 +46,7 @@ export const toUser = (user: UserDB): User => {
         id: user.id,
         name: user.name ?? undefined,
         email: user.email,
-        image: user.image ?? undefined,
+        image: user.image ? (process.env.S3_DOWNLOAD_URL + (process.env.S3_PROFILE_IMAGE_DIR ?? "") + "/" + user.image) : undefined,
         state: user.state,
         step: isLastCheckInByStep(user.lastManualCheck, user.lastStepCheck),
         lastCheckIn: getLastCheckIn(user.lastManualCheck, user.lastStepCheck),
