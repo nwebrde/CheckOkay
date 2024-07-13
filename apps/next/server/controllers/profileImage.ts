@@ -1,5 +1,4 @@
-import { Credentials } from 'aws-sdk'
-import S3 from 'aws-sdk/clients/s3'
+
 import {db} from "db";
 import { getUser } from '../adapters/db/users'
 import { users } from 'db/schema/auth'
@@ -9,15 +8,18 @@ import { eq } from 'drizzle-orm'
 
 
 export const setProfileImage = async (userId: string, key: string) => {
-    const s3 = getS3();
+    //const s3 = getS3();
 
     const user = await getUser(userId, false, false)
 
     if(user && user.image) {
+        /*
         s3.deleteObject({
             Bucket: process.env.S3_BUCKET!,
             Key: process.env.S3_PROFILE_IMAGE_DIR ?? "" + user.image
         })
+
+         */
     }
 
     const res = await db.update(users)
@@ -28,13 +30,14 @@ export const setProfileImage = async (userId: string, key: string) => {
 }
 
 export const getUploadUrl = async () => {
-    const s3 = getS3();
+    //const s3 = getS3();
 
     const fileId = "dngbsnf";
     const signedUrlExpireSeconds = 60 * 15;
 
     const key = `${fileId}.jpg`
 
+    /*
     const url = await s3.getSignedUrlPromise("putObject", {
         Bucket: process.env.S3_BUCKET,
         Key: process.env.S3_PROFILE_IMAGE_DIR ?? "" + key,
@@ -42,11 +45,17 @@ export const getUploadUrl = async () => {
         Expires: signedUrlExpireSeconds,
     });
 
+     */
+
+    const url = "sss"
+
     return {
         uploadUrl: url,
         key: key
     }
 }
+
+/*
 
 const getS3 = () => {
     const access = new Credentials({
@@ -61,3 +70,5 @@ const getS3 = () => {
         signatureVersion: "v4",
     });
 }
+
+ */
