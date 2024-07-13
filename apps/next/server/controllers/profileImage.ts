@@ -6,6 +6,8 @@ import { users } from 'db/schema/auth'
 import { eq } from 'drizzle-orm'
 import { v4 as uuid } from 'uuid'
 
+/*
+
 export const setProfileImage = async (userId: string, key: string) => {
     const s3 = getS3();
 
@@ -59,3 +61,5 @@ const getS3 = () => {
         signatureVersion: "v4",
     });
 }
+
+ */
