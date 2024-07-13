@@ -4,7 +4,6 @@ import {db} from "db";
 import { getUser } from '../adapters/db/users'
 import { users } from 'db/schema/auth'
 import { eq } from 'drizzle-orm'
-import { randomUUID } from 'crypto'
 
 
 
@@ -31,7 +30,7 @@ export const setProfileImage = async (userId: string, key: string) => {
 export const getUploadUrl = async () => {
     const s3 = getS3();
 
-    const fileId = randomUUID();
+    const fileId = "dngbsnf";
     const signedUrlExpireSeconds = 60 * 15;
 
     const key = `${fileId}.jpg`
