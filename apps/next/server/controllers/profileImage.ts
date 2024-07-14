@@ -30,20 +30,23 @@ export const setProfileImage = async (userId: string, key: string) => {
 }
 
 export const getUploadUrl = async () => {
+    console.log("s1")
     const s3 = getS3();
-
+    console.log("s2")
     const fileId = randomUUID();
+    console.log("s3")
     const signedUrlExpireSeconds = 60 * 15;
-
+    console.log("s4")
     const key = `${fileId}.jpg`
-
+    console.log("s5")
     const command = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET,
         Key: (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + key,
         ContentType: "image/jpeg"
     });
+    console.log("s6")
     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
+    console.log("s7")
     return {
         uploadUrl: url,
         key: key

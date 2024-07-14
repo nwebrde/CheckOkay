@@ -23,7 +23,6 @@ export const profileImageRouter = router({
             key: z.string()
         }
     )).mutation(async (opts) => {
-        const {uploadUrl, key} = await getUploadUrl()
-        return {uploadUrl, key}
+        return await getUploadUrl()
     })
 });
