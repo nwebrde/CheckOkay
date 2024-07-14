@@ -1,6 +1,6 @@
-import * as AWS from 'aws-sdk'
 import * as nodemailer from 'nodemailer'
 import {Notification, Recipient} from "../../entities/notifications/Notifications";
+import { SESClient } from '@aws-sdk/client-ses'
 
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 
@@ -23,21 +23,16 @@ else {
 }
 
 function createTransporter(): nodemailer.Transporter {
-    AWS.config.update({
-        accessKeyId: process.env.AWS_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        region: 'eu-west-1',
-    })
-    AWS.config.getCredentials(function (error) {
-        if (error) {
-            console.log(error.stack)
-        }
-    })
-    const ses = new AWS.SES({ apiVersion: '2010-12-01' })
+    const client = new SESClient({
+        credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY!,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
+        },
+        region: process.env.AWS_REGION, apiVersion: '2010-12-01'  });
 
 // Create a transporter of nodemailer
     return nodemailer.createTransport({
-        SES: ses,
+        SES: client,
     })
 }
 
