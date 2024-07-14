@@ -55,10 +55,7 @@ const presignUrl = async (key: string): Promise<string | undefined> => {
     };
 
     const res = await axios.request(config)
-    console.log(res)
-    console.log(res.data)
-    console.log(res.data.presigned_url)
-    return res.data.presigned_url
+    return res.data.data["presigned_url"]
 }
 
 const getS3 = () => {
