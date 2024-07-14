@@ -16,7 +16,7 @@ export const setProfileImage = async (userId: string, key: string) => {
     if(user && user.image) {
         const input = { // DeleteObjectRequest
             Bucket: process.env.S3_BUCKET!, // required
-            Key: process.env.S3_PROFILE_IMAGE_DIR ?? "" + user.image, // required
+            Key: (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + user.image, // required
         };
         const command = new DeleteObjectCommand(input);
         const response = await s3.send(command);
@@ -39,7 +39,7 @@ export const getUploadUrl = async () => {
 
     const command = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET,
-        Key: process.env.S3_PROFILE_IMAGE_DIR ?? "" + key,
+        Key: (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + key,
         ContentType: "image/jpeg"
     });
     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
