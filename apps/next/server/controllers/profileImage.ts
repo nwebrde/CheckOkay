@@ -4,7 +4,7 @@ import { users } from 'db/schema/auth'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 import { S3Client, DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import axios from 'axios';
 
 export const setProfileImage = async (userId: string, key: string) => {
     const s3 = getS3();
@@ -28,15 +28,8 @@ export const setProfileImage = async (userId: string, key: string) => {
 }
 
 export const getUploadUrl = async () => {
-    const s3 = getS3();
     const fileId = randomUUID();
-    const signedUrlExpireSeconds = 60 * 15;
     const key = `${fileId}.jpg`
-    const command = new PutObjectCommand({
-        Bucket: process.env.S3_BUCKET,
-        Key: (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + key,
-        ContentType: "image/jpeg"
-    });
     const url = await presignUrl((process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + key);
     return {
         uploadUrl: url,
@@ -45,8 +38,6 @@ export const getUploadUrl = async () => {
 }
 
 const presignUrl = async (key: string): Promise<string | undefined> => {
-    const axios = require('axios');
-
     let data = JSON.stringify({
         "ttl": 60 * 5
     });
@@ -64,7 +55,10 @@ const presignUrl = async (key: string): Promise<string | undefined> => {
     };
 
     const res = await axios.request(config)
-    return res.data["presigned_url"]
+    console.log(res)
+    console.log(res.data)
+    console.log(res.data.presigned_url)
+    return res.data.presigned_url
 }
 
 const getS3 = () => {
