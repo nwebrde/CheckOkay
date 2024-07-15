@@ -12,15 +12,17 @@ export const setProfileImage = async (userId: string, key: string) => {
     const user = await getUser(userId, false, false)
 
     if(user && user.image) {
+        console.log("key to delete", user.image)
         const input = { // DeleteObjectRequest
             Bucket: process.env.S3_BUCKET, // required
             Key: user.image, // required
         };
         try {
             const command = new DeleteObjectCommand(input);
-            await s3.send(command).catch(e => {
+            const res = await s3.send(command).catch(e => {
                 console.log(e)
-            }).then(() => {console.log("finished")})
+            }).then((r) => {console.log("finished", r)})
+            console.log("finsihed 2", res)
         } catch (e) {
             console.log(e)
         }
