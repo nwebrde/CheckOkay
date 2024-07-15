@@ -18,7 +18,9 @@ export const setProfileImage = async (userId: string, key: string) => {
         };
         try {
             const command = new DeleteObjectCommand(input);
-            await s3.send(command);
+            await s3.send(command).catch(e => {
+                console.log(e)
+            }).then(() => {console.log("finished")})
         } catch (e) {
             console.log(e)
         }
