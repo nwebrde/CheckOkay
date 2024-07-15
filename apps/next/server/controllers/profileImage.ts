@@ -13,8 +13,7 @@ import axios from 'axios';
 
 export const setProfileImage = async (userId: string, key: string) => {
     await deleteCurrentProfileImage(userId)
-
-    await makeProfileImagePublic(key)
+    //await makeProfileImagePublic(key)
 
     const res = await db.update(users)
     .set({ image: key })
@@ -50,6 +49,8 @@ export const deleteCurrentProfileImage = async (userId: string) => {
     }
 }
 
+/*
+required if s3 bucket should also hold private files (not the case now)
 const makeProfileImagePublic = async (key: string) => {
     const s3 = getS3();
     const input = {
@@ -60,6 +61,7 @@ const makeProfileImagePublic = async (key: string) => {
     const command = new PutObjectAclCommand(input);
     await s3.send(command)
 }
+ */
 
 const presignUrl = async (key: string): Promise<string | undefined> => {
     let data = JSON.stringify({
