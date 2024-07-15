@@ -2,11 +2,19 @@ import {db} from "db";
 import { users } from 'db/schema/auth'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
-import { S3Client, DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+    S3Client,
+    DeleteObjectCommand,
+    PutObjectCommand,
+    PutObjectAclCommand,
+    ObjectCannedACL
+} from '@aws-sdk/client-s3'
 import axios from 'axios';
 
 export const setProfileImage = async (userId: string, key: string) => {
-   deleteCurrentProfileImage(userId)
+    await deleteCurrentProfileImage(userId)
+
+    await makeProfileImagePublic(key)
 
     const res = await db.update(users)
     .set({ image: key })
@@ -42,6 +50,17 @@ export const deleteCurrentProfileImage = async (userId: string) => {
     }
 }
 
+const makeProfileImagePublic = async (key: string) => {
+    const s3 = getS3();
+    const input = {
+        Bucket: process.env.S3_BUCKET, // required
+        Key: key, // required
+        ACL: ObjectCannedACL.public_read
+    }
+    const command = new PutObjectAclCommand(input);
+    await s3.send(command)
+}
+
 const presignUrl = async (key: string): Promise<string | undefined> => {
     let data = JSON.stringify({
         "ttl": 60 * 5
@@ -60,6 +79,10 @@ const presignUrl = async (key: string): Promise<string | undefined> => {
     };
 
     const res = await axios.request(config)
+    if(process.env.S3_UPLOAD_URL && process.env.S3_UPLOAD_URL != "") {
+        const token = res.data.data["token"]
+        return process.env.S3_UPLOAD_URL + "/" + key + "?X-AMZ-Security-Token=" + token
+    }
     return res.data.data["presigned_url"]
 }
 const getS3 = () => {
