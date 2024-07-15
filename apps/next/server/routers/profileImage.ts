@@ -1,6 +1,6 @@
 import { authorizedProcedure, router } from '../trpc'
 import { z } from 'zod'
-import { getUploadUrl, setProfileImage } from '../controllers/profileImage'
+import { deleteCurrentProfileImage, getUploadUrl, setProfileImage } from '../controllers/profileImage'
 import { TRPCError } from '@trpc/server'
 import { NextResponse } from 'next/server'
 
@@ -23,6 +23,16 @@ export const profileImageRouter = router({
             key: z.string()
         }
     )).mutation(async (opts) => {
-        return await getUploadUrl()
+        const {uploadUrl, key} = await getUploadUrl()
+        if(!uploadUrl) {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+                message: 'Upload URL could not be issued',
+            })
+        }
+        return {uploadUrl, key}
+    }),
+    delete: authorizedProcedure.mutation(async (opts) => {
+        await deleteCurrentProfileImage(opts.ctx.userId!)
     })
 });

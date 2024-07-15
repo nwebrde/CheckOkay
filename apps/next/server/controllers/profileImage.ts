@@ -1,5 +1,4 @@
 import {db} from "db";
-import { getUser } from '../adapters/db/users'
 import { users } from 'db/schema/auth'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
@@ -7,28 +6,7 @@ import { S3Client, DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client
 import axios from 'axios';
 
 export const setProfileImage = async (userId: string, key: string) => {
-    const s3 = getS3();
-
-    const user = await db.query.users.findFirst({
-        where: eq(users.id, userId)
-    })
-
-    if(user && user.image) {
-        const input = { // DeleteObjectRequest
-            Bucket: process.env.S3_BUCKET, // required
-            Key: user.image, // required
-        };
-        try {
-            const command = new DeleteObjectCommand(input);
-            const res = await s3.send(command).catch(e => {
-                console.log(e)
-            }).then((r) => {console.log("finished", r)})
-            console.log("finsihed 2", res)
-        } catch (e) {
-            console.log(e)
-        }
-
-    }
+   deleteCurrentProfileImage(userId)
 
     const res = await db.update(users)
     .set({ image: key })
@@ -44,6 +22,23 @@ export const getUploadUrl = async () => {
     return {
         uploadUrl: url,
         key: key
+    }
+}
+
+export const deleteCurrentProfileImage = async (userId: string) => {
+    const s3 = getS3();
+
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, userId)
+    })
+
+    if(user && user.image) {
+        const input = { // DeleteObjectRequest
+            Bucket: process.env.S3_BUCKET, // required
+            Key: user.image, // required
+        };
+        const command = new DeleteObjectCommand(input);
+        await s3.send(command)
     }
 }
 
@@ -67,7 +62,6 @@ const presignUrl = async (key: string): Promise<string | undefined> => {
     const res = await axios.request(config)
     return res.data.data["presigned_url"]
 }
-
 const getS3 = () => {
     return new S3Client({
         credentials: {
@@ -75,7 +69,6 @@ const getS3 = () => {
             secretAccessKey: process.env.S3_SECRET ?? ""
         },
         endpoint: process.env.S3_ENDPOINT,
-        region: process.env.S3_REGION,
-        forcePathStyle: process.env.S3_PATH_STYLE == "ja"
+        region: process.env.S3_REGION
     });
 }
