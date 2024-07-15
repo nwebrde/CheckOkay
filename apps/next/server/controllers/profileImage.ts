@@ -13,7 +13,7 @@ export const setProfileImage = async (userId: string, key: string) => {
 
     if(user && user.image) {
         const input = { // DeleteObjectRequest
-            Bucket: "", // required
+            Bucket: process.env.S3_BUCKET, // required
             Key: user.image, // required
         };
         try {
@@ -72,5 +72,7 @@ const getS3 = () => {
             secretAccessKey: process.env.S3_SECRET ?? ""
         },
         endpoint: process.env.S3_ENDPOINT,
+        region: process.env.S3_REGION,
+        forcePathStyle: process.env.S3_PATH_STYLE == "ja"
     });
 }
