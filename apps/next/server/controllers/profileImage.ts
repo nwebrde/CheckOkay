@@ -9,10 +9,11 @@ import axios from 'axios';
 export const setProfileImage = async (userId: string, key: string) => {
     const s3 = getS3();
 
-    const user = await getUser(userId, false, false)
+    const user = await db.query.users.findFirst({
+        where: eq(users.id, userId)
+    })
 
     if(user && user.image) {
-        console.log("key to delete", user.image)
         const input = { // DeleteObjectRequest
             Bucket: process.env.S3_BUCKET, // required
             Key: user.image, // required
