@@ -33,6 +33,6 @@ export const profileImageRouter = router({
         return {uploadUrl, key}
     }),
     delete: authorizedProcedure.mutation(async (opts) => {
-        await deleteCurrentProfileImage(opts.ctx.userId!)
+        await deleteCurrentProfileImage(opts.ctx.userId!, true)
     })
 });

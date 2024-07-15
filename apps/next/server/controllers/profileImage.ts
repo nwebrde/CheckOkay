@@ -32,7 +32,7 @@ export const getUploadUrl = async () => {
     }
 }
 
-export const deleteCurrentProfileImage = async (userId: string) => {
+export const deleteCurrentProfileImage = async (userId: string, deleteFromDB = false) => {
     const s3 = getS3();
 
     const user = await db.query.users.findFirst({
@@ -46,11 +46,17 @@ export const deleteCurrentProfileImage = async (userId: string) => {
         };
         const command = new DeleteObjectCommand(input);
         await s3.send(command)
+
+        if(deleteFromDB) {
+            await db.update(users)
+            .set({ image: null })
+            .where(eq(users.id, userId));
+        }
     }
 }
 
 /*
-required if s3 bucket should also hold private files (not the case now)
+required if s3 bucket should also hold private files (not the case now) => then set default bucket acl to private again and uncomment this code
 const makeProfileImagePublic = async (key: string) => {
     const s3 = getS3();
     const input = {
