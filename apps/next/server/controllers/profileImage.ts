@@ -14,10 +14,15 @@ export const setProfileImage = async (userId: string, key: string) => {
     if(user && user.image) {
         const input = { // DeleteObjectRequest
             Bucket: process.env.S3_BUCKET!, // required
-            Key: (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + user.image, // required
+            Key: user.image, // required
         };
-        const command = new DeleteObjectCommand(input);
-        const response = await s3.send(command);
+        try {
+            const command = new DeleteObjectCommand(input);
+            await s3.send(command);
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     const res = await db.update(users)
