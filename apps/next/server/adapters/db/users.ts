@@ -37,6 +37,11 @@ export const updateCheckState = async (userId: string, checkState: CheckState) =
     return res[0].affectedRows > 0
 }
 
+export const setUserName = async (userId: string, name: string) => {
+    const res = await db.update(users).set({name: name}).where(eq(users.id, userId))
+    return res[0].affectedRows > 0
+}
+
 /**
  * Converts a DB object to corresponding User type
  * @param user
