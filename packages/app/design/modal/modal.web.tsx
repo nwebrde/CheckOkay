@@ -37,7 +37,7 @@ export const Modal = forwardRef<ModalRef, ModalProps>(({title, proceedLabel, pro
     }
 
     useEffect(() => {
-        if(pathname.includes(routeIdentifier)) {
+        if(!pathname.includes(routeIdentifier)) {
             close()
         }
     }, [pathname]);
