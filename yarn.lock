@@ -7099,6 +7099,7 @@ __metadata:
     clsx: ^2.1.1
     expo-image-picker: ~15.0.7
     expo-linear-gradient: ~13.0.2
+    expo-modules-core: ^1.12.19
     moment: ^2.30.1
     moti: 0.29.0
     nativewind: 4.0.36
@@ -10353,6 +10354,15 @@ __metadata:
   dependencies:
     invariant: ^2.2.4
   checksum: b6bfd75379db146bbbe86be271fb6b56f9efda23fdd268516e97326d43ba5608670c8713af6960f2ff5e6663e6a1f0505849572d99fec08827aafa6e3d69bba3
+  languageName: node
+  linkType: hard
+
+"expo-modules-core@npm:^1.12.19":
+  version: 1.12.19
+  resolution: "expo-modules-core@npm:1.12.19"
+  dependencies:
+    invariant: ^2.2.4
+  checksum: f634bafecc9cd3fa508ea5c6ae7b1dd19ee23471636a92f90c8cec009dabb60ed687811414112379f19033487e0d0990f88007d481cf9da178dcb5ac284c25e3
   languageName: node
   linkType: hard
 
