@@ -9,7 +9,7 @@ export default function Page() {
     const ref = useRef<HandlerRef>(null);
     return (
         <Modal title="Kontrollzeitpunkt hinzufügen" cancelLabel="Abbrechen" proceedLabel="Hinzufügen" childRef={ref} routeIdentifier="addMail">
-            <AddCheck />
+            <AddCheck ref={ref} />
         </Modal>
     )
 }

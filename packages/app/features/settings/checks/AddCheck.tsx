@@ -42,12 +42,6 @@ export const AddCheck = forwardRef<HandlerRef, Props>((props, ref) => {
             });
         }
     })
-    const add = (hour: number, minute: number) => {
-        addMutation.mutate({
-            hour: hour,
-            minute: minute,
-        })
-    }
 
     const [hour, setHour] = useState(0)
     const [minute, setMinute] = useState(0)

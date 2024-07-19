@@ -32,10 +32,6 @@ export const Modal = forwardRef<ModalRef, ModalProps>(({title, proceedLabel, pro
         setIsOpen(false)
     }
 
-    function open() {
-        setIsOpen(true)
-    }
-
     function afterLeave() {
         router.push(".")
     }
