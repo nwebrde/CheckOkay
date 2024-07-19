@@ -29,6 +29,12 @@
           }
         }
       ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Die App benötigt Zugriff auf deine Fotos, damit du ein Profilbild auswählen kannst."
+        }
+      ],
       "expo-apple-authentication"
     ],
     "extra": {

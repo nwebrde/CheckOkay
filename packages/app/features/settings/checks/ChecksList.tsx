@@ -1,80 +1,112 @@
 import React from 'react'
+import { I18nManager, StyleSheet } from 'react-native'
+import * as Burnt from "burnt";
+import { FlatList } from 'react-native-gesture-handler';
 
-import ChecksListItem from './ChecksListItem'
+import {SwipeableToDelete} from 'app/design/lists/swipeableRow/swipeableToDelete'
 import { View } from 'app/design/view'
-import { LAST_ITEM_ID } from 'app/features/settings/checks/const'
+import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
-import { FlatList } from 'react-native'
 import { Skeleton } from 'moti/skeleton'
-import {Check} from "app/lib/types/check";
+import { UTCToLocal } from 'app/lib/time'
 
-function pushNewButton(checks?: Check[]) {
-    if (!checks) {
-        return undefined
-    }
-    if (checks.some((e) => e.id === LAST_ITEM_ID)) {
-        return checks
-    }
-    const returnData = checks
-    returnData.push({
-        id: LAST_ITEM_ID,
-        hour: 1,
-        minute: 1,
-    })
-    return returnData
+
+//  To toggle LTR/RTL change to `true`
+I18nManager.allowRTL(false);
+
+const Row = ({text}) => (
+        <View className="w-full flex bg-white rounded-2xl border border-[#c9ba97] p-3 pl-4 pr-4">
+            <Text type="unstyled" className="text-2xl font-medium tracking-widest text-slate-900">{text}</Text>
+        </View>
+);
+
+const formatTime = (hour, minute) => {
+    return UTCToLocal(hour, minute).date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
 }
 
-const ChecksList = () => {
-    const checks = trpc.checks.get.useQuery()
 
-    const renderItem = ({ item }: { item: Check }) => {
-        return (
-            <ChecksListItem
-                item={item}
-                latestItem={getLatestItem(checks.data)}
-            />
-        )
-    }
 
-    const getLatestItem = (items: Check[] | undefined) => {
-        if (items) {
-            if (items[items.length - 1]!.id == LAST_ITEM_ID) {
-                return items[items.length - 2]!
-            }
-            return items[items.length - 1]!
+export default function ChecksList() {
+    const query = trpc.checks.get.useQuery()
+    const utils = trpc.useUtils()
+
+    const deleteCheck = trpc.checks.remove.useMutation({
+        onMutate: async (mutation) => {
+            await utils.checks.get.cancel();
+            const previousChecks = utils.checks.get.getData()
+            utils.checks.get.setData(undefined, (old) => {
+                return old!.map(curr => {
+                    if(curr.id == mutation.checkId) {
+                        return {
+                            ...curr,
+                            deleted: true
+                        }
+                    }
+                    return curr
+                })
+            })
+            return { previousChecks }
+        },
+        onError: (err, _, context) => {
+            utils.checks.get.setData(undefined, context!.previousChecks)
+            Burnt.toast({
+                title: "Fehler", // required
+
+                preset: "error", // or "error", "none", "custom"
+
+                message: "Check wurde nicht entfernt", // optional
+
+                haptic: "error", // or "success", "warning", "error"
+
+                duration: 2, // duration in seconds
+
+                shouldDismissByDrag: true,
+
+                from: "top", // "top" or "bottom"
+            });
+        },
+        onSettled: () => {
+            utils.checks.get.invalidate()
         }
-    }
+    })
+
+    const renderItem = ({item}) => {
+        return (
+            <View className="flex-1">
+                <SwipeableToDelete action={() => {deleteCheck.mutate({
+                    checkId: item.id
+                })}} isDeleting={item.deleted}>
+                    <Row text={formatTime(item.hour, item.minute) + " Uhr"} />
+                </SwipeableToDelete>
+            </View>
+
+        );
+    };
 
     return (
-        <View>
-            <Skeleton
-                colorMode="light"
-                width={'100%'}
-                height={100}
-                show={checks.isLoading}
-            >
-                <FlatList
-                    // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
-                    numColumns={5}
-                    // This prop is necessary to uniquely identify the elements in the list.
-                    keyExtractor={(item: Check) => {
-                        return (item.id).toString()
-                    }}
-                    scrollEnabled={false}
-                    columnWrapperStyle={{
-                        flexWrap: 'wrap',
-                        flex: 1,
-                        marginTop: 5,
-                    }}
-                    renderItem={renderItem}
-                    data={pushNewButton(checks.data)}
-                    style={{
-                        flexGrow: 0,
-                    }}
-                />
-            </Skeleton>
-        </View>
-    )
+        <Skeleton
+            colorMode="light"
+            width={'100%'}
+            show={query.isLoading}
+        >
+            <FlatList
+                data={query.data}
+                numColumns={2}
+                ItemSeparatorComponent={() => <View className="h-2" />}
+                columnWrapperStyle={style.row}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+            />
+        </Skeleton>
+    );
+
 }
 
-export default ChecksList
+const style = StyleSheet.create({
+    row: {
+        flex: 1,
+        width: "100%",
+        gap: 10,
+        justifyContent: "space-between"
+    }
+});

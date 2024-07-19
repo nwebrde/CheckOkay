@@ -32,6 +32,12 @@ export default function SettingsLayout() {
                             animationDuration: 100, gestureEnabled: true}} />
                         <Stack.Screen name="reminder_delay/setReminder" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
                             animationDuration: 100, gestureEnabled: true}} />
+                        <Stack.Screen name="reminder_delay/setDelay" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
+                            animationDuration: 100, gestureEnabled: true}} />
+                        <Stack.Screen name="checks/addCheck" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
+                            animationDuration: 100, gestureEnabled: true}} />
+                        <Stack.Screen name="guards/invite" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
+                            animationDuration: 100, gestureEnabled: true}} />
                     </Stack>
                 </View>
             </SettingsNavigatorLayout>

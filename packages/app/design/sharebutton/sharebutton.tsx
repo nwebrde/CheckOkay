@@ -7,11 +7,13 @@ export const ShareButton = ({
     link,
     title,
     msg,
+    onPress
 }: {
     children: ReactNode
     link: string
     title: string
     msg: string
+    onPress: () => void
 }) => {
     const onShare = async () => {
         try {
@@ -21,6 +23,7 @@ export const ShareButton = ({
                 message: msg,
             })
             if (result.action === Share.sharedAction) {
+                onPress()
                 if (result.activityType) {
                     // shared with activity type of result.activityType
                 } else {

@@ -5,9 +5,15 @@ export type HandlerRef = {
     state: "idle" | "loading" | "error" | "success" | undefined
 }
 
+export type ModalRef = {
+    proceed: () => Promise<void | boolean>,
+    close: () => void
+}
+
 export type ModalProps = {
     title: string,
     proceedLabel: string,
+    proceedChild: React.ReactNode | undefined,
     cancelLabel: string,
     children: React.ReactNode
     childRef: React.RefObject<HandlerRef>

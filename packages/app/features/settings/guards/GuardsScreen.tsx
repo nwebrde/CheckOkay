@@ -1,82 +1,31 @@
-import { Text } from 'app/design/typography'
+import { Button, StyledLink } from 'app/design/button'
+import { useNotifications } from 'app/provider/notifications'
+import { SettingsGroup } from 'app/design/settings/group'
+import { SettingsRow } from 'app/design/settings/row'
+import { Switch } from 'react-native'
+import { trpc } from 'app/provider/trpc-client'
+import React, { useEffect, useState } from 'react'
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
+import { Screen } from 'app/design/layout'
+import { Link } from 'expo-router'
+import { Text, TextLink } from 'app/design/typography'
+import { Plus } from 'app/design/icons'
 import { View } from 'app/design/view'
-import { Row } from 'app/design/layout'
-import {
-    AnimatedPressable, MotiLink
-} from 'app/design/button'
-import React, { useState } from 'react'
-import { PlusCircle } from '@nandorojo/heroicons/24/solid'
-import { StyleSheet } from 'react-native'
-import { InviteModal } from 'app/features/settings/guards/InviteModal'
+import { HeaderLink } from 'app/design/settings/HeaderLink'
 import GuardsList from 'app/features/settings/guards/GuardsList'
-import { Link } from 'solito/link'
 
-export function GuardsScreen() {
-    const [shareVisible, setShareVisible] = useState(false)
-
-    const onShareClose = () => {
-        setShareVisible(false)
-    }
+function Guardss() {
+    const notifications = useNotifications()
 
     return (
-       <>
-            <View>
-                <Link href="/settings/emergency"><Text>test</Text></Link>
-                <Text>Diese Personen werden gewarnt, wenn du dich nicht rechtzeitig zu einem Check-In Zeitpunkt meldest. Lade
-                Personen ein denen du diese Aufgabe anvertrauen möchtest.</Text>
-                <Row className="items-center justify-between">
-                    <Text type="H1">Deine Guards</Text>
-                    <AnimatedPressable onClick={() => setShareVisible(true)}>
-                        <PlusCircle className="h-14" />
-                    </AnimatedPressable>
-                </Row>
-                <GuardsList invite={() => setShareVisible(true)} />
-            </View>
-            <InviteModal visible={shareVisible} onClose={onShareClose} />
-           </>
+        <Screen width="max-w-xl">
+            <SettingsGroup>
+                <SettingsRow headerChild={<HeaderLink href="invite" />} separator={false} label="Beschützer" description="Wir warnen diese Personen wenn du dich nicht rechtzeitig zurückmeldest">
+                    <GuardsList />
+                </SettingsRow>
+            </SettingsGroup>
+        </Screen>
     )
 }
 
-const styles = StyleSheet.create({
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22,
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
-    textStyle: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-    },
-})
+export const GuardsScreen = gestureHandlerRootHOC(Guardss);

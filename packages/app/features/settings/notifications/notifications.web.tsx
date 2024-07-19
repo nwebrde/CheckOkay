@@ -7,12 +7,13 @@ import { Text } from 'app/design/typography'
 import React from 'react'
 import { Switch } from 'react-native'
 import { Screen } from 'app/design/layout'
+import { HeaderLink } from 'app/design/settings/HeaderLink'
 
 export function Notifications() {
     return (
         <Screen width="max-w-xl">
             <SettingsGroup>
-                <SettingsRow separator={false} label="Zusätzliche Emails für Warnungen" description="Erhalte Warnungen über den Zustand deiner Freunde über folgende weitere Email Adressen" fullsize={true}>
+                <SettingsRow headerChild={<HeaderLink href="addMail" />} separator={false} label="Zusätzliche Emails für Warnungen" description="Erhalte Warnungen über den Zustand deiner Freunde über folgende weitere Email Adressen" fullsize={true}>
                     <EmailsList />
                 </SettingsRow>
             </SettingsGroup>

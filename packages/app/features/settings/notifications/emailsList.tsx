@@ -3,7 +3,7 @@ import { I18nManager } from 'react-native'
 import * as Burnt from "burnt";
 import { FlatList } from 'react-native-gesture-handler';
 
-import {SwipeableToDelete} from 'app/design/swipeableRow/swipeableToDelete'
+import {SwipeableToDelete} from 'app/design/lists/swipeableRow/swipeableToDelete'
 import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'

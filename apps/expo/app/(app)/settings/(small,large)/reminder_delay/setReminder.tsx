@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { SetReminder } from 'app/features/settings/notifications/SetReminder'
-import Modal from 'app/design/modal/modal'
+import {Modal} from 'app/design/modal/modal'
 import { HandlerRef } from 'app/design/modal/types'
 
 

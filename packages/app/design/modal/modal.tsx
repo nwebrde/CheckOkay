@@ -1,9 +1,9 @@
 import { Text } from 'app/design/typography'
 import { Link, Stack, useRouter } from 'expo-router'
-import React from 'react'
+import React, { forwardRef, useImperativeHandle } from 'react'
 import { StyledPressable } from 'app/design/button'
 import { ActivityIndicator } from 'react-native'
-import { ModalProps, ProceedProps } from 'app/design/modal/types'
+import { ModalProps, ModalRef, ProceedProps } from 'app/design/modal/types'
 
 const Proceed = ({ state, handleProceed, label } : ProceedProps) => {
     return (
@@ -29,22 +29,33 @@ const Proceed = ({ state, handleProceed, label } : ProceedProps) => {
  * @param childRef
  * @constructor
  */
-export default function Modal({title, proceedLabel, cancelLabel, routeIdentifier, children, childRef}: ModalProps) {
+export const Modal = forwardRef<ModalRef, ModalProps>(({title, proceedLabel, proceedChild, cancelLabel, routeIdentifier, children, childRef}, ref) => {
     const router = useRouter()
 
-    async function handleDone() {
+    const close = () => {
+        router.back();
+    }
+
+    async function proceed() {
         try {
             await childRef.current?.proceedHandler()
-            router.back();
+            close();
         } catch (error) {
         }
     }
 
+    useImperativeHandle(ref, () => {
+        return {
+            close,
+            proceed
+        }
+    }, [childRef])
+
     return (
         <>
             <Stack.Screen options={{headerTitle: title,
-                headerRight: () => <Proceed handleProceed={handleDone} label={proceedLabel} state={childRef.current?.state} />, headerLeft: () => <Link href="../"><Text>{cancelLabel}</Text></Link> }} />
+                headerRight: () => ((proceedChild) ? {proceedChild} : <Proceed handleProceed={proceed} label={proceedLabel} state={childRef.current?.state} />), headerLeft: () => <Link href="../"><Text>{cancelLabel}</Text></Link> }} />
             {children}
         </>
     )
-}
+})

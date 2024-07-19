@@ -690,22 +690,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/s3-request-presigner@npm:^3.614.0":
-  version: 3.614.0
-  resolution: "@aws-sdk/s3-request-presigner@npm:3.614.0"
-  dependencies:
-    "@aws-sdk/signature-v4-multi-region": 3.614.0
-    "@aws-sdk/types": 3.609.0
-    "@aws-sdk/util-format-url": 3.609.0
-    "@smithy/middleware-endpoint": ^3.0.5
-    "@smithy/protocol-http": ^4.0.3
-    "@smithy/smithy-client": ^3.1.7
-    "@smithy/types": ^3.3.0
-    tslib: ^2.6.2
-  checksum: dae4f4a359d9ff03736dc2848614ff92b764bf6c08d54664755a077f74755cc837643bca18ac971e1f3ef140a6ce174bdcc41254f295b7d77dfb8729f05294a9
-  languageName: node
-  linkType: hard
-
 "@aws-sdk/signature-v4-multi-region@npm:3.614.0":
   version: 3.614.0
   resolution: "@aws-sdk/signature-v4-multi-region@npm:3.614.0"
@@ -763,18 +747,6 @@ __metadata:
     "@smithy/util-endpoints": ^2.0.5
     tslib: ^2.6.2
   checksum: 9d9973ceee59bf30af85c7f4328083daea033a987ec396dcb89eb7649f470ceb19c6b96635e121f3557e726f7ec7453236c956cf43f22128883c277f17d2a13f
-  languageName: node
-  linkType: hard
-
-"@aws-sdk/util-format-url@npm:3.609.0":
-  version: 3.609.0
-  resolution: "@aws-sdk/util-format-url@npm:3.609.0"
-  dependencies:
-    "@aws-sdk/types": 3.609.0
-    "@smithy/querystring-builder": ^3.0.3
-    "@smithy/types": ^3.3.0
-    tslib: ^2.6.2
-  checksum: 487a666cc4f6a3a8bcd27839fda7b79a3dccc81a7bd694a9903c6ea3695e1cc7cb2e538421335db5fb59460a148cc1a4a0a6e4796c5241a0ab406c4190f781d9
   languageName: node
   linkType: hard
 
@@ -7133,6 +7105,7 @@ __metadata:
     react-native-timer-picker: ^1.9.1
     react-native-toast-message: ^2.2.0
     react-native-toast-notifications: ^3.4.0
+    react-native-userpic: ^2.0.3
     solito: 4.2.2
     superjson: ^2.2.1
     tailwind-merge: ^2.3.0
@@ -7422,6 +7395,17 @@ __metadata:
   version: 4.9.1
   resolution: "axe-core@npm:4.9.1"
   checksum: 41d9227871781f96c2952e2a777fca73624959dd0e98864f6d82806a77602f82b4fc490852082a7e524d8cd864e50d8b4d9931819b4a150112981d8c932110c5
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "axios@npm:1.7.2"
+  dependencies:
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: e457e2b0ab748504621f6fa6609074ac08c824bf0881592209dfa15098ece7e88495300e02cd22ba50b3468fd712fe687e629dcb03d6a3f6a51989727405aedf
   languageName: node
   linkType: hard
 
@@ -10078,6 +10062,7 @@ __metadata:
     expo-device: ~6.0.2
     expo-haptics: ~13.0.1
     expo-image: ~1.12.12
+    expo-image-picker: ~15.0.7
     expo-linear-gradient: ~13.0.2
     expo-linking: ~6.3.1
     expo-notifications: ~0.28.9
@@ -10268,6 +10253,26 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 5419e6451d3718dde8fb099eb710d7c90448d75d00d44e8b42ec301ec45d52bdb52e6ef2959fd0f207abcbe090b0c851b8bd94aba90343053d5435e4e545a997
+  languageName: node
+  linkType: hard
+
+"expo-image-loader@npm:~4.7.0":
+  version: 4.7.0
+  resolution: "expo-image-loader@npm:4.7.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 1630e988443f87fe86761fb2909e3de88978004a55f769cce7d7965c3ff6e4497e73e9607e826d9a1d5588361b92350e8d4ec0111c9a3243d04a565eddfcf346
+  languageName: node
+  linkType: hard
+
+"expo-image-picker@npm:~15.0.7":
+  version: 15.0.7
+  resolution: "expo-image-picker@npm:15.0.7"
+  dependencies:
+    expo-image-loader: ~4.7.0
+  peerDependencies:
+    expo: "*"
+  checksum: 569f9479eed8f0d2667c70f6d790b2a8dd6647a1c416eb5b9f573ce6bf4ff18d0fa45654f71bfa7d7579844a7a11334c6ceca6929c8e3d87ee32c52ba6b76bbb
   languageName: node
   linkType: hard
 
@@ -10765,6 +10770,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: a62c378dfc8c00f60b9c80cab158ba54e99ba0239a5dd7c81245e5a5b39d10f0c35e249c3379eae719ff0285fff88c365dd446fab19dee771f1d76252df1bbf5
+  languageName: node
+  linkType: hard
+
 "fontfaceobserver@npm:^2.1.0":
   version: 2.3.0
   resolution: "fontfaceobserver@npm:2.3.0"
@@ -10799,6 +10814,17 @@ __metadata:
     combined-stream: ^1.0.8
     mime-types: ^2.1.12
   checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "form-data@npm:4.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 01135bf8675f9d5c61ff18e2e2932f719ca4de964e3be90ef4c36aacfc7b9cb2fceb5eca0b7e0190e3383fe51c5b37f4cb80b62ca06a99aaabfcfd6ac7c9328c
   languageName: node
   linkType: hard
 
@@ -12389,6 +12415,13 @@ __metadata:
   version: 5.5.0
   resolution: "jose@npm:5.5.0"
   checksum: 4fad87a6cd4280dad6ff15392314d3b743f744a8a4c99ee9ff11e64d1db34b55c74b05648437e8f92d97f32aa81df61fc02a6d6a377f14debb8e22d27572b955
+  languageName: node
+  linkType: hard
+
+"js-md5@npm:^0.7.3":
+  version: 0.7.3
+  resolution: "js-md5@npm:0.7.3"
+  checksum: 1ed9f7f23a2ad224fc159ba7e074617d20e6b501ea96319091ae4c7cfe722cc472c4e05366fd25708311fb66dc2deb1b82e51c730f9ccd910e64b67ba36d3a75
   languageName: node
   linkType: hard
 
@@ -14204,7 +14237,6 @@ __metadata:
     "@auth/drizzle-adapter": ^0.3.12
     "@aws-sdk/client-s3": ^3.614.0
     "@aws-sdk/client-ses": ^3.614.0
-    "@aws-sdk/s3-request-presigner": ^3.614.0
     "@expo/next-adapter": 6.0.0
     "@headlessui/react": ^2.1.2
     "@jmondi/oauth2-server": ^3.0.2
@@ -14218,6 +14250,7 @@ __metadata:
     "@types/uuid": ^10.0.0
     app: "*"
     autoprefixer: ^10.4.17
+    axios: ^1.7.2
     bullmq: ^5.7.1
     dayjs: ^1.11.10
     db: "workspace:^"
@@ -15990,6 +16023,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 734a54111e3657859d3cca9505a197bc6eb486e473e655d8aa087157de8f5e8b819083963f28e5e9155110be9a17774296bbfd721749f670c5f4e093557bd88f
+  languageName: node
+  linkType: hard
+
+"react-native-userpic@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "react-native-userpic@npm:2.0.3"
+  dependencies:
+    js-md5: ^0.7.3
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 70f7d1ebe3c14aee5f76e4bcfaa6fa1437cf06eeaffe8472cb88133c26348afa66e4eb6beb3392ed65a8036120a862abc2ccb2da569164bc909db13f903d3eab
   languageName: node
   linkType: hard
 

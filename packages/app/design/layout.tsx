@@ -1,8 +1,5 @@
-import { CheckIn } from 'app/features/checkIn/CheckIn'
-import { Guards } from 'app/features/settings/guards/Guards'
 import React, { ReactNode } from 'react'
 import { View } from 'app/design/view'
-import { MotiLink as MLink } from 'solito/build/moti/app'
 
 export function Row({ className, ...props }) {
     return (<View className={"flex-row " + className} {...props } />)

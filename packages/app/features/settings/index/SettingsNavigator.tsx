@@ -14,11 +14,16 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
                     <Text type="H1" className="mt-0.5">Einstellungen</Text>
                 </>
             }
-            <SettingsGroup>
-                <SettingsRow label="Check-In Zeitpunkte" separator={false} />
+            <SettingsGroup title="Profil">
+                <SettingsRow label="Anmeldeinformationen" link={"user"} useRelative={useRelative} separator={true} />
+                <SettingsRow label="Öffentliches Profil" link={"user"} useRelative={useRelative} separator={true} />
+                <SettingsRow label="Notfalldaten" link={"user"} useRelative={useRelative} separator={false} />
             </SettingsGroup>
             <SettingsGroup>
-                <SettingsRow label="Deine Beschützer" separator={false} />
+                <SettingsRow label="Check-In Zeitpunkte" link="checks" separator={false} />
+            </SettingsGroup>
+            <SettingsGroup>
+                <SettingsRow label="Deine Beschützer" link="guards" separator={false} />
             </SettingsGroup>
             <SettingsGroup title="Benachrichtigungen">
                 <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} useRelative={useRelative} />

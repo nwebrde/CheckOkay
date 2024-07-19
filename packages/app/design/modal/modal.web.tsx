@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import { Button } from 'app/design/button'
 import { ActivityIndicator } from 'react-native'
-import { ModalProps, ProceedProps } from 'app/design/modal/types'
+import { ModalProps, ModalRef, ProceedProps } from 'app/design/modal/types'
 
 const Proceed = ({ state, handleProceed, label } : ProceedProps) => {
     return (
@@ -21,18 +21,18 @@ const Proceed = ({ state, handleProceed, label } : ProceedProps) => {
     )
 }
 
-export default function Modal({title, proceedLabel, cancelLabel, routeIdentifier, children, childRef}: ModalProps) {
+export const Modal = forwardRef<ModalRef, ModalProps>(({title, proceedLabel, proceedChild, cancelLabel, routeIdentifier, children, childRef}, ref) => {
 
     let [isOpen, setIsOpen] = useState(true)
 
     const router = useRouter()
     const pathname = usePathname()
 
-    function closeModal() {
+    function close() {
         setIsOpen(false)
     }
 
-    function openModal() {
+    function open() {
         setIsOpen(true)
     }
 
@@ -42,23 +42,30 @@ export default function Modal({title, proceedLabel, cancelLabel, routeIdentifier
 
     useEffect(() => {
         if(pathname.includes(routeIdentifier)) {
-            openModal()
+            close()
         }
     }, [pathname]);
 
 
-    async function handleProceed() {
+    async function proceed() {
         try {
             await childRef.current?.proceedHandler()
-            closeModal();
+            close();
         } catch (error) {
         }
     }
 
+    useImperativeHandle(ref, () => {
+        return {
+            close,
+            proceed
+        }
+    }, [childRef])
+
     return (
         <>
             <Transition appear show={isOpen} afterLeave={afterLeave} as={Fragment} >
-                <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                <Dialog as="div" className="relative z-10" onClose={close}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -95,8 +102,8 @@ export default function Modal({title, proceedLabel, cancelLabel, routeIdentifier
                                     </div>
 
                                     <div className="mt-4 flex flex-row justify-around">
-                                        <Button text={cancelLabel} onClick={closeModal} />
-                                        <Proceed label={proceedLabel} state={childRef.current?.state} handleProceed={handleProceed} />
+                                        <Button text={cancelLabel} onClick={close} />
+                                        <Proceed label={proceedLabel} state={childRef.current?.state} handleProceed={proceed} />
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
@@ -106,4 +113,4 @@ export default function Modal({title, proceedLabel, cancelLabel, routeIdentifier
             </Transition>
         </>
     )
-}
+})
