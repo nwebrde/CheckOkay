@@ -1,5 +1,4 @@
 import {z} from "zod";
-import {ZUser} from "app/lib/types/user";
 
 export const ZProfile = z.object({
   id: z.string(),

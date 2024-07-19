@@ -1,6 +1,5 @@
 import {z} from "zod";
 import {ZProfile} from "app/lib/types/userProfile";
-import {ZUser} from "app/lib/types/user";
 
 export enum GuardType {
     IMPORTANT = 'important',
