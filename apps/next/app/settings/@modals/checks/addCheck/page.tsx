@@ -8,7 +8,7 @@ import { AddCheck } from 'app/features/settings/checks/AddCheck'
 export default function Page() {
     const ref = useRef<HandlerRef>(null);
     return (
-        <Modal title="Kontrollzeitpunkt hinzufügen" cancelLabel="Abbrechen" proceedLabel="Hinzufügen" childRef={ref} routeIdentifier="addMail">
+        <Modal title="Kontrollzeitpunkt hinzufügen" cancelLabel="Abbrechen" proceedLabel="Hinzufügen" childRef={ref} routeIdentifier="addCheck">
             <AddCheck ref={ref} />
         </Modal>
     )
