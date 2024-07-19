@@ -7,11 +7,13 @@ export const ShareButton = ({
     link,
     title,
     msg,
+    onPress
 }: {
     children: ReactNode
     link: string
     title: string
     msg: string
+    onPress: () => void
 }) => {
     return (
         <div>
@@ -21,9 +23,9 @@ export const ShareButton = ({
                     title: title,
                     text: msg,
                 }}
-                onClick={() => console.log('shared successfully!')}
+                onClick={onPress}
             >
-                <Button text={title} onClick={() => {}} />
+                <Button text={title} />
             </RWebShare>
         </div>
     )

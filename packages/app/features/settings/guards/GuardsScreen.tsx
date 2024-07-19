@@ -1,5 +1,4 @@
 import { Button, StyledLink } from 'app/design/button'
-import { useNotifications } from 'app/provider/notifications'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
 import { Switch } from 'react-native'
@@ -15,7 +14,6 @@ import { HeaderLink } from 'app/design/settings/HeaderLink'
 import GuardsList from 'app/features/settings/guards/GuardsList'
 
 function Guardss() {
-    const notifications = useNotifications()
 
     return (
         <Screen width="max-w-xl">
