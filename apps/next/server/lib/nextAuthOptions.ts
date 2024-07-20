@@ -27,12 +27,12 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
         // which is used to look up the session in the database.
 
         // Seconds - How long until an idle session expires and is no longer valid.
-        maxAge: 12 * 30 * 24 * 60 * 60, // 365 days
+        //maxAge: 12 * 30 * 24 * 60 * 60, // 365 days
 
         // Seconds - Throttle how frequently to write to database to extend a session.
         // Use it to limit write operations. Set to 0 to always update the database.
         // Note: This option is ignored if using JSON Web Tokens
-        updateAge: 24 * 60 * 60, // 24 hours
+        //updateAge: 24 * 60 * 60, // 24 hours
         strategy: "jwt"
     },
     adapter: DrizzleAdapter(db, tableCreator),
