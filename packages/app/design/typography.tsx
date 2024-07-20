@@ -98,5 +98,5 @@ export const TextLink = styled<
  */
 
 export function TextLink({ className, ...props }) {
-    return (<SolitoTextLink {...props } />)
+    return (<SolitoTextLink className={className} {...props } />)
 }

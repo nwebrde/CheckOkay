@@ -8,6 +8,7 @@ import { Card, VSpacer } from 'app/design/layout'
 import Moment from 'react-moment'
 import {CheckState} from "app/lib/types/check";
 import {Guarded} from "app/lib/types/guardedUser";
+import { AvatarName } from 'app/features/user/AvatarName'
 
 const renderItem = ({ item }: { item: Guarded }) => {
     const deleteMutation = trpc.guards.deleteGuardedUser.useMutation()
@@ -27,10 +28,10 @@ const renderItem = ({ item }: { item: Guarded }) => {
                       : 'bg-orange-200'
             }`}
         >
-            <View className="flex-row items-center justify-between">
-                <Text type="H2" className="my-0 mb-0 mt-0 text-xl opacity-75">
-                    {item.name ?? item.email}
-                </Text>
+            <View className="w-full flex-row items-center justify-between">
+                <View className="basis-4/5 truncate">
+                    <AvatarName name={item.name} email={item.email} image={item.image} />
+                </View>
 
                 <StyledPressable
                     onPress={remove}

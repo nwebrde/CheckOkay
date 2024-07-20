@@ -8,7 +8,7 @@ export default function Page() {
     const ref = useRef<HandlerRef>(null);
     const modalRef = useRef<ModalRef>(null);
     return (
-            <Modal ref={modalRef} title="Beschützer einladen" cancelLabel="Abbrechen" childRef={ref} routeIdentifier="invite">
+            <Modal ref={modalRef} title="Beschützer einladen" cancelLabel="Fertig" childRef={ref} routeIdentifier="invite">
                 <Invite ref={ref} modalRef={modalRef} />
             </Modal>
         )

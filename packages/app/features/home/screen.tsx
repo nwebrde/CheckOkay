@@ -3,6 +3,7 @@ import { Screen, VSpacer } from 'app/design/layout'
 import { CheckIn } from 'app/features/checkIn/CheckIn'
 import { Guarded } from 'app/features/guardedPersons/Guarded'
 import React, { useState } from 'react'
+import { AvatarName } from 'app/features/user/AvatarName'
 
 export function HomeScreen() {
     const [test, setTest] = useState("some input")

@@ -32,6 +32,7 @@ const GuardedList = () => {
                     columnWrapperStyle={{
                         flexWrap: 'wrap',
                         flex: 1,
+                        gap: 15,
                         marginTop: 5,
                     }}
                     ListEmptyComponent={<EmptyItem />}

@@ -8,14 +8,15 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
+import { AvatarName } from 'app/features/user/AvatarName'
 
 
 //  To toggle LTR/RTL change to `true`
 I18nManager.allowRTL(false);
 
-const Row = ({text}) => (
+const Row = ({name, email, image}) => (
     <View className="flex flex-col w-full p-2" >
-        <Text>{text}</Text>
+        <AvatarName name={name} email={email} image={image} />
     </View>
     );
 
@@ -73,7 +74,7 @@ export default function GuardsList() {
             <SwipeableToDelete action={() => {deleteGuard.mutate({
                 guardUserId: item.id
             })}} isDeleting={item.deleted}>
-                <Row text={item.email} />
+                <Row name={item.name} email={item.email} image={item.image} />
             </SwipeableToDelete>
         );
     };

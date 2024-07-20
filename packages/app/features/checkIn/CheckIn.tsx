@@ -1,7 +1,7 @@
 import { Text, TextLink } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Card, HSpacer, Row } from 'app/design/layout'
-import { AnimatedLink, AnimatedPressable } from 'app/design/button'
+import { AnimatedLink, AnimatedPressable, StyledLink } from 'app/design/button'
 import React from 'react'
 import Moment from 'react-moment'
 import { trpc } from 'app/provider/trpc-client'
@@ -9,6 +9,7 @@ import { SetupChecks } from 'app/features/checkIn/SetupChecks'
 import { Skeleton } from 'moti/skeleton'
 import {CheckState} from "app/lib/types/check";
 import { Cog6Tooth } from 'app/design/icons'
+import * as Burnt from 'burnt'
 
 export function CheckIn() {
     const checkOkay = trpc.checks.checkIn.useMutation()
@@ -30,10 +31,23 @@ export function CheckIn() {
         return true
     }
 
-    const check = () => {
-        checkOkay.mutate({
+    const check = async () => {
+        await checkOkay.mutateAsync({
             step: false,
         })
+        Burnt.toast({
+            title: "Du hast dich zurückgemeldet", // required
+
+            preset: "done", // or "error", "none", "custom"
+
+            haptic: "success", // or "success", "warning", "error"
+
+            duration: 2, // duration in seconds
+
+            shouldDismissByDrag: true,
+
+            from: "top", // "top" or "bottom"
+        });
     }
     return (
         <View className="w-full">
@@ -60,22 +74,22 @@ export function CheckIn() {
                                     </AnimatedLink>
                                 </Row>
 
-                                <Row>
+                                <Row className="mt-5">
                                     <AnimatedPressable onClick={check}>
                                         <Text
+                                            type="unstyled"
                                             selectable={false}
-                                            className="text-base font-bold"
+                                            className="text-base font-bold text-xl"
                                         >
                                             Ja &#128077;
                                         </Text>
                                     </AnimatedPressable>
                                     <HSpacer />
-                                    <TextLink
+                                    <StyledLink
                                         href="/callEmergency"
-                                        className="text-red-500"
                                     >
-                                        Nein &#128078;
-                                    </TextLink>
+                                        <Text className="text-red-500 font-bold text-xl">Nein &#128078;</Text>
+                                    </StyledLink>
                                 </Row>
                                 {user.data?.nextRequiredCheckIn && (
                                     <Text className="mt-5">

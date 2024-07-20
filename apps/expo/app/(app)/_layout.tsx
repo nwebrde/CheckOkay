@@ -2,6 +2,7 @@ import { Redirect, Stack } from 'expo-router'
 import { Text } from 'react-native'
 import { useAuth } from 'app/provider/auth-context/index.native'
 import React from 'react'
+import { AvatarName } from 'app/features/user/AvatarName'
 
 
 export default function AppLayout() {
@@ -35,9 +36,10 @@ export default function AppLayout() {
                 headerTransparent: false,
                 contentStyle: {
                     backgroundColor: "#ffffff"
-                },
+                }
             }}
         >
+            <Stack.Screen name="index" options={{headerRight: () => <AvatarName small href="settings/(small)/user" />}} />
             <Stack.Screen name="settings/(small)/channels/addMail" options={{presentation: "modal", headerTitleAlign: "center", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
             <Stack.Screen name="settings/(small)/reminder_delay/setReminder" options={{presentation: "modal", headerTitleAlign: "center", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />
             <Stack.Screen name="settings/(small)/reminder_delay/setDelay" options={{presentation: "modal", headerTitleAlign: "center", animation: "slide_from_bottom", animationDuration: 100, gestureEnabled: true}} />

@@ -2,7 +2,7 @@ import { Screen } from 'app/design/layout'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
 import React, { useEffect, useState } from 'react'
-import { PublicProfile } from 'app/features/user/PublicProfile'
+import { AvatarName } from 'app/features/user/AvatarName'
 import { Input } from 'app/design/input'
 import { HeaderLink } from 'app/design/settings/HeaderLink'
 import { Photo, Trash, XMark } from 'app/design/icons'
@@ -12,6 +12,7 @@ import { ActivityIndicator, TextInput } from 'react-native'
 import { Button } from 'app/design/button'
 import { View } from 'app/design/view'
 import { DismissKeyboardView } from 'app/design/KeyboardDismisser'
+import { Text } from 'app/design/typography'
 
 
 const getBlob = async (fileUri) => {
@@ -100,7 +101,12 @@ export function PublicProfileScreen() {
     return(
         <Screen width="max-w-xl">
             <DismissKeyboardView>
-                <PublicProfile />
+                <View className="flex flex-col gap-2 mb-3">
+                    <AvatarName />
+                    <Text>
+                        So sehen dich deine Beschützer
+                    </Text>
+                </View>
                 <SettingsGroup>
                     {
                         /*
