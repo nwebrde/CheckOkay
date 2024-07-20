@@ -5,8 +5,16 @@ import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
 import { useEffect, useState } from 'react'
 import { cn } from 'app/lib/utils'
-import { Pressable } from 'react-native'
 import { StyledLink } from 'app/design/button'
+
+const Inner = ({name, email, image, small}) => {
+    <View  className={cn("flex flex-row gap-2 items-center")}>
+        <UserAvatar size={small ? 30 : 60} name={name} email={email} image={image} />
+        { !small &&
+            <Text type="H2">{name ?? email}</Text>
+        }
+    </View>
+}
 
 export function AvatarName({name, email, image, small, href, useRelative}) {
     const [innerName, setInnerName] = useState(name)
@@ -29,14 +37,14 @@ export function AvatarName({name, email, image, small, href, useRelative}) {
 
     return(
             <Skeleton colorMode="light" width={small ? 20 : "100%"} show={!initialized()}>
+                {href &&
                 <StyledLink href={href} useRelative={useRelative}>
-                    <View  className={cn("flex flex-row gap-2 items-center")}>
-                        <UserAvatar size={small ? 30 : 60} name={innerName} email={innerEmail} image={innerImage} />
-                        { !small &&
-                            <Text type="H2">{innerName ?? innerEmail}</Text>
-                        }
-                    </View>
+                    <Inner name={innerName} email={innerEmail} image={innerImage} small={small} />
                 </StyledLink>
+                }
+                {!href &&
+                    <Inner name={innerName} email={innerEmail} image={innerImage} small={small} />
+                }
             </Skeleton>
     )
 }
