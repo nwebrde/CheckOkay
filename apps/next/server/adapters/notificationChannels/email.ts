@@ -1,6 +1,6 @@
 import * as nodemailer from 'nodemailer'
 import {Notification, Recipient} from "../../entities/notifications/Notifications";
-import { SESClient } from '@aws-sdk/client-ses'
+import { SendRawEmailCommand, SES } from '@aws-sdk/client-ses'
 
 
 declare global {
@@ -22,7 +22,7 @@ else {
 }
 
 function createTransporter(): nodemailer.Transporter {
-    const client = new SESClient({
+    const client = new SES({
         credentials: {
             accessKeyId: process.env.AWS_ACCESS_KEY!,
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
@@ -31,7 +31,13 @@ function createTransporter(): nodemailer.Transporter {
 
 // Create a transporter of nodemailer
     return nodemailer.createTransport({
-        SES: client,
+        SES: {
+            ses: client,
+            aws: {
+                SendRawEmailCommand
+            }
+        }
+
     })
 }
 
