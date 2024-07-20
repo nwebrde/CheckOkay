@@ -17,7 +17,16 @@ function middleware(request: NextRequest) {
     }
 }
 
-export default withAuth(middleware)
+export default withAuth(middleware, {
+    callbacks: {
+        authorized: ({ token, req }) => {
+            if(req.nextUrl.pathname.startsWith('/app') && !token) {
+                return false // sign in
+            }
+            return true
+        }
+    }
+})
 
 export const config = {
     matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],

@@ -102,15 +102,6 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
             }
             return token
         },
-        authorized({ jwt, request: { nextUrl } }) {
-            const isLoggedIn = jwt;
-            const isOnDashboard = nextUrl.pathname.startsWith('/app');
-            if (isOnDashboard) {
-                if (isLoggedIn) return true;
-                return false; // Redirect unauthenticated users to login page
-            }
-            return true;
-        },
     },
 })
 
