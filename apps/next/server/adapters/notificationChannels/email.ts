@@ -2,7 +2,6 @@ import * as nodemailer from 'nodemailer'
 import {Notification, Recipient} from "../../entities/notifications/Notifications";
 import { SESClient } from '@aws-sdk/client-ses'
 
-require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 
 declare global {
     var transporter:

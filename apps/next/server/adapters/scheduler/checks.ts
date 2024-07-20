@@ -98,12 +98,16 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
             break
 
         case CheckSteps.BACKUP:
-            delay = (Number(backupTime) - Number(new Date()))
-            if(delay < 0) {
-                delay = 0
+            if(!job.finishedOn) {
+                // completed / failed jobs do not have their delay changed
+                delay = (Number(backupTime) - Number(new Date()))
+                if(delay < 0) {
+                    delay = 0
+                }
+
+                await job.changeDelay(delay)
             }
 
-            await job.changeDelay(delay)
             break
     }
 
@@ -151,30 +155,35 @@ export const updateBackupTime = async (checkId: number, backup: number) => {
     switch (job.data.step) {
         case CheckSteps.REMINDER:
         case CheckSteps.CHECK:
-            await job.updateData({
-                step: job.data.step,
-                checkDate: job.data.checkDate,
-                backupDate: backupTime,
-                userId: job.data.userId
-            })
 
-            break
+                await job.updateData({
+                    step: job.data.step,
+                    checkDate: job.data.checkDate,
+                    backupDate: backupTime,
+                    userId: job.data.userId
+                })
 
+            break;
         case CheckSteps.BACKUP:
-            delay = Number(backupTime) - Number(new Date())
-            if(delay < 0) {
-                delay = 0
+            if(!job.finishedOn) {
+                // completed / failed jobs do not have their delay changed
+
+                delay = Number(backupTime) - Number(new Date())
+                if(delay < 0) {
+                    delay = 0
+                }
+
+                await job.updateData({
+                    step: job.data.step,
+                    checkDate: job.data.checkDate,
+                    backupDate: backupTime,
+                    userId: job.data.userId
+                })
+
+                await job.changeDelay(delay)
             }
 
-            await job.updateData({
-                step: job.data.step,
-                checkDate: job.data.checkDate,
-                backupDate: backupTime,
-                userId: job.data.userId
-            })
-
-            await job.changeDelay(delay)
-            break
+            break;
     }
 
     return true
