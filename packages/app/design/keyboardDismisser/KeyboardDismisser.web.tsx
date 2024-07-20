@@ -1,0 +1,1 @@
+export const DismissKeyboardView = ({ children }: { children: React.ReactElement }) => <>{children}</>

@@ -11,7 +11,7 @@ import { trpc } from 'app/provider/trpc-client'
 import { ActivityIndicator, TextInput } from 'react-native'
 import { Button } from 'app/design/button'
 import { View } from 'app/design/view'
-import { DismissKeyboardView } from 'app/design/KeyboardDismisser'
+import { DismissKeyboardView } from 'app/design/keyboardDismisser/KeyboardDismisser'
 import { Text } from 'app/design/typography'
 
 
@@ -114,7 +114,7 @@ export function PublicProfileScreen() {
                          */
                     }
                     <SettingsRow headerChild={nameLoading ? <ActivityIndicator /> : (nameEditing ? <HeaderLink title="Speichern" icon={<></>} /> : <></>)} separator={true} label="Name" description="Gebe einen Namen an, der deinen Beschützern angezeigt werden soll">
-                        <Input className="min-w-full w-full" value={name} onChangeText={setName} onFocus={() => setNameEditing(true)} />
+                        <Input className="min-w-full w-full" value={name} onChangeText={setName} onFocus={() => setNameEditing(true)} onEndEditing={changeName} />
                     </SettingsRow>
                     <SettingsRow onPress={pickImage} headerChild={loading ? <ActivityIndicator /> : <HeaderLink title="" icon={<Photo className="stroke-2 text-primary" />} />} separator={userQuery.data?.image != undefined} label="Neues Profilbild auswählen" description="Wähle ein Profilbild aus, damit dich deine Beschützer leichter erkennen" />
                     {(userQuery.data?.image) &&

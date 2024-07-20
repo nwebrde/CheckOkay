@@ -98,8 +98,12 @@ export const Modal = forwardRef<ModalRef, ModalProps>(({title, proceedLabel, pro
                                     </div>
 
                                     <div className="mt-4 flex flex-row justify-around">
+                                        {cancelLabel &&
                                         <Button text={cancelLabel} onClick={close} />
+                                        }
+                                        {proceedLabel &&
                                         <Proceed label={proceedLabel} state={childRef.current?.state} handleProceed={proceed} />
+                                        }
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
