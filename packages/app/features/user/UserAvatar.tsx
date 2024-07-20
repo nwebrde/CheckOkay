@@ -7,10 +7,10 @@ export function UserAvatar({name, email, image, size = 60}) {
     const [innerEmail, setInnerEmail] = useState(email)
     const [innerImage, setInnerImage] = useState(image)
 
-    const query = trpc.getUser.useQuery({enabled: !initialized})
+    const query = trpc.getUser.useQuery()
 
     const initialized = () => {
-        return (innerName || innerEmail || innerImage)
+        return (name || email || image)
     }
 
     useEffect(() => {
