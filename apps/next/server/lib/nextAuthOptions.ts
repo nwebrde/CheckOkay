@@ -33,6 +33,7 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
         // Use it to limit write operations. Set to 0 to always update the database.
         // Note: This option is ignored if using JSON Web Tokens
         updateAge: 24 * 60 * 60, // 24 hours
+        strategy: "jwt"
     },
     adapter: DrizzleAdapter(db, tableCreator),
     providers: [
@@ -94,8 +95,15 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
             param.session.user.id = param.user.id
             return param.session
         },
-        authorized({ auth, request: { nextUrl } }) {
-            const isLoggedIn = !!auth?.user;
+        async jwt({ token, account, profile }) {
+            // Persist the user id to the token right after signin
+            if (account) {
+                token.id = profile.id
+            }
+            return token
+        },
+        authorized({ jwt, request: { nextUrl } }) {
+            const isLoggedIn = jwt;
             const isOnDashboard = nextUrl.pathname.startsWith('/app');
             if (isOnDashboard) {
                 if (isLoggedIn) return true;
