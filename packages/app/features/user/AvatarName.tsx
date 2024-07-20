@@ -45,7 +45,7 @@ export function AvatarName({name, email, image, small, href, useRelative}) {
                     </StyledLink>
                     ) : (
                         <View  className={cn("flex flex-row gap-2 items-center")}>
-                    <UserAvatar size={small ? 30 : 60} name={innerName} email={innerEmail} image={innerImage} />
+                    <UserAvatar size={small ? 30 : 60} />
                     { (!small) &&
                         <Text type="H2">{innerName ?? innerEmail}</Text>
                     }
