@@ -16,6 +16,11 @@ interface Profile {
 }
 
 export const authOptions = (userObject: Profile | undefined = undefined) => ({
+    theme: {
+        brandColor: "#2F5651", // Hex color code
+        logo: "https://checkokay.com/logo-light.png", // Absolute URL to image
+        buttonText: "#ffffff" // Hex color code
+    },
     session: {
         // Choose how you want to save the user session.
         // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.
@@ -41,6 +46,13 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
         AppleProvider({
             clientId: process.env.APPLE_CLIENT_ID!,
             clientSecret: process.env.APPLE_CLIENT_SECRET!,
+            authorization: {
+                params: {
+                    scope: "name email",
+                    response_mode: "form_post",
+                    response_type: "code",
+                },
+            },
             profile(profile) {
                 if (userObject) {
                     profile.name = `${userObject.name.firstName} ${userObject.name.lastName}`;
@@ -55,11 +67,20 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
             },
         }),
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
         })
     ],
     cookies: {
+        callbackUrl: {
+            name: `__Secure-next-auth.callback-url`,
+            options: {
+                httpOnly: false,
+                sameSite: "none",
+                path: "/",
+                secure: true,
+            },
+        },
         pkceCodeVerifier: {
             name: 'next-auth.pkce.code_verifier',
             options: {
