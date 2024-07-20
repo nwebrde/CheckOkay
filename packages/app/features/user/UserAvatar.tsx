@@ -9,12 +9,16 @@ export function UserAvatar({name, email, image, size = 60}) {
 
     const query = trpc.getUser.useQuery()
 
-    const initialized = () => {
+    const prefilled = () => {
         return (name || email || image)
     }
 
+    const initialized = () => {
+        return (innerName || innerEmail || innerImage)
+    }
+
     useEffect(() => {
-        if(!initialized() && query && query.data) {
+        if(!prefilled() && query && query.data) {
             setInnerName(query.data.name)
             setInnerEmail(query.data.email)
             setInnerImage(query.data.image)
