@@ -50,7 +50,7 @@ export const Invite = forwardRef<HandlerRef, Props>(({ modalRef }, ref) => {
                     <ShareButton
                         link={linkMutation.data!}
                         title="Link teilen"
-                        msg="Teile diesen Link mit der Person, die du als Beschützer einladen möchtest"
+                        msg="Hey. Ich lade dich ein, mich im Notfall zu beschützen. Melde dich an und werde mein Beschützer."
                         onPress={modalRef?.current?.close}
                     />
                 )}

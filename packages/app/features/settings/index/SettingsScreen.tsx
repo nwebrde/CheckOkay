@@ -13,10 +13,11 @@ import { Text } from 'app/design/typography'
  * @constructor
  */
 export function SettingsScreen() {
-
+    const auth = useAuth()
     return (
         <Screen width="max-w-xl">
             <SettingsNavigator header={false} currentPath="" useRelative />
+            <Button text="Abmelden" onClick={auth?.signOut} />
             <Text type="unstyled" className="mt-5">Ein Geschenk für Lydi von ihrem Enkel Niklas</Text>
         </Screen>
     )
