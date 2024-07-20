@@ -4,7 +4,6 @@ import { SettingsRow } from 'app/design/settings/row'
 import React from 'react'
 import { Text } from 'app/design/typography'
 import { Link } from 'solito/link'
-import { useAuth } from 'app/provider/auth-context'
 
 export function SettingsNavigator({ header, currentPath, useRelative }: { header: boolean, currentPath: string, useRelative: boolean }) {
     return (
