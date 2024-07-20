@@ -3,9 +3,6 @@ import { db, tableCreator } from 'db'
 import DiscordProvider from 'next-auth/providers/discord'
 import AppleProvider from "next-auth/providers/apple"
 import GoogleProvider from "next-auth/providers/google"
-
-
-import CredentialsProvider from 'next-auth/providers/credentials'
 import { Session, User } from 'next-auth'
 
 interface Profile {
@@ -46,13 +43,6 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
         AppleProvider({
             clientId: process.env.APPLE_CLIENT_ID!,
             clientSecret: process.env.APPLE_CLIENT_SECRET!,
-            authorization: {
-                params: {
-                    scope: "name email",
-                    response_mode: "form_post",
-                    response_type: "code",
-                },
-            },
             profile(profile) {
                 if (userObject) {
                     profile.name = `${userObject.name.firstName} ${userObject.name.lastName}`;
