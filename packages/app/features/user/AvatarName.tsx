@@ -37,7 +37,7 @@ export function AvatarName({name, email, image, small, href, useRelative}) {
                 {href ? (
                     <StyledLink href={href} useRelative={useRelative}>
                         <View  className={cn("flex flex-row gap-2 items-center")}>
-                            <UserAvatar size={small ? 30 : 60} />
+                            <UserAvatar name={name} email={email} image={image} size={small ? 30 : 60} />
                             { !small &&
                                 <Text type="H2">{innerName ?? innerEmail}</Text>
                             }
@@ -45,7 +45,7 @@ export function AvatarName({name, email, image, small, href, useRelative}) {
                     </StyledLink>
                     ) : (
                         <View  className={cn("flex flex-row gap-2 items-center")}>
-                    <UserAvatar size={small ? 30 : 60} />
+                    <UserAvatar name={name} email={email} image={image} size={small ? 30 : 60} />
                     { (!small) &&
                         <Text type="H2">{innerName ?? innerEmail}</Text>
                     }
