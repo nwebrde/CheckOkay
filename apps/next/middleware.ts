@@ -25,8 +25,7 @@ export default withAuth(middleware, {
     callbacks: {
         authorized: ({ req: { cookies, nextUrl } }) => {
             if(nextUrl.pathname.startsWith('/app')) {
-                const sessionToken = cookies.get("next-auth.session-token");
-                return sessionToken != null;
+                return true
             }
             return true
         },
