@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from 'next/server'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../../../server/lib/nextAuthOptions'
-import { getToken } from 'next-auth/jwt'
 
 export async function GET(req: NextRequest) {
     const query = Object.fromEntries(req.nextUrl.searchParams)
@@ -22,10 +21,10 @@ export async function GET(req: NextRequest) {
                 query: query,
             })
 
-        const token = await getToken({ req })
-        if (token) {
+        const session = await getServerSession(authOptions())
+        if (session) {
             // Signed in
-            authRequest.user = token
+            authRequest.user = session.user
 
             // Once the user has approved or denied the client update the status
             // (true = approved, false = denied)

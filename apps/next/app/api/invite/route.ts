@@ -11,9 +11,11 @@ export async function GET(req: NextRequest) {
     if (!code) {
         return redirect(`/`)
     }
+    const session = await getServerSession(authOptions())
     const token = await getToken({ req })
-    if (token) {
-        if (await acceptInvitation(code, token.sub)) {
+    if (session) {
+        const user = session.user
+        if (await acceptInvitation(code, user.id)) {
             return redirect(`/`)
         }
         return new Response('invitation code not found or expired', {

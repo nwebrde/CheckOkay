@@ -35,7 +35,7 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     experimental: {
-        instrumentationHook: false,
+        instrumentationHook: true,
         forceSwcTransforms: true
     },
 }

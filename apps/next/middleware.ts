@@ -1,6 +1,10 @@
 import { NextResponse, NextRequest, userAgent } from 'next/server'
 import { withAuth } from 'next-auth/middleware'
-
+const customizedAuthRoutes = {
+    signIn: "/api/auth/signin",
+    // signOut: "/api/auth/signout",
+    // error: "/api/auth/error",
+};
 function middleware(request: NextRequest) {
     if (request.nextUrl.pathname == '/app/settings') {
         const { device } = userAgent(request)
@@ -19,13 +23,17 @@ function middleware(request: NextRequest) {
 
 export default withAuth(middleware, {
     callbacks: {
-        authorized: ({ token, req }) => {
-            if(req.nextUrl.pathname.startsWith('/app') && !token) {
-                return false // sign in
+        authorized: ({ req: { cookies, nextUrl } }) => {
+            if(nextUrl.pathname.startsWith('/app')) {
+                const sessionToken = cookies.get("next-auth.session-token");
+                return sessionToken != null;
             }
             return true
-        }
-    }
+        },
+    },
+    pages: {
+        signIn: customizedAuthRoutes.signIn,
+    },
 })
 
 export const config = {
