@@ -18,6 +18,9 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
         logo: "https://checkokay.com/logo-light.png", // Absolute URL to image
         buttonText: "#ffffff" // Hex color code
     },
+    pages: {
+        signIn: '/auth/signin'
+    },
     session: {
         // Choose how you want to save the user session.
         // The default is `"jwt"`, an encrypted JWT (JWE) stored in the session cookie.

@@ -12,7 +12,8 @@
     "icon": "./icon.png",
     "ios": {
       "bundleIdentifier": "de.nweber.checkokay",
-      "usesAppleSignIn": true
+      "usesAppleSignIn": true,
+      "buildNumber": "2"
     },
     "android": {
       "package": "de.nweber.checkokay",
