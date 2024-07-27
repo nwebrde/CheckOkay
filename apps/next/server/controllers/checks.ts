@@ -40,7 +40,7 @@ export const checkIn = async (userId: string, step: boolean) => {
         throw new Error("Failed updating nextRequiredCheckDate in DB")
     }
 
-    await reschedule(userId, checksController, data.currentCheckId, new Date(), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter))
+    await reschedule(userId, checksController, data.currentCheckId, new Date(), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
 }
 
 export const addCheck = async (userId: string, hour: Hour, minute: Minute ): Promise<boolean> => {
@@ -62,7 +62,7 @@ export const addCheck = async (userId: string, hour: Hour, minute: Minute ): Pro
 
     const checksController = toChecksController(data.checks)
 
-    return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter))
+    return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), false)
 }
 
 export const modifyCheck = async (userId: string, checkId: number, hour: Hour, minute: Minute): Promise<boolean> => {
@@ -83,7 +83,7 @@ export const modifyCheck = async (userId: string, checkId: number, hour: Hour, m
     }
 
     const checksController = toChecksController(data.checks)
-    return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter))
+    return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), false)
 }
 
 export const removeCheck = async (userId: string, checkId: number): Promise<boolean> => {
@@ -104,7 +104,7 @@ export const removeCheck = async (userId: string, checkId: number): Promise<bool
     }
 
     const checksController = toChecksController(data.checks)
-    return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter))
+    return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), false)
 }
 
 export const changeReminderTime = async (userId: string, hour: Hour, minute: Minute): Promise<boolean> => {
@@ -183,12 +183,14 @@ export const getCheckSettings = async (userId: string) => {
  * @param nextRequiredCheckIn check in zeit des in der queue befindlichen checks
  * @param reminder
  * @param backup
+ * @param forceNewJob force the creation of a new job in checkQueue even if a respective job with the same check id exist.
+ * Used for checkIn to ensure that the check state gets reset if only one check is present.
  */
-const reschedule = async (userId: string, checksController: ChecksController, currentCheckId: number | null, lastCheckIn: Date | undefined, nextRequiredCheckIn: Date | null, reminder: number, backup: number): Promise<boolean> => {
+const reschedule = async (userId: string, checksController: ChecksController, currentCheckId: number | null, lastCheckIn: Date | undefined, nextRequiredCheckIn: Date | null, reminder: number, backup: number, forceNewJob = false): Promise<boolean> => {
     const nextRequired = checksController.getNextRequiredCheck(lastCheckIn)
 
     if(nextRequired) {
-        if(nextRequired.check.id != currentCheckId) {
+        if(nextRequired.check.id != currentCheckId || forceNewJob) {
             if(currentCheckId) {
                 await deleteCheckFromQueue(currentCheckId)
             }
@@ -201,6 +203,7 @@ const reschedule = async (userId: string, checksController: ChecksController, cu
             if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id)) {
                 throw new Error("Error while updating the next required check in date")
             }
+
             if(!await updateCheckInQueue(nextRequired.check.id, nextRequired.date, reminder, backup)) {
                 return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, reminder, backup)
             }
