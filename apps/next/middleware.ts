@@ -15,6 +15,13 @@ function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/settings/user', request.url))
         }
     }
+    if(request.nextUrl.pathname.startsWith("/auth/signin")) {
+        const sessionToken = request.cookies.get("__Secure-next-auth.session-token");
+        if(sessionToken != null) {
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+        return NextResponse.next()
+    }
 }
 
 export default withAuth(middleware, {
