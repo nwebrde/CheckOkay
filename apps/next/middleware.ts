@@ -6,18 +6,14 @@ const customizedAuthRoutes = {
     // error: "/api/auth/error",
 };
 function middleware(request: NextRequest) {
-    if (request.nextUrl.pathname == '/app/settings') {
+    if (request.nextUrl.pathname == '/settings') {
         const { device } = userAgent(request)
         if(device.type === 'mobile') {
             return NextResponse.next()
         }
         else {
-            return NextResponse.redirect(new URL('/app/settings/user', request.url))
+            return NextResponse.redirect(new URL('/settings/user', request.url))
         }
-    }
-
-    if(request.nextUrl.pathname == '/') {
-        return NextResponse.redirect(new URL('/app', request.url))
     }
 }
 
