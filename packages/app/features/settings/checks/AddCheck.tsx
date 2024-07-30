@@ -63,7 +63,7 @@ export const AddCheck = forwardRef<HandlerRef, Props>((props, ref) => {
 
             <TimePicker onChange={(hour, minute) => {setHour(hour); setMinute(minute)}} displayTimeInLocalFormat={true} hour={10} minute={9} />
 
-                <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern dich rückzumelden. Ziehe dafür die Zahlen an die gewünschte Position</Text>
+                <Text className="mt-10">Wähle aus, um wie viel Uhr du dich spätestens rückmelden musst. Ziehe dafür die Zahlen an die gewünschte Position</Text>
             </View>
     )
 } )
