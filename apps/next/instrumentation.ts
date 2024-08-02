@@ -2,7 +2,6 @@ import { CheckJob, EmailJob, PushJob } from './server/adapters/scheduler/config'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/de'
 import dayjs from 'dayjs'
-import { UserDeleted } from './server/controllers/checkState'
 
 
 declare global {
@@ -35,6 +34,8 @@ export const register = async () => {
             const {CheckSteps} = await import('./server/adapters/scheduler/config');
             const { checkTickets } = await import('./server/adapters/notificationChannels/push');
             const { DelayedError } = await import('bullmq');
+            const { UserDeleted } = await import('./server/controllers/checkState');
+
 
             new Worker<CheckJob>(CHECK_QUEUE, async (job, token?: string) => {
                 let delay;
