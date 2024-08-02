@@ -2,6 +2,7 @@ import { CheckJob, EmailJob, PushJob } from './server/adapters/scheduler/config'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/de'
 import dayjs from 'dayjs'
+import { UserDeleted } from './server/controllers/checkState'
 
 
 declare global {
@@ -39,7 +40,17 @@ export const register = async () => {
                 let delay;
                 switch (job.data.step) {
                     case CheckSteps.REMINDER:
-                        await remind(job.data.userId)
+                        try {
+                            await remind(job.data.userId)
+                        } catch (e) {
+                            if (e instanceof UserDeleted) {
+                                // stop the job as user is deleted
+                                return
+                            } else {
+                                throw e; // re-throw the error unchanged
+                            }
+                        }
+                        
                         delay = Number(new Date(job.data.checkDate)) - Number(new Date())
                         if(delay < 0) {
                             delay = 0;
@@ -53,7 +64,16 @@ export const register = async () => {
                         });
                         throw new DelayedError();
                     case CheckSteps.CHECK:
-                        await warn(job.data.userId, false)
+                        try {
+                            await warn(job.data.userId, false)
+                        } catch (e) {
+                            if (e instanceof UserDeleted) {
+                                // stop the job as user is deleted
+                                return
+                            } else {
+                                throw e; // re-throw the error unchanged
+                            }
+                        }
                         if(job.data.backupDate) {
                             delay = Number(new Date(job.data.backupDate)) - Number(new Date())
                             if(delay < 0) {
@@ -70,7 +90,16 @@ export const register = async () => {
                         }
                         break;
                     case CheckSteps.BACKUP:
-                        await warn(job.data.userId, true)
+                        try {
+                            await warn(job.data.userId, true)
+                        } catch (e) {
+                            if (e instanceof UserDeleted) {
+                                // stop the job as user is deleted
+                                return
+                            } else {
+                                throw e; // re-throw the error unchanged
+                            }
+                        }
                         break;
                 }
             }, {

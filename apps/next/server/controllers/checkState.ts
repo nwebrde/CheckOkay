@@ -10,6 +10,11 @@ import { StandardNotifier, WarningNotifier } from './notifications/ConcreteNotif
 import { getMainSubmitters } from './notifications/NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
 
+export class UserDeleted extends Error {
+    constructor(msg: string) {
+        super(msg);
+    }
+}
 
 /**
  * Triggered by check queue
@@ -25,7 +30,7 @@ export const remind = async (userId: string) => {
     })
 
     if(!data) {
-        throw new Error("User not found. Check was not added.")
+        throw new UserDeleted("User not found. Check was not added.")
     }
 
     if(!data.nextRequiredCheckDate) {
@@ -67,7 +72,7 @@ export const warn = async (userId: string, backup: boolean) => {
     })
 
     if(!data) {
-        throw new Error("User not found. Check was not added.")
+        throw new UserDeleted("User not found. Check was not added.")
     }
 
     if(!data.nextRequiredCheckDate) {

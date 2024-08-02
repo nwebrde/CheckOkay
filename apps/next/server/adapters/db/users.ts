@@ -27,8 +27,8 @@ export const getUser = async (userId: string, withGuards: boolean, withGuardedUs
     return undefined
 }
 
-export const updateNextRequiredCheckIn = async (userId: string, nextRequiredCheckIn: Date | null, nextCheckId: number | null) => {
-    const res = await db.update(users).set({nextRequiredCheckDate: nextRequiredCheckIn, currentCheckId: nextCheckId}).where(eq(users.id, userId))
+export const updateNextRequiredCheckIn = async (userId: string, nextRequiredCheckIn: Date | null, nextCheckId: number | null, nextCheckInPossibleFrom: Date | null) => {
+    const res = await db.update(users).set({nextRequiredCheckDate: nextRequiredCheckIn, currentCheckId: nextCheckId, nextCheckInPossibleFrom: nextCheckInPossibleFrom}).where(eq(users.id, userId))
     return res[0].affectedRows > 0
 }
 
@@ -55,7 +55,8 @@ export const toUser = (user: UserDB): User => {
         state: user.state,
         step: isLastCheckInByStep(user.lastManualCheck, user.lastStepCheck),
         lastCheckIn: getLastCheckIn(user.lastManualCheck, user.lastStepCheck),
-        nextRequiredCheckIn: user.nextRequiredCheckDate ?? undefined
+        nextRequiredCheckIn: user.nextRequiredCheckDate ?? undefined,
+        nextCheckInPossibleFrom: user.nextCheckInPossibleFrom ?? undefined
     }
 }
 

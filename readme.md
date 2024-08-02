@@ -41,13 +41,14 @@ Changes to the database scheme must be committed by running
 cd packages/db
 yarn migrations:generate
 ```
+Please ensure that the generated mitigation file is added to git!
+
 This command generates migration files. These migrations can then be applied to the local database by running
 ```sh
 cd packages/db
 yarn migrations:push-local
 ```
-
-Host database migrations can be executed by running
+Host database migrations are applied automatically on push, they can be executed manually by running
 ```sh
 dokku run checkokay /bin/sh -c 'cd packages/db; node dist/migrate.js'
 ```

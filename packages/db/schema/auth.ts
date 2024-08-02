@@ -28,6 +28,7 @@ export const users = mySqlTable('user', {
     }).default(sql`CURRENT_TIMESTAMP(3)`),
     image: varchar('image', { length: 255 }),
     nextRequiredCheckDate: datetime('nextRequiredCheckDate'),
+    nextCheckInPossibleFrom: datetime('nextCheckInPossibleFrom'),
     currentCheckId: int("currentCheckId"),
     lastManualCheck: datetime('lastManualCheck'),
     lastStepCheck: datetime('lastStepCheck'),

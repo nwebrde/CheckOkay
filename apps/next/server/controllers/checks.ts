@@ -188,19 +188,20 @@ export const getCheckSettings = async (userId: string) => {
  */
 const reschedule = async (userId: string, checksController: ChecksController, currentCheckId: number | null, lastCheckIn: Date | undefined, nextRequiredCheckIn: Date | null, reminder: number, backup: number, forceNewJob = false): Promise<boolean> => {
     const nextRequired = checksController.getNextRequiredCheck(lastCheckIn)
+    const checkInPossibleFrom = checksController.getNextCheck(lastCheckIn)?.date
 
     if(nextRequired) {
         if(nextRequired.check.id != currentCheckId || forceNewJob) {
             if(currentCheckId) {
                 await deleteCheckFromQueue(currentCheckId)
             }
-            if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id)) {
+            if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id, checkInPossibleFrom ?? null)) {
                 throw new Error("Error while updating the next required check in date")
             }
             return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, reminder, backup)
         }
         else if ((new Date(nextRequired.date)).getTime() != nextRequiredCheckIn?.getTime()) {
-            if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id)) {
+            if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id, checkInPossibleFrom ?? null)) {
                 throw new Error("Error while updating the next required check in date")
             }
 
@@ -214,7 +215,7 @@ const reschedule = async (userId: string, checksController: ChecksController, cu
 
     else if(currentCheckId) {
         await deleteCheckFromQueue(currentCheckId)
-        if(!await updateNextRequiredCheckIn(userId, null, null)) {
+        if(!await updateNextRequiredCheckIn(userId, null, null, null)) {
             throw new Error("Error while updating the next required check in date")
         }
         return true

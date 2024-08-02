@@ -4,6 +4,7 @@ import { deleteCurrentProfileImage, getUploadUrl, setProfileImage } from '../con
 import { TRPCError } from '@trpc/server'
 import { NextResponse } from 'next/server'
 import { setUserName } from '../adapters/db/users'
+import { deleteUser } from '../controllers/user'
 
 export const userRouter = router({
     setProfileImage: authorizedProcedure.input(z.object({
@@ -47,5 +48,13 @@ export const userRouter = router({
             })
         }
         return result
-    })
+    }),
+    deleteUser: authorizedProcedure.mutation(async (opts) => {
+        const result = await deleteUser(opts.ctx.userId!)
+        if (!result) {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+            })
+        }
+    }),
 });

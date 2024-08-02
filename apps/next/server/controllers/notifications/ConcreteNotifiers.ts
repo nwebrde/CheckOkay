@@ -1,12 +1,15 @@
-import {db} from "db";
-import {eq} from "drizzle-orm";
-import {users} from "db/schema/auth";
-import {Notifier} from "../../entities/notifications/Notifier";
-import {Notification, Recipient} from "../../entities/notifications/Notifications"
-import {NotificationSubmitter} from "../../entities/notifications/NotificationSubmitter";
-import {repeat} from "../../adapters/scheduler/repeatingNotifiers";
+import { db } from 'db'
+import { eq } from 'drizzle-orm'
+import { users } from 'db/schema/auth'
+import { Notifier } from '../../entities/notifications/Notifier'
+import { Notification, Recipient } from '../../entities/notifications/Notifications'
+import { NotificationSubmitter } from '../../entities/notifications/NotificationSubmitter'
+import { repeat } from '../../adapters/scheduler/repeatingNotifiers'
 import { getAllSubmitters } from './NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
+
+export const WARNING_NOTIFIER_JOB_ID_BACKUP = "-backup"
+export const WARNING_NOTIFIER_JOB_ID_NORMAL = "-normal"
 
 /**
  * Sends notification only once to all provided NotificationSubmitters.
@@ -58,17 +61,23 @@ export abstract class RepeatingNotifier extends Notifier {
             return;
         }
 
-        const notifier = new StandardNotifier(this.notification, await this.getSubmitters())
+        const submitters = await this.getSubmitters()
+
+        const notifier = new StandardNotifier(this.notification, submitters)
         await notifier.submit();
 
-        if (this.currentRound <= this.repeatTimes) {
+        // length check cancels repeating if user does not exist anymore
+        if (this.currentRound <= this.repeatTimes && submitters.length > 0) {
             this.currentRound++;
-            await repeat(this, this.repeatInterval * 60 * Math.pow(this.multiplicativeBackoffFactor, this.currentRound - 2))
+            await repeat(this, this.getJobId(), this.repeatInterval * 60 * Math.pow(this.multiplicativeBackoffFactor, this.currentRound - 2))
         }
     }
 
     // concrete implementation contains logic for retrieving the submitters
     protected abstract getSubmitters(): Promise<NotificationSubmitter[]>
+
+    // return the id for the next repeating job scheduled during submit
+    abstract getJobId(): string
 }
 
 /**
@@ -85,6 +94,10 @@ export class WarningNotifier extends RepeatingNotifier {
         super(notification, 10, 30, 2, currentRound);
         this.userId = userId;
         this.guardType = guardType
+    }
+
+    getJobId(): string {
+        return this.userId + ((this.guardType == GuardType.BACKUP) ? WARNING_NOTIFIER_JOB_ID_BACKUP : WARNING_NOTIFIER_JOB_ID_NORMAL)
     }
 
     protected async getSubmitters(): Promise<NotificationSubmitter[]> {

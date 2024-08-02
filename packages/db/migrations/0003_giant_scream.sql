@@ -1,0 +1,1 @@
+ALTER TABLE `bwell_user` ADD `nextCheckInPossibleFrom` datetime;
