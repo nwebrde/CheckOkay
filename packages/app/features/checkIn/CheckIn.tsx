@@ -2,7 +2,7 @@ import { Text, TextLink } from 'app/design/typography'
 import { View } from 'app/design/view'
 import { Card, HSpacer, Row } from 'app/design/layout'
 import { AnimatedLink, AnimatedPressable, StyledLink } from 'app/design/button'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Moment from 'react-moment'
 import { trpc } from 'app/provider/trpc-client'
 import { SetupChecks } from 'app/features/checkIn/SetupChecks'
@@ -11,9 +11,22 @@ import {CheckState} from "app/lib/types/check";
 import { Cog6Tooth } from 'app/design/icons'
 import * as Burnt from 'burnt'
 
+
+const isCheckInPossible = (checkInPossibleFrom: Date | undefined) => {
+    if(!checkInPossibleFrom) {
+        return true
+    }
+    return checkInPossibleFrom.getTime() <= (new Date()).getTime()
+}
+
 export function CheckIn() {
     const checkOkay = trpc.checks.checkIn.useMutation()
     const user = trpc.getUser.useQuery()
+    const [checkInPossible, setCheckInPossible] = useState(false)
+
+    useEffect(() => {
+        setCheckInPossible(isCheckInPossible(user.data?.nextCheckInPossibleFrom))
+    }, [user.data])
 
     const isSetup = () => {
         if (!user.data) {
@@ -54,9 +67,9 @@ export function CheckIn() {
             <Skeleton colorMode="light" width={'100%'} show={user.isLoading}>
                 {user.data && (
                     <>
-                        {isSetup() && (
+                        {(isSetup() && checkInPossible) && (
                             <Card
-                                className={`w-full ${
+                                className={`w-fit ${
                                     user.data?.state == CheckState.OK
                                         ? 'bg-lime-200'
                                         : user.data?.state ==
@@ -69,9 +82,6 @@ export function CheckIn() {
                                     <Text type="H1" className="my-0 opacity-75">
                                         Ist alles okay?
                                     </Text>
-                                    <AnimatedLink href="/settings">
-                                        <Cog6Tooth className="text-primary stroke-primary" />
-                                    </AnimatedLink>
                                 </Row>
 
                                 <Row className="mt-5">
@@ -122,6 +132,16 @@ export function CheckIn() {
                                     </Text>
                                 )}
                             </Card>
+                        )}
+                        {(isSetup() && !checkInPossible) && (
+                            <Text>Du kannst dich erst in{' '}
+                                <Moment
+                                    element={Text}
+                                    locale="de"
+                                    date={user.data.nextCheckInPossibleFrom}
+                                    fromNow
+                                />{' '}wieder rückmelden</Text>
+
                         )}
                         {!isSetup() && <SetupChecks />}
                     </>

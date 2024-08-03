@@ -4,17 +4,25 @@ import { CheckIn } from 'app/features/checkIn/CheckIn'
 import { Guarded } from 'app/features/guardedPersons/Guarded'
 import React, { useState } from 'react'
 import { AvatarName } from 'app/features/user/AvatarName'
+import { ScrollView } from 'moti'
+import {
+    RefreshControl,
+} from 'react-native';
+import { View } from 'app/design/view'
+import { Text } from 'app/design/typography'
+import { trpc } from 'app/provider/trpc-client'
 
 export function HomeScreen() {
-    const [test, setTest] = useState("some input")
-
-
-
     return (
-        <Screen width="max-w-xl">
-            <CheckIn />
-            <VSpacer />
-            <Guarded />
+        <Screen stickyHeaderIndices={[0,2]} paddingTop={false} width="max-w-4xl">
+                <View className="pt-3">
+                    <CheckIn />
+                </View>
+                <VSpacer />
+                <View className="bg-white">
+                    <Text type="H1">Zustand deiner Freunde</Text>
+                </View>
+                <Guarded />
         </Screen>
     )
 }

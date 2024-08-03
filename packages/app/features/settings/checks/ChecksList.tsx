@@ -92,6 +92,7 @@ export default function ChecksList() {
             <FlatList
                 data={query.data}
                 numColumns={2}
+                scrollEnabled={false}
                 ItemSeparatorComponent={() => <View className="h-2" />}
                 columnWrapperStyle={style.row}
                 renderItem={renderItem}

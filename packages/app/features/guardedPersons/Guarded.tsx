@@ -8,9 +8,6 @@ export function Guarded() {
     return (
         <>
             <View className="w-full">
-                <Row className="items-center justify-between">
-                    <Text type="H1">Zustand deiner Freunde</Text>
-                </Row>
                 <GuardedList />
             </View>
         </>

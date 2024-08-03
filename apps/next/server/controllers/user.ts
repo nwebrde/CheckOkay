@@ -4,7 +4,6 @@ import { accounts, sessions, users } from 'db/schema/auth'
 import { deleteCurrentProfileImage } from './profileImage'
 import { deleteCheck } from '../adapters/scheduler/checks'
 import { deleteRepeatingNotifier } from '../adapters/scheduler/repeatingNotifiers'
-const request = require('request');
 
 export const deleteUser = async (userId: string) => {
     const user = await db.query.users.findFirst({
@@ -36,14 +35,24 @@ export const deleteUser = async (userId: string) => {
             type = "access_token"
         }
 
-        request.post('https://appleid.apple.com/auth/revoke', {
-            form: {
-                client_id: process.env.APPLE_CLIENT_ID!,
-                client_secret: process.env.APPLE_CLIENT_SECRET!,
-                token: token,
-                token_type_hint: type
-            }
-        })
+        const urlEncodedData = new URLSearchParams();
+        urlEncodedData.append('client_id', process.env.APPLE_CLIENT_ID!);
+        urlEncodedData.append('client_secret', process.env.APPLE_CLIENT_SECRET!);
+        urlEncodedData.append('token', token ?? "");
+        urlEncodedData.append('token_type_hint', type);
+
+        try {
+            const response = await fetch('https://appleid.apple.com/auth/revoke', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: urlEncodedData.toString(),
+            });
+
+            const result = await response.json();
+        } catch (e) {
+        }
     }
 
     await db.delete(users).where(eq(users.id, userId))

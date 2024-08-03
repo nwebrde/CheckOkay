@@ -1,5 +1,12 @@
 import React, { ReactNode } from 'react'
 import { View } from 'app/design/view'
+import { RefreshControl } from 'react-native'
+import { CheckIn } from 'app/features/checkIn/CheckIn'
+import { Text } from 'app/design/typography'
+import { Guarded } from 'app/features/guardedPersons/Guarded'
+import { ScrollView } from 'moti'
+import { trpc } from 'app/provider/trpc-client'
+import { clsx } from 'clsx'
 
 export function Row({ className, ...props }) {
     return (<View className={"flex-row " + className} {...props } />)
@@ -19,14 +26,36 @@ export function Card({ className, ...props }) {
 
 export const Screen = ({
     children,
-    width,
+    stickyHeaderIndices,
+    paddingTop = true,
+    width = 'max-w-2xl',
 }: {
     children: ReactNode
-    width: 'max-w-xl' | 'max-w-2xl'
+    stickyHeaderIndices: number[]
+    paddingTop: boolean
+    width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl'
 }) => {
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const utils = trpc.useUtils();
+
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await utils.invalidate();
+        setRefreshing(false);
+    }, []);
+
     return (
-        <View className="center flex-1 items-center p-3 pt-7 md:justify-center md:pt-0">
-            <View className={'w-full' + ' ' + width}>{children}</View>
-        </View>
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            className={clsx("p-3", paddingTop ? "" : "pt-0", width)}
+            stickyHeaderIndices={stickyHeaderIndices}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
+            {children}
+        </ScrollView>
+
     )
 }

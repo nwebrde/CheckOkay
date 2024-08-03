@@ -7,6 +7,7 @@ import GuardedListItem from 'app/features/guardedPersons/GuardedListItem'
 import { EmptyItem } from 'app/features/guardedPersons/EmptyItem'
 import { Skeleton } from 'moti/skeleton'
 import {Guarded} from "app/lib/types/guardedUser";
+import { ScrollView } from 'moti'
 
 const GuardedList = () => {
     const guardedUsers = trpc.getUser.useQuery()
@@ -16,7 +17,7 @@ const GuardedList = () => {
     }
 
     return (
-        <View>
+        <View className="h-full w-full">
             <Skeleton
                 colorMode="light"
                 width={'100%'}
@@ -25,10 +26,13 @@ const GuardedList = () => {
                 <FlatList
                     // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
                     numColumns={2}
+                    className="h-full w-full"
+
                     // This prop is necessary to uniquely identify the elements in the list.
                     keyExtractor={(item: Guarded) => {
                         return item.id
                     }}
+                    scrollEnabled={false}
                     columnWrapperStyle={{
                         flexWrap: 'wrap',
                         flex: 1,

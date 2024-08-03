@@ -14,12 +14,6 @@ type Props = {
     modalRef: React.RefObject<ModalRef> | undefined
 }
 
-/**
- * Only shown on small devices.
- * On large devices, the SettingsNavigator is used for navigation and displayed as an sidebar
- * (see nextjs and expo layouts)
- * @constructor
- */
 export const Invite = forwardRef<HandlerRef, Props>(({ modalRef }, ref) => {
     const linkMutation = trpc.guards.invite.useMutation()
     const { mutate } = linkMutation

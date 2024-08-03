@@ -8,6 +8,7 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
+import { ChannelType } from 'db/schema/notificationChannels'
 
 
 //  To toggle LTR/RTL change to `true`
@@ -84,7 +85,8 @@ export default function EmailsList() {
                 show={query.isLoading}
             >
             <FlatList
-                data={query.data}
+                data={query.data.filter(data => data.type == ChannelType.EMAIL)}
+                scrollEnabled={false}
                 ItemSeparatorComponent={() => <View className="border-b border-[#c9ba97]" />}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.address}

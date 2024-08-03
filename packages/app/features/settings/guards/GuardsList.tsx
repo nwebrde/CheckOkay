@@ -87,6 +87,7 @@ export default function GuardsList() {
             >
             <FlatList
                 data={query.data?.guards}
+                scrollEnabled={false}
                 ItemSeparatorComponent={() => <View className="border-b border-[#c9ba97]" />}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.email}

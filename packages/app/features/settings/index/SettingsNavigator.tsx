@@ -25,6 +25,7 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
                 }
 
                 <SettingsRow label="Öffentliches Profil" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={true} />
+                <SettingsRow label="Konto löschen" link={"user/deleteUser"} useRelative={useRelative} />
                 <SettingsRow label="Abmelden" onPress={auth?.signOut} separator={false} />
             </SettingsGroup>
             <SettingsGroup>

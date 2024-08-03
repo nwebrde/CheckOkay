@@ -16,12 +16,6 @@ import * as Burnt from 'burnt'
 
 type Props = {}
 
-/**
- * Only shown on small devices.
- * On large devices, the SettingsNavigator is used for navigation and displayed as an sidebar
- * (see nextjs and expo layouts)
- * @constructor
- */
 export const AddCheck = forwardRef<HandlerRef, Props>((props, ref) => {
     const addMutation = trpc.checks.add.useMutation({
         onError: () => {

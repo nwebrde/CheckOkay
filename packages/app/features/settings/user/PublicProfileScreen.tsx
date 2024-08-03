@@ -9,7 +9,6 @@ import { Photo, Trash, XMark } from 'app/design/icons'
 import * as ImagePicker from 'expo-image-picker';
 import { trpc } from 'app/provider/trpc-client'
 import { ActivityIndicator, TextInput } from 'react-native'
-import { Button } from 'app/design/button'
 import { View } from 'app/design/view'
 import { DismissKeyboardView } from 'app/design/keyboardDismisser/KeyboardDismisser'
 import { Text } from 'app/design/typography'

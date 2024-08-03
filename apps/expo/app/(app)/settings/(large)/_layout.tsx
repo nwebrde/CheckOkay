@@ -38,6 +38,8 @@ export default function SettingsLayout() {
                             animationDuration: 100, gestureEnabled: true}} />
                         <Stack.Screen name="guards/invite" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
                             animationDuration: 100, gestureEnabled: true}} />
+                        <Stack.Screen name="user/deleteUser" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
+                            animationDuration: 100, gestureEnabled: true}} />
                     </Stack>
                 </View>
             </SettingsNavigatorLayout>
