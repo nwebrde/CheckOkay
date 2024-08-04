@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 
+type screen = {
+    width: undefined | number;
+    height: undefined | number;
+}
+
 export const useScreenSize = () => {
-    const [screenSize, setScreenSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight,
+    const [screenSize, setScreenSize] = useState<screen>({
+        width: undefined,
+        height: undefined,
     });
 
     useEffect(() => {
@@ -16,6 +21,8 @@ export const useScreenSize = () => {
 
         window.addEventListener('resize', handleResize);
 
+        handleResize();
+
         // Clean up the event listener when the component unmounts
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -27,6 +34,10 @@ export const useScreenSize = () => {
 
 export const useLargeSettings = () => {
     const {width} = useScreenSize()
+
+    if(!width) {
+        return false
+    }
 
     return width > 1200;
 };
