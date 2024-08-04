@@ -11,11 +11,12 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
     return (
         <View>
             {header &&
-                <>
+                <View className="fixed z-50 bg-secondary w-full">
                     <Link href="/"><Text>Zurück</Text></Link>
                     <Text type="H1" className="mt-0.5">Einstellungen</Text>
-                </>
+                </View>
             }
+            <View className="mt-20">
             <SettingsGroup title="Profil">
                 {
                     /*
@@ -38,7 +39,7 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
                 <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} useRelative={useRelative} />
                 <SettingsRow label="Erhalte Benachrichtigungen über" active={currentPath.includes("channels")} link={"channels"} separator={false} useRelative={useRelative} />
             </SettingsGroup>
-
+            </View>
         </View>
     )
 }
