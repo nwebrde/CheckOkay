@@ -85,7 +85,7 @@ export default function EmailsList() {
                 show={query.isLoading}
             >
             <FlatList
-                data={query.data.filter(data => data.type == ChannelType.EMAIL)}
+                data={query.data?.filter(data => data.type == ChannelType.EMAIL)}
                 scrollEnabled={false}
                 ItemSeparatorComponent={() => <View className="border-b border-[#c9ba97]" />}
                 renderItem={renderItem}

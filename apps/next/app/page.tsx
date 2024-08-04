@@ -10,9 +10,13 @@ export default function HomeScreen() {
     const { user, isLoading, signIn } = useAuth()!
     if (isLoading) {
         return <ActivityIndicator />
-    } else if (!user) {
+    }
+    /*
+    else if (!user) {
         return <SignInScreen />
     }
+
+     */
 
 
     return <Screen />

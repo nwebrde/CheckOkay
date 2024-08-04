@@ -1,5 +1,5 @@
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
-import { Screen } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { SettingsRow } from 'app/design/settings/row'
 import { HeaderLink } from 'app/design/settings/HeaderLink'
 import { SettingsGroup } from 'app/design/settings/group'

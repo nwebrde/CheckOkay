@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation'
 import { SettingsNavigatorLayout } from 'app/features/settings/index/SettingsNavigatorLayout'
 import { Dimensions } from 'react-native'
 import { Redirect } from 'expo-router'
+import useWindowDimensions, { useLargeSettings } from '../../hooks/windowDimensions'
+import useScreenSize from '../../hooks/windowDimensions'
 
 
 
@@ -18,21 +20,25 @@ export default function SettingsLayout({
     modals: React.ReactNode
 }) {
     const pathname = usePathname()
+    const useLarge = useLargeSettings()
 
     return (
         <>
 
 
-            <View className="hidden lg:block w-full h-screen">
+            {(useLarge) &&
+            <View className="w-full h-screen">
                 <SettingsNavigatorLayout currentPath={pathname}>
                     <View className="flex-1 rounded-xl bg-white h-full">
                         {children}
                     </View>
                 </SettingsNavigatorLayout>
             </View>
-            <View className="block lg:hidden w-full h-full">
-                {children}
-            </View>
+            }
+
+            {(!useLarge) &&
+                children
+            }
 
 
 

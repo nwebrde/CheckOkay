@@ -1,5 +1,5 @@
 'use client'
-import { Screen, VSpacer } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { CheckIn } from 'app/features/checkIn/CheckIn'
 import { Guarded } from 'app/features/guardedPersons/Guarded'
 import React, { useState } from 'react'
@@ -11,6 +11,7 @@ import {
 import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
+import { VSpacer } from 'app/design/layout'
 
 export function HomeScreen() {
     return (

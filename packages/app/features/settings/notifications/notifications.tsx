@@ -7,7 +7,7 @@ import { trpc } from 'app/provider/trpc-client'
 import React, { useEffect, useState } from 'react'
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import EmailsList from 'app/features/settings/notifications/emailsList'
-import { Screen } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { HeaderLink } from 'app/design/settings/HeaderLink'
 
 function Notificationss() {

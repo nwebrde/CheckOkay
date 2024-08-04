@@ -8,10 +8,12 @@ import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
 import { Portal } from '@gorhom/portal'
 import React from 'react'
+import Screen from 'app/design/screen'
 
 export function CallEmergencyScreen() {
     return (
-        <View className="flex-1 items-center justify-center p-3">
+        <Screen width="max-w-4xl">
+        <View className="flex-1 items-center justify-center center">
             <Text type="H1">Bitte rufe die lokalen Notfalldienste an</Text>
             <P className="mb-10">
                 Zu deiner eigenen Sicherheit solltest du den Notfalldienst oder
@@ -36,5 +38,6 @@ export function CallEmergencyScreen() {
                 <Text>&#128222; Rufe 112 an</Text>
             </MotiPressable>
         </View>
+        </Screen>
     )
 }

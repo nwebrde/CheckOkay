@@ -1,7 +1,7 @@
 'use client'
 import React, { forwardRef, useState, useImperativeHandle, useRef } from 'react'
 import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
-import { Screen } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { TextInput } from 'react-native'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'

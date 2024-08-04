@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
-import { Screen } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { Text } from 'app/design/typography'
 
 /**

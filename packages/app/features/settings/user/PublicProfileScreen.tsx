@@ -1,4 +1,4 @@
-import { Screen } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
 import React, { useEffect, useState } from 'react'

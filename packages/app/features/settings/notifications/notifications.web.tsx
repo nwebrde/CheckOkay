@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Text } from 'app/design/typography'
 import React from 'react'
 import { Switch } from 'react-native'
-import { Screen } from 'app/design/layout'
+import Screen from 'app/design/screen'
 import { HeaderLink } from 'app/design/settings/HeaderLink'
 
 export function Notifications() {
