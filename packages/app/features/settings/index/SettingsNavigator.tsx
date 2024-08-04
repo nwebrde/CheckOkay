@@ -5,6 +5,7 @@ import React from 'react'
 import { Text } from 'app/design/typography'
 import { Link } from 'solito/link'
 import { useAuth } from 'app/provider/auth-context'
+import { clsx } from 'clsx'
 
 export function SettingsNavigator({ header, currentPath, useRelative }: { header: boolean, currentPath: string, useRelative: boolean }) {
     const auth = useAuth()
@@ -16,7 +17,7 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
                     <Text type="H1" className="mt-0.5">Einstellungen</Text>
                 </View>
             }
-            <View className="mt-20">
+            <View className={clsx(header ? "mt-20" : "")}>
             <SettingsGroup title="Profil">
                 {
                     /*
