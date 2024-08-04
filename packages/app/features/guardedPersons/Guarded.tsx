@@ -7,7 +7,7 @@ import GuardedList from 'app/features/guardedPersons/GuardedList'
 export function Guarded() {
     return (
         <>
-            <View className="w-full">
+            <View className="w-full pointer-events-none">
                 <GuardedList />
             </View>
         </>

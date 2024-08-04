@@ -45,7 +45,7 @@ const Screen = ({
                     }
 
                     {path == "/" &&
-                    <View className="basis-2/4">
+                    <View className="basis-3/4">
                         <AvatarName />
                     </View>
                     }
