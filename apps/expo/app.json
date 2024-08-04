@@ -2,7 +2,7 @@
   "expo": {
     "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
     "scheme": "checkokay",
     "platforms": [
@@ -13,11 +13,12 @@
     "ios": {
       "bundleIdentifier": "de.nweber.checkokay",
       "usesAppleSignIn": true,
-      "buildNumber": "6"
+      "buildNumber": "8"
     },
     "android": {
       "package": "de.nweber.checkokay",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 2
     },
     "plugins": [
       "expo-secure-store",

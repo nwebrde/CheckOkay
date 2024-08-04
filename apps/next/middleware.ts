@@ -6,15 +6,6 @@ const customizedAuthRoutes = {
     // error: "/api/auth/error",
 };
 function middleware(request: NextRequest) {
-    if (request.nextUrl.pathname == '/settings') {
-        const { device } = userAgent(request)
-        if(device.type === 'mobile') {
-            return NextResponse.next()
-        }
-        else {
-            return NextResponse.redirect(new URL('/settings/user', request.url))
-        }
-    }
     if(request.nextUrl.pathname.startsWith("/auth/signin")) {
         const sessionToken = request.cookies.get("__Secure-next-auth.session-token");
         if(sessionToken != null) {

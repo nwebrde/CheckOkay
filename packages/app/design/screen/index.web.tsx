@@ -30,7 +30,7 @@ const Screen = ({
 
     return (
         <>
-            <View className="center flex-1 items-center md:mt-auto md:mb-auto p-3 pt-0">
+            <View className="center flex-1 items-center justify-center p-3 pt-0">
 
                 {topbarVisible() &&
                 <View className={clsx("w-full border-[#c9ba97] border z-50 bg-secondary h-20 fixed top-0 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
@@ -59,13 +59,8 @@ const Screen = ({
                 </View>
                 }
 
-                <View className={clsx('w-full overflow-scroll', width, topbarVisible() ? "pt-20" : "")}>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        stickyHeaderIndices={stickyHeaderIndices}
-                    >
+                <View className={clsx('w-full overflow-scroll max-h-full', width, topbarVisible() ? "pt-24" : "p-4")}>
                         {children}
-                    </ScrollView>
                 </View>
             </View>
         </>
