@@ -13,8 +13,8 @@ import { View } from 'app/design/view'
 export function SettingsNavigatorLayout({children, currentPath}: {children: ReactElement, currentPath: string}) {
 
     return (
-        <View className="flex-1 flex-row content-center items-center bg-secondary p-8 h-full">
-            <View className="pr-8">
+        <View className="flex-1 flex-row bg-secondary p-8 h-screen items-center">
+            <View className="pr-8 overflow-scroll max-h-full">
                 <SettingsNavigator header={true} currentPath={currentPath} useRelative={false} />
             </View>
             {children}

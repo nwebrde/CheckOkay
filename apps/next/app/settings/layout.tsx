@@ -29,7 +29,7 @@ export default function SettingsLayout({
             {(useLarge) &&
             <View className="w-full h-screen">
                 <SettingsNavigatorLayout currentPath={pathname}>
-                    <View className="flex-1 rounded-xl bg-white h-full">
+                    <View className="flex-1 rounded-xl bg-white h-full overflow-scroll">
                         {children}
                     </View>
                 </SettingsNavigatorLayout>
