@@ -6,7 +6,6 @@ import { Linking } from 'react-native'
 import { MotiPressable } from 'moti/interactions'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
-import { Portal } from '@gorhom/portal'
 import React from 'react'
 import Screen from 'app/design/screen'
 

@@ -5,7 +5,7 @@ import React, { useRef } from 'react'
 import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
 import { usePathname } from 'next/navigation'
 import { SettingsNavigatorLayout } from 'app/features/settings/index/SettingsNavigatorLayout'
-import { Dimensions } from 'react-native'
+import { ActivityIndicator, Dimensions } from 'react-native'
 import { Redirect } from 'expo-router'
 import useWindowDimensions, { useLargeSettings } from '../../hooks/windowDimensions'
 import useScreenSize from '../../hooks/windowDimensions'
@@ -36,8 +36,14 @@ export default function SettingsLayout({
             </View>
             }
 
-            {(!useLarge) &&
+            {(useLarge !== undefined && !useLarge) &&
                 children
+            }
+
+            {(useLarge === undefined) &&
+                <View className="w-screen h-screen items-center justify-center">
+                    <ActivityIndicator />
+                </View>
             }
 
 

@@ -1,7 +1,7 @@
 'use client'
 import React, { forwardRef, useState, useImperativeHandle, useRef, useEffect } from 'react'
 import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
-import { HSpacer, Row, Screen, VSpacer } from 'app/design/layout'
+import { HSpacer, Row, VSpacer } from 'app/design/layout'
 import { ActivityIndicator, TextInput } from 'react-native'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'

@@ -1,8 +1,9 @@
 import { Redirect, Stack } from 'expo-router'
-import { Text } from 'react-native'
+import { ActivityIndicator, Text } from 'react-native'
 import { useAuth } from 'app/provider/auth-context/index.native'
 import React from 'react'
 import { AvatarName } from 'app/features/user/AvatarName'
+import { View } from 'app/design/view'
 
 
 export default function AppLayout() {
@@ -10,7 +11,9 @@ export default function AppLayout() {
 
     // You can keep the splash screen open, or render a loading screen like we do here.
     if (isLoading) {
-        return <Text>Loading...</Text>
+        return <View className="w-screen h-screen items-center justify-center">
+            <ActivityIndicator />
+        </View>
     }
 
     // Only require authentication within the (app) group's layout as users

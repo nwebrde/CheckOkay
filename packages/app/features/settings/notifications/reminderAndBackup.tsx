@@ -1,10 +1,10 @@
-import { Screen } from 'app/design/layout'
 import { SettingsRow } from 'app/design/settings/row'
 import { SettingsGroup } from 'app/design/settings/group'
 import React from 'react'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Skeleton } from 'moti/skeleton'
+import Screen from 'app/design/screen'
 
 function formatReminderTime(hour: number, minute: number) {
     let hourString = ""

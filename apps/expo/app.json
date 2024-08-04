@@ -13,7 +13,7 @@
     "ios": {
       "bundleIdentifier": "de.nweber.checkokay",
       "usesAppleSignIn": true,
-      "buildNumber": "5"
+      "buildNumber": "6"
     },
     "android": {
       "package": "de.nweber.checkokay",
