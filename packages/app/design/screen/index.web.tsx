@@ -24,11 +24,15 @@ const Screen = ({
     const path = usePathname()
     const useLarge = useLargeSettings();
 
+    const topbarVisible = () => {
+        return !path.includes("/settings") || (!useLarge && useLarge !== undefined)
+    }
+
     return (
         <>
             <View className="center flex-1 items-center md:mt-auto md:mb-auto p-3 pt-0">
 
-                {(!path.includes("/settings") || (!useLarge && useLarge !== undefined)) &&
+                {topbarVisible() &&
                 <View className={clsx("w-full border-[#c9ba97] border z-50 bg-secondary h-20 fixed top-0 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
 
                     {path != "/" &&
@@ -55,10 +59,9 @@ const Screen = ({
                 </View>
                 }
 
-                <View className={clsx('w-full pt-20 overflow-scroll', width)}>
+                <View className={clsx('w-full overflow-scroll', width, topbarVisible() ? "pt-20" : "")}>
                     <ScrollView
                         showsVerticalScrollIndicator={false}
-                        className={clsx(paddingTop ? "" : "pt-0")}
                         stickyHeaderIndices={stickyHeaderIndices}
                     >
                         {children}
