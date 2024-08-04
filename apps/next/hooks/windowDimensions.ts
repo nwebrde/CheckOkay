@@ -36,7 +36,7 @@ export const useLargeSettings = () => {
     const {width} = useScreenSize()
 
     if(!width) {
-        return false
+        return undefined
     }
 
     return width > 1200;
