@@ -9,6 +9,18 @@
 @tailwind utilities;
 
 @layer base {
+    .screenWrapper.wxl  > div {
+        @apply max-w-xl w-full;
+    }
+    .screenWrapper.w2xl  > div {
+        @apply max-w-2xl w-full;
+    }
+    .screenWrapper.w3xl  > div {
+        @apply max-w-3xl w-full;
+    }
+    .screenWrapper.w4xl  > div {
+        @apply max-w-4xl w-full;
+    }
     :root {
         --background: 0 0% 100%;
         --foreground: 240 10% 3.9%;

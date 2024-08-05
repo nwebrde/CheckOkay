@@ -4,20 +4,31 @@ import { clsx } from 'clsx'
 import { AvatarName } from 'app/features/user/AvatarName'
 import { AnimatedLink } from 'app/design/button'
 import { ChevronLeft, Cog6Tooth } from 'app/design/icons'
-import { ScrollView } from 'moti'
 import { Text } from 'app/design/typography'
 import { usePathname } from 'next/navigation'
 import { useLargeSettings } from 'next-app/hooks/windowDimensions'
+import { ScrollView } from 'react-native'
+
+const getW = (width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl') => {
+    switch (width) {
+        case 'max-w-xl':
+            return "wxl"
+        case 'max-w-2xl':
+            return "w2xl"
+        case 'max-w-3xl':
+            return "w3xl"
+        case 'max-w-4xl':
+            return "w4xl"
+    }
+}
 
 const Screen = ({
                            children,
                            stickyHeaderIndices,
-                           paddingTop = true,
                            width = 'max-w-2xl',
                        }: {
     children: ReactNode
     stickyHeaderIndices: number[]
-    paddingTop: boolean
     width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl'
 }) => {
 
@@ -30,7 +41,7 @@ const Screen = ({
 
     return (
         <>
-            <View className="center flex-1 items-center md:justify-center p-3 pt-0">
+            <View className="center flex-1 items-center md:justify-center pt-0">
 
                 {topbarVisible() &&
                 <View className={clsx("w-full border-[#c9ba97] border z-50 bg-secondary h-20 fixed top-0 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
@@ -59,8 +70,12 @@ const Screen = ({
                 </View>
                 }
 
-                <View className={clsx('w-full overflow-scroll max-h-full', width, topbarVisible() ? "pt-24" : "p-4")}>
-                        {children}
+                <View className={clsx('w-full overflow-scroll max-h-screen h-fit', topbarVisible() ? "pt-[65px]" : "p-4")}>
+                    <ScrollView className={clsx("p-3 items-center screenWrapper", topbarVisible() ? "pt-10" : "", getW(width))}
+                                stickyHeaderIndices={stickyHeaderIndices}
+                    >
+                                {children}
+                    </ScrollView>
                 </View>
             </View>
         </>
