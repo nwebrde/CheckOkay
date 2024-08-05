@@ -41,10 +41,10 @@ const Screen = ({
 
     return (
         <>
-            <View className="center flex-1 items-center md:justify-center pt-0">
+            <View className="center flex-1 items-center md:justify-center max-h-[calc(100dvh)] max-h-screen">
 
                 {topbarVisible() &&
-                <View className={clsx("w-full border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
+                <View className={clsx("w-[calc(100vw-1.5rem)] border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
 
                     {path != "/" &&
                     <AnimatedLink href=".">
@@ -70,8 +70,8 @@ const Screen = ({
                 </View>
                 }
 
-                <View className={clsx('w-full max-h-[calc(100dvh)] h-screen h-fit', topbarVisible() ? "" : "p-4")}>
-                    <ScrollView className={clsx("p-3 items-center screenWrapper", topbarVisible() ? "pt-20" : "", getW(width))}
+                <View className={clsx('w-full max-h-full h-fit')}>
+                    <ScrollView className={clsx("p-3 items-center screenWrapper", topbarVisible() ? "pt-24" : "", getW(width))}
                                 stickyHeaderIndices={stickyHeaderIndices}
                     >
 
