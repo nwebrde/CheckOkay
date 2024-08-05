@@ -30,7 +30,7 @@ const Screen = ({
 
     return (
         <>
-            <View className="center flex-1 items-center justify-center p-3 pt-0">
+            <View className="center flex-1 items-center md:justify-center p-3 pt-0">
 
                 {topbarVisible() &&
                 <View className={clsx("w-full border-[#c9ba97] border z-50 bg-secondary h-20 fixed top-0 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>

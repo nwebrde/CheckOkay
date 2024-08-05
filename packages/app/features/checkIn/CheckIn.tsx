@@ -63,7 +63,7 @@ export function CheckIn() {
         });
     }
     return (
-        <View className="w-full">
+        <View className="w-fit">
             <Skeleton colorMode="light" width={'100%'} show={user.isLoading}>
                 {user.data && (
                     <>

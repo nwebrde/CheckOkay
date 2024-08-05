@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Alert, Share } from 'react-native'
+import { Alert, Platform, Share } from 'react-native'
 import { AnimatedPressable, Button } from 'app/design/button'
 
 export const ShareButton = ({
@@ -20,7 +20,7 @@ export const ShareButton = ({
             const result = await Share.share({
                 url: link,
                 title: title,
-                message: msg,
+                message: Platform.OS === 'android' ? (msg + " " + link) : msg,
             })
             if (result.action === Share.sharedAction) {
                 onPress()
