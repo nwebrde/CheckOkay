@@ -36,7 +36,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
                 <StyledPressable
                     onPress={remove}
                     className={`
-      ml-2 pointer-events-auto mr-2 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
+      ml-2 mr-2 rounded-full border border-gray-300 bg-white bg-opacity-30 p-2 font-semibold text-gray-800 shadow hover:bg-gray-100 focus:bg-gray-100 active:bg-gray-100 active:ring-4
     `}
                 >
                     <XMark className="text-red-500 stroke-red-500 stroke-2" />
