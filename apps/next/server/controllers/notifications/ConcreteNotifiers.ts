@@ -39,6 +39,7 @@ export abstract class RepeatingNotifier extends Notifier {
     private readonly repeatTimes: number
     private readonly repeatInterval: number // minutes
     private readonly multiplicativeBackoffFactor: number
+    private sentSucceed = false
 
     /**
      *
@@ -66,11 +67,23 @@ export abstract class RepeatingNotifier extends Notifier {
         const notifier = new StandardNotifier(this.notification, submitters)
         await notifier.submit();
 
-        // length check cancels repeating if user does not exist anymore
-        if (this.currentRound <= this.repeatTimes && submitters.length > 0) {
+        if(submitters.length > 0) {
             this.currentRound++;
+            this.sentSucceed = true;
             await repeat(this, this.getJobId(), this.repeatInterval * 60 * Math.pow(this.multiplicativeBackoffFactor, this.currentRound - 2))
         }
+    }
+
+    shouldReschedule() {
+        // sentSucceed check cancels repeating if user does not exist anymore
+        if (this.currentRound < this.repeatTimes && this.sentSucceed) {
+            return true
+        }
+        return false
+    }
+
+    getRescheduleDelayInSeconds() {
+        return this.repeatInterval * 60 * Math.pow(this.multiplicativeBackoffFactor, this.currentRound - 2)
     }
 
     // concrete implementation contains logic for retrieving the submitters

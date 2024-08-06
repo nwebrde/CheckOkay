@@ -136,12 +136,19 @@ export const register = async () => {
                 removeOnFail: { count: 5000 },
             });
 
-            new Worker(STANDARD_QUEUE, async (job) => {
+            new Worker(STANDARD_QUEUE, async (job, token?: string) => {
                 switch (job.name) {
                     case STANDARD_QUEUE_JOBS.REPEATING_NOTIFIER:
                         // TODO switch for different repeating notifier implementations
                         const notifier = new WarningNotifier(job.data.notifier.userId, job.data.notifier.guardType, toConcreteNotification(job.data.notifier.notification), job.data.notifier.currentRound)
                         await notifier.submit()
+                        if(notifier.shouldReschedule()) {
+                            await job.moveToDelayed(Date.now() + 1000 * notifier.getRescheduleDelayInSeconds(), token);
+                            await job.updateData({
+                                notifier: notifier
+                            });
+                            throw new DelayedError();
+                        }
                         break;
                     case STANDARD_QUEUE_JOBS.PUSH_TICKET:
                         const failedReceipts = await checkPush(job.data.tickets, job.data.notification)

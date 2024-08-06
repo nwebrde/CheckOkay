@@ -110,7 +110,7 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             result = new ReminderNotification(plainObject.userId, plainObject.nextRequiredCheckIn)
             break;
         case ConcreteNotificationType.WARNING_NOTIFICATION:
-            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.nextRequiredCheckIn, plainObject.relatedCheckId, plainObject.relatedRequiredCheckInDate)
+            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.lastCheckIn, plainObject.relatedCheckId, plainObject.relatedRequiredCheckInDate)
             break;
         case ConcreteNotificationType.NEW_GUARD_NOTIFICATION:
             result = new NewGuardNotification(plainObject.guardName)
