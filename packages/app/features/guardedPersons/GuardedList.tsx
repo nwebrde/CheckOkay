@@ -26,7 +26,7 @@ const GuardedList = () => {
                 <FlatList
                     // Saving reference to the `FlashList` instance to later trigger `prepareForLayoutAnimationRender` method.
                     numColumns={2}
-                    className="h-full w-full"
+                    className="h-full w-full listWrapper"
 
                     // This prop is necessary to uniquely identify the elements in the list.
                     keyExtractor={(item: Guarded) => {
@@ -37,7 +37,7 @@ const GuardedList = () => {
                         flexWrap: 'wrap',
                         flex: 1,
                         gap: 15,
-                        marginTop: 5,
+                        marginTop: 5
                     }}
                     ListEmptyComponent={<EmptyItem />}
                     renderItem={renderItem}

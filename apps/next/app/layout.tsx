@@ -1,6 +1,7 @@
 /** @jsxImportSource react */
 
 import 'app/global.css';
+import '../web.css';
 
 import { Provider } from 'app/provider'
 import 'setimmediate'
