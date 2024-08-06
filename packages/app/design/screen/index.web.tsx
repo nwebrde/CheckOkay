@@ -71,7 +71,7 @@ const Screen = ({
                 }
 
                 <View className={clsx('w-full max-h-full h-fit')}>
-                    <ScrollView className={clsx("p-3 items-center screenWrapper", topbarVisible() ? "pt-20" : "", getW(width))}
+                    <ScrollView className={clsx("p-3 items-center screenWrapper", topbarVisible() ? "pt-[4.3rem]" : "", getW(width))}
                                 stickyHeaderIndices={stickyHeaderIndices}
                     >
 
