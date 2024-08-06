@@ -70,7 +70,7 @@ export abstract class RepeatingNotifier extends Notifier {
         if(submitters.length > 0) {
             this.currentRound++;
             this.sentSucceed = true;
-            await repeat(this, this.getJobId(), this.repeatInterval * 60 * Math.pow(this.multiplicativeBackoffFactor, this.currentRound - 2))
+            await repeat(this, this.getJobId(), this.getRescheduleDelayInSeconds())
         }
     }
 

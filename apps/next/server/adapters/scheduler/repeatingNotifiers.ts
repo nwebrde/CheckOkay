@@ -13,6 +13,11 @@ import {
  * @param delay in seconds
  */
 export const repeat = async (notifier: RepeatingNotifier, jobId: string, delay: number = 0) => {
+    const job = await queue.getJob(jobId)
+    if(job) {
+        await queue.remove(jobId)
+    }
+
     await queue.add(STANDARD_QUEUE_JOBS.REPEATING_NOTIFIER, {
         notifier: notifier
     }, {
@@ -22,7 +27,9 @@ export const repeat = async (notifier: RepeatingNotifier, jobId: string, delay: 
         backoff: {
             type: 'exponential',
             delay: 30000, // half minute
-        }});
+        },
+        removeOnComplete: true
+    });
 }
 
 export const deleteRepeatingNotifier = async (userId: string) => {

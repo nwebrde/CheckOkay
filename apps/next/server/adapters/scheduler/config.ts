@@ -70,7 +70,7 @@ export const checkQueue = new Queue<CheckJob>(CHECK_QUEUE, {
         backoff: {
             type: 'exponential',
             delay: 30000, // half minute
-        },
+        }
     },
 });
 
@@ -80,7 +80,8 @@ export const checkQueue = new Queue<CheckJob>(CHECK_QUEUE, {
 export const queue = new Queue(STANDARD_QUEUE, {
     connection,
     defaultJobOptions: {
-        attempts: 1
+        attempts: 1,
+        removeOnComplete: true
     },
 });
 
@@ -93,6 +94,7 @@ export const emailQueue = new Queue<EmailJob>(EMAIL_QUEUE, {
             type: 'exponential',
             delay: 30000, // half minute
         },
+        removeOnComplete: true
     },
 });
 
@@ -104,5 +106,6 @@ export const pushQueue = new Queue<PushJob>(PUSH_QUEUE, {
             type: 'exponential',
             delay: 30000, // half minute
         },
+        removeOnComplete: true
     },
 });
