@@ -20,7 +20,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
 
     return (
         <Card
-            className={`flex-col grow p-2 ${
+            className={`flex-col w-fit grow p-2 ${
                 item.state == CheckState.OK
                     ? 'bg-lime-200'
                     : item.state == CheckState.NOTIFIED

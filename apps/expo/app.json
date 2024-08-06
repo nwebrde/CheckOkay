@@ -12,6 +12,7 @@
     "icon": "./icon.png",
     "ios": {
       "bundleIdentifier": "de.nweber.checkokay",
+      "supportsTablet": true,
       "usesAppleSignIn": true,
       "buildNumber": "8"
     },
