@@ -22,13 +22,23 @@ const getW = (width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl') => {
     }
 }
 
+/**
+ *
+ * @param children
+ * @param stickyHeaderIndices
+ * @param stickyHeaderWeb if defined, this replaces the native stickyHeaderIndices. Useful as on web, multiple sticky elements stick together which messes up the layout
+ * @param width
+ * @constructor
+ */
 const Screen = ({
                            children,
                            stickyHeaderIndices,
+                           stickyHeaderWeb,
                            width = 'max-w-2xl',
                        }: {
     children: ReactNode
     stickyHeaderIndices: number[]
+    stickyHeaderWeb?: number
     width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl'
 }) => {
 
@@ -44,7 +54,7 @@ const Screen = ({
             <View className="center flex-1 items-center md:justify-center max-h-screen">
 
                 {topbarVisible() &&
-                <View className={clsx("w-[calc(100vw-1.5rem)] border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
+                <View className={clsx("w-full border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 md:rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
 
                     {path != "/" &&
                     <AnimatedLink href=".">
@@ -71,12 +81,10 @@ const Screen = ({
                 }
 
                 <View className={clsx('w-full max-h-full h-fit')}>
-                    <ScrollView className={clsx("p-3 items-center screenWrapper", topbarVisible() ? "pt-[4.3rem]" : "", getW(width))}
-                                stickyHeaderIndices={stickyHeaderIndices}
+                    <ScrollView className={clsx("items-center screenWrapper", topbarVisible() ? "pt-20" : "", getW(width))}
+                                stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
                     >
-
                                 {children}
-
                     </ScrollView>
                 </View>
             </View>

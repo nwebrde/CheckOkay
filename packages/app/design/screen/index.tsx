@@ -7,11 +7,13 @@ import { RefreshControl } from 'react-native'
 const Screen = ({
                            children,
                            stickyHeaderIndices,
+                           stickyHeaderWeb,
                            paddingTop = true,
                            width = 'max-w-2xl',
                        }: {
     children: ReactNode
     stickyHeaderIndices: number[]
+    stickyHeaderWeb?: number
     paddingTop: boolean
     width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl'
 }) => {
