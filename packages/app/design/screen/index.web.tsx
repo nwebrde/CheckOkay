@@ -22,6 +22,35 @@ const getW = (width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl') => {
     }
 }
 
+const getBreakpointDependantStyles = (width: 'max-w-xl' | 'max-w-2xl' | 'max-w-3xl' | 'max-w-4xl') => {
+    /*
+pt-20 in scrollView is enabled on large screens when the header has margin to the ends of the screen to let the scrollbar scroll up to the top of the screen.
+On mobile, pt-20 is removed to let the scrollbar start right below the header (as the header spans the full screen width)
+ */
+    switch (width) {
+        case 'max-w-xl':
+            return {
+                header: "bxl:rounded-b-2xl bxl:fixed",
+                scrollView: "bxl:max-h-screen bxl:pt-20"
+            }
+        case 'max-w-2xl':
+            return {
+                header: "b2xl:rounded-b-2xl b2xl:fixed",
+                scrollView: "b2xl:max-h-screen b2xl:pt-20"
+            }
+        case 'max-w-3xl':
+            return {
+                header: "b3xl:rounded-b-2xl b3xl:fixed",
+                scrollView: "b3xl:max-h-screen b3xl:pt-20"
+            }
+        case 'max-w-4xl':
+            return {
+                header: "b4xl:rounded-b-2xl b4xl:fixed",
+                scrollView: "b4xl:max-h-screen b4xl:pt-20"
+            }
+    }
+}
+
 /**
  *
  * @param children
@@ -54,7 +83,7 @@ const Screen = ({
             <View className="center flex-1 items-center md:justify-center max-h-screen">
 
                 {topbarVisible() &&
-                <View className={clsx("w-full border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 flex flex-row justify-between items-center p-3", "b-"+width+":rounded-b-2xl", width)}>
+                <View className={clsx("w-full border-[#c9ba97] border top-0 z-50 bg-secondary h-20 flex flex-row justify-between items-center p-3", getBreakpointDependantStyles(width).header, width)}>
 
                     {path != "/" &&
                     <AnimatedLink href=".">
@@ -80,8 +109,8 @@ const Screen = ({
                 </View>
                 }
 
-                <View className={clsx('w-full max-h-full h-fit')}>
-                    <ScrollView className={clsx("items-center screenWrapper", topbarVisible() ? ("b-"+width+":pt-20") : "", getW(width))}
+                <View className={clsx('w-full h-fit')}>
+                    <ScrollView className={clsx("items-center screenWrapper max-h-[calc(100dvh-5rem)] ", topbarVisible() ? getBreakpointDependantStyles(width).scrollView : "max-h-screen", getW(width))}
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
                     >
                                 {children}

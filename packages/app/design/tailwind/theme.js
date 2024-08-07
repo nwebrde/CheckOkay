@@ -13,18 +13,6 @@ const theme = {
         extrabold: '800',
         black: '900',
     },
-    screens: {
-        'xxxxxs': '400px',
-        'b-max-w-xl': '576px',
-        'sm': '576px',
-        'b-max-w-2xl': '672px',
-        'b-max-w-3xl': '768px',
-        'b-max-w-4xl': '896px',
-        'md': '960px',
-        'lg': '1440px',
-        'xl': '1280px',
-        '2xl': '1536px',
-    },
     extend: {
         colors: {
             primary: {
@@ -50,7 +38,13 @@ const theme = {
         },
         maxHeight: {
             screen: ['100vh /* fallback for Opera, IE and etc. */', '100dvh'],
-        }
+        },
+        screens: {
+            'bxl': '576px',
+            'b2xl': '672px',
+            'b3xl': '768px',
+            'b4xl': '896px',
+        },
     },
 }
 
