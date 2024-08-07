@@ -14,7 +14,8 @@ const theme = {
         black: '900',
     },
     maxWidth: {
-        '4xl': '58rem',
+        ...defaultTheme.maxWidth,
+        '4xl': '58rem'
     },
     extend: {
         colors: {
