@@ -109,7 +109,7 @@ const Screen = ({
                 </View>
                 }
 
-                <View className={clsx('w-full h-fit')}>
+                <View className={clsx('w-full h-fit max-h-full')}>
                     <ScrollView className={clsx("items-center screenWrapper max-h-[calc(100dvh-5rem)] ", topbarVisible() ? getBreakpointDependantStyles(width).scrollView : "max-h-screen", getW(width))}
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
                     >

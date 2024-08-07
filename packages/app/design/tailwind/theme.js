@@ -13,6 +13,9 @@ const theme = {
         extrabold: '800',
         black: '900',
     },
+    maxWidth: {
+        '4xl': '58rem',
+    },
     extend: {
         colors: {
             primary: {
@@ -43,7 +46,7 @@ const theme = {
             'bxl': '576px',
             'b2xl': '672px',
             'b3xl': '768px',
-            'b4xl': '896px',
+            'b4xl': '928px',
         },
     },
 }
