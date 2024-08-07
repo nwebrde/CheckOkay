@@ -42,7 +42,10 @@ export const checkIn = async (userId: string, step: boolean) => {
     }
 
     await reschedule(userId, checksController, data.currentCheckId, new Date(), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
-    await deleteRepeatingNotifier(userId)
+
+    if(data.state == CheckState.WARNED || data.state == CheckState.BACKUP) {
+        await deleteRepeatingNotifier(userId)
+    }
 }
 
 export const addCheck = async (userId: string, hour: Hour, minute: Minute ): Promise<boolean> => {
