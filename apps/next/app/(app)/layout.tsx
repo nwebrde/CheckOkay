@@ -73,7 +73,13 @@ export default function RootLayout({
     const useLarge = useLargeSettings();
 
     const topbarVisible = () => {
-        return !path.includes("/settings") || (!useLarge && useLarge !== undefined)
+        if(path.includes("/settings") && useLarge) {
+            return false
+        }
+        if(path.includes("/auth")) {
+            return false
+        }
+        return true
     }
 
     const width = getWidthForPath(path)
@@ -109,7 +115,7 @@ export default function RootLayout({
                                 </View>
                             }
 
-                            <View className={clsx('w-full h-fit max-h-[calc(100dvh-5rem)]', topbarVisible() ? getBreakpointDependantStyles(width).scrollView : "max-h-screen", getW(width))}>
+                            <View className={clsx('w-full w-fit', topbarVisible() ? getBreakpointDependantStyles(width).scrollView : "max-h-screen", topbarVisible() ? "max-h-[calc(100dvh-5rem)]" : "", getW(width))}>
                                 {children}
                             </View>
                         </View>

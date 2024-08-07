@@ -37,7 +37,7 @@ export function SignInScreen() {
     }, [])
 
     return (
-        <>
+        <View className="h-screen">
             <View className="bg-secondary flex-1 items-center justify-center p-3">
                 <Logo doAnimate={true} />
                 <View className="max-w-xl items-center">
@@ -77,6 +77,6 @@ export function SignInScreen() {
                 </View>
             </View>
 
-        </>
+        </View>
     )
 }

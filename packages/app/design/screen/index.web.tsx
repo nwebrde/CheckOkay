@@ -22,9 +22,9 @@ const Screen = ({
     return (
 
 
-                    <ScrollView className="screenWrapper w-full items-center"
+                    <ScrollView className="screenWrapper w-full items-center flex-1"
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
-                    >
+                                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                                 {children}
                     </ScrollView>
 
