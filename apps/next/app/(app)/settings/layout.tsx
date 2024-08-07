@@ -1,14 +1,11 @@
 'use client';
 
 import { View } from 'app/design/view'
-import React, { useRef } from 'react'
-import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
+import React from 'react'
 import { usePathname } from 'next/navigation'
 import { SettingsNavigatorLayout } from 'app/features/settings/index/SettingsNavigatorLayout'
 import { ActivityIndicator, Dimensions } from 'react-native'
-import { Redirect } from 'expo-router'
-import useWindowDimensions, { useLargeSettings } from '../../hooks/windowDimensions'
-import useScreenSize from '../../hooks/windowDimensions'
+import { useLargeSettings } from '../../../hooks/windowDimensions'
 
 
 

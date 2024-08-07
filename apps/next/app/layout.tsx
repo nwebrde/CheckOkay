@@ -7,6 +7,7 @@ import { Provider } from 'app/provider'
 import 'setimmediate'
 import 'raf/polyfill'
 import { StylesProvider } from './styles-provider'
+import React from 'react'
 
 export const metadata = {
     title: 'CheckOkay',
@@ -18,11 +19,14 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
+
     return (
         <html lang="en">
             <body>
                 <StylesProvider>
-                    <Provider>{children}</Provider>
+                    <Provider>
+                        {children}
+                    </Provider>
                 </StylesProvider>
             </body>
         </html>
