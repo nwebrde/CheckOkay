@@ -1,7 +1,7 @@
 'use client'
 
 import { SettingsScreen } from 'app/features/settings/index/SettingsScreen'
-import { useLargeSettings } from '../../../hooks/windowDimensions'
+import { useLargeSettings } from '../../hooks/windowDimensions'
 import { useRouter } from 'next/navigation'
 
 export default function Screen() {
