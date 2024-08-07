@@ -54,7 +54,7 @@ const Screen = ({
             <View className="center flex-1 items-center md:justify-center max-h-screen">
 
                 {topbarVisible() &&
-                <View className={clsx("w-full border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 md:rounded-b-2xl flex flex-row justify-between items-center p-3", width)}>
+                <View className={clsx("w-full border-[#c9ba97] fixed border top-0 z-50 bg-secondary h-20 flex flex-row justify-between items-center p-3", "b-"+width+":rounded-b-2xl", width)}>
 
                     {path != "/" &&
                     <AnimatedLink href=".">
@@ -81,7 +81,7 @@ const Screen = ({
                 }
 
                 <View className={clsx('w-full max-h-full h-fit')}>
-                    <ScrollView className={clsx("items-center screenWrapper", topbarVisible() ? "pt-20" : "", getW(width))}
+                    <ScrollView className={clsx("items-center screenWrapper", topbarVisible() ? ("b-"+width+":pt-20") : "", getW(width))}
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
                     >
                                 {children}
