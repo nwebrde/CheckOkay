@@ -9,6 +9,10 @@ export default function Screen() {
     const router = useRouter()
     if(largeSettings) {
         router.push("/settings/user")
+        return <></>
     }
-    return <SettingsScreen />
+    else {
+        return <SettingsScreen />
+    }
+
 }

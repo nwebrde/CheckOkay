@@ -31,22 +31,26 @@ On mobile, pt-20 is removed to let the scrollbar start right below the header (a
         case 'max-w-xl':
             return {
                 header: "bxl:rounded-b-2xl bxl:fixed",
-                scrollView: "bxl:max-h-screen bxl:pt-20"
+                scrollView: "bxl:max-h-screen bxl:pt-20",
+                root: "bxl:justify-center"
             }
         case 'max-w-2xl':
             return {
                 header: "b2xl:rounded-b-2xl b2xl:fixed",
-                scrollView: "b2xl:max-h-screen b2xl:pt-20"
+                scrollView: "b2xl:max-h-screen b2xl:pt-20",
+                root: "b2xl:justify-center"
             }
         case 'max-w-3xl':
             return {
                 header: "b3xl:rounded-b-2xl b3xl:fixed",
-                scrollView: "b3xl:max-h-screen b3xl:pt-20"
+                scrollView: "b3xl:max-h-screen b3xl:pt-20",
+                root: "b3xl:justify-center"
             }
         case 'max-w-4xl':
             return {
                 header: "b4xl:rounded-b-2xl b4xl:fixed",
-                scrollView: "b4xl:max-h-screen b4xl:pt-20"
+                scrollView: "b4xl:max-h-screen b4xl:pt-20",
+                root: "b4xl:justify-center"
             }
     }
 }
@@ -80,7 +84,7 @@ const Screen = ({
 
     return (
         <>
-            <View className="center flex-1 items-center md:justify-center max-h-screen">
+            <View className={clsx("center flex-1 items-center max-h-screen", getBreakpointDependantStyles(width).root)}>
 
                 {topbarVisible() &&
                 <View className={clsx("w-full border-[#c9ba97] border top-0 z-50 bg-secondary h-20 flex flex-row justify-between items-center p-3", getBreakpointDependantStyles(width).header, width)}>
