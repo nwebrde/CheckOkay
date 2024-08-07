@@ -13,10 +13,6 @@ const theme = {
         extrabold: '800',
         black: '900',
     },
-    maxWidth: {
-        ...defaultTheme.maxWidth,
-        '4xl': '58rem'
-    },
     extend: {
         colors: {
             primary: {
@@ -42,6 +38,9 @@ const theme = {
         },
         maxHeight: {
             screen: ['100vh /* fallback for Opera, IE and etc. */', '100dvh'],
+        },
+        maxWidth: {
+            '4xl': '58rem'
         },
         screens: {
             'bxl': '576px',
