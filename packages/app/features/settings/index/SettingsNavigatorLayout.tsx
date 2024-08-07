@@ -14,7 +14,7 @@ export function SettingsNavigatorLayout({children, currentPath}: {children: Reac
 
     return (
         <View className="flex-1 flex-row bg-secondary p-8 h-screen items-center">
-            <View className="pr-8 overflow-scroll max-h-full">
+            <View className="pr-8 overflow-scroll max-h-full basis-1/3 shrink">
                 <SettingsNavigator header={true} currentPath={currentPath} useRelative={false} />
             </View>
             {children}
