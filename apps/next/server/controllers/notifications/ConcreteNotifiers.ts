@@ -80,7 +80,7 @@ export abstract class RepeatingNotifier extends Notifier {
 
     shouldReschedule() {
         // sentSucceed check cancels repeating if user does not exist anymore
-        if (this.currentRound < this.repeatTimes && this.sentSucceed) {
+        if (this.currentRound <= this.repeatTimes && this.sentSucceed) {
             return true
         }
         return false
