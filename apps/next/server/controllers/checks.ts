@@ -12,6 +12,7 @@ import { getLastCheckIn, toSeconds, updateNextRequiredCheckIn } from '../adapter
 import {Hour, Minute} from "app/lib/types/time";
 import {ChecksController} from "../entities/checks/ChecksController";
 import { CheckState } from 'app/lib/types/check'
+import { deleteRepeatingNotifier } from '../adapters/scheduler/repeatingNotifiers'
 
 export const checkIn = async (userId: string, step: boolean) => {
     const data = await db.query.users.findFirst({
@@ -41,6 +42,7 @@ export const checkIn = async (userId: string, step: boolean) => {
     }
 
     await reschedule(userId, checksController, data.currentCheckId, new Date(), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
+    await deleteRepeatingNotifier(userId)
 }
 
 export const addCheck = async (userId: string, hour: Hour, minute: Minute ): Promise<boolean> => {
