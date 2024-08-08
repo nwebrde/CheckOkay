@@ -14,12 +14,12 @@
       "bundleIdentifier": "de.nweber.checkokay",
       "supportsTablet": true,
       "usesAppleSignIn": true,
-      "buildNumber": "17"
+      "buildNumber": "18"
     },
     "android": {
       "package": "de.nweber.checkokay",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 2
+      "versionCode": 4
     },
     "plugins": [
       "expo-secure-store",
@@ -30,6 +30,9 @@
         {
           "ios": {
             "deploymentTarget": "13.4"
+          },
+          "android": {
+            "minSdkVersion": 25
           }
         }
       ],
