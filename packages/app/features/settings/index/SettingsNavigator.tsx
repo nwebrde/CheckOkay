@@ -40,6 +40,9 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
                 <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} useRelative={useRelative} />
                 <SettingsRow label="Erhalte Benachrichtigungen über" active={currentPath.includes("channels")} link={"channels"} separator={false} useRelative={useRelative} />
             </SettingsGroup>
+                <SettingsGroup>
+                    <SettingsRow label="Rechtliche Dokumente" description="Hier findest du die Datenschutzerklärung, Nutzungsvereinbarung und das Impressum dieser App" link="https://checkokay.com/legal" useRelative={false} />
+                </SettingsGroup>
             </View>
         </View>
     )

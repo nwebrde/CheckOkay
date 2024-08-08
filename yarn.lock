@@ -10086,6 +10086,7 @@ __metadata:
     expo-secure-store: ~13.0.1
     expo-splash-screen: ~0.27.5
     expo-status-bar: ~1.12.1
+    expo-web-browser: ~13.0.3
     jwt-decode: ^4.0.0
     p-queue: 6.6.2
     react: 18.2.0
@@ -10479,7 +10480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-web-browser@npm:~13.0.0":
+"expo-web-browser@npm:~13.0.0, expo-web-browser@npm:~13.0.3":
   version: 13.0.3
   resolution: "expo-web-browser@npm:13.0.3"
   peerDependencies:
