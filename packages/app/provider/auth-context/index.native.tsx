@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStorageState } from 'expo-app/lib/useStorageState'
 import { refresh, signIn, signOut } from 'expo-app/lib/OAuthClient'
 import { NativeAuthContext, User } from 'app/provider/auth-context/types'
@@ -23,12 +23,12 @@ export function AuthProvider(props: React.PropsWithChildren) {
     const [[refreshTokenLoading, refreshToken], setRefreshToken] =
         useStorageState('refreshToken')
 
-    const authValue = {
+    let authValue = {
         signIn: async () => {
             return await signIn(setAccessToken, setRefreshToken)
         },
-        refresh: async () => {
-            return await refresh(setAccessToken, setRefreshToken, refreshToken)
+        refresh: async (refreshTokenLocal: string) => {
+            return await refresh(setAccessToken, setRefreshToken, refreshTokenLocal)
         },
         signOut: async () => {
             return await signOut(setAccessToken, setRefreshToken, refreshToken)

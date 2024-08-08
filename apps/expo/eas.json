@@ -5,7 +5,10 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_LOGROCKET_APPID": "bov4sq/checkokay"
+      }
     },
     "preview": {
       "distribution": "internal",
@@ -14,7 +17,8 @@
         "EXPO_PUBLIC_OAUTH_AUTHORIZATION_ENDPOINT": "https://app.checkokay.com/api/oauth2/authorize",
         "EXPO_PUBLIC_OAUTH_TOKEN_ENDPOINT": "https://app.checkokay.com/api/oauth2/token",
         "EXPO_PUBLIC_OAUTH_REVOCATION_ENDPOINT": "https://app.checkokay.com/api/oauth2/token/revoke",
-        "EXPO_PUBLIC_OAUTH_CLIENT_ID": "BeingWellApp"
+        "EXPO_PUBLIC_OAUTH_CLIENT_ID": "BeingWellApp",
+        "EXPO_PUBLIC_LOGROCKET_APPID": "bov4sq/checkokay"
       }
     },
     "preview-simulator": {
@@ -26,7 +30,8 @@
         "EXPO_PUBLIC_OAUTH_AUTHORIZATION_ENDPOINT": "https://app.checkokay.com/api/oauth2/authorize",
         "EXPO_PUBLIC_OAUTH_TOKEN_ENDPOINT": "https://app.checkokay.com/api/oauth2/token",
         "EXPO_PUBLIC_OAUTH_REVOCATION_ENDPOINT": "https://app.checkokay.com/api/oauth2/token/revoke",
-        "EXPO_PUBLIC_OAUTH_CLIENT_ID": "BeingWellApp"
+        "EXPO_PUBLIC_OAUTH_CLIENT_ID": "BeingWellApp",
+        "EXPO_PUBLIC_LOGROCKET_APPID": "bov4sq/checkokay"
       }
     },
     "production": {

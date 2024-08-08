@@ -77,23 +77,29 @@ export const refresh = async (
     if (!refreshToken) {
         return false
     }
+    console.log("refresh pass a")
+    console.log("refresh token", refreshToken)
+    console.log("clientid", clientId)
     const refreshTokenObject: AuthSession.RefreshTokenRequestConfig = {
         clientId: clientId,
         refreshToken: refreshToken,
         scopes: ['all'],
     }
+    console.log("refresh pass b")
     const tokenResult = await AuthSession.refreshAsync(
         refreshTokenObject,
         discovery,
     )
+    console.log("refresh pass c", tokenResult)
 
     setLocalAccessToken(tokenResult.accessToken)
     setLocalRefreshToken(
         tokenResult.refreshToken ? tokenResult.refreshToken : null,
     )
+    console.log("refresh pass d")
     setAccessToken(tokenResult.accessToken)
     setRefreshToken(tokenResult.refreshToken ? tokenResult.refreshToken : null)
-
+    console.log("refresh pass e")
     return true
 }
 

@@ -12,7 +12,7 @@ import superjson from 'superjson';
 import atob from 'core-js-pure/stable/atob'
 import btoa from 'core-js-pure/stable/btoa'
 import { tokenRefreshLink } from 'app/provider/trpc-client/refreshLink'
-import { localAccessToken } from 'app/provider/auth-context/state.native'
+import { localAccessToken, localRefreshToken } from 'app/provider/auth-context/state.native'
 
 global.atob = atob
 global.btoa = btoa
@@ -55,23 +55,30 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                 // is accessible on both methods
                 tokenRefreshNeeded: (query) => {
                     // on every request, this function is called
-                    if (!localAccessToken) {
+                    if (!localAccessToken || !localRefreshToken) {
+                        console.log("refresh needed as localAccessToken is undefined")
                         return true
                     }
+
+                    console.log("local refesh token", localRefreshToken)
 
                     let decodedToken
                     try {
                         decodedToken = jwtDecode(localAccessToken!)
+                        console.log("decoded token", decodedToken)
                     } catch {
+                        console.log("localAccessToken decodation failed")
                         signOut()
                     }
 
                     if (!decodedToken || !decodedToken.exp) {
+                        console.log("refresh needed as:", decodedToken.exp)
                         return true
                     }
 
                     // if access token expires in the next 10 sec
                     if (decodedToken.exp! - Date.now() / 1000 <= 5) {
+                        console.log("refresh needed as expired")
                         return true
                     }
 
@@ -83,11 +90,13 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                     // do your magic to fetch a refresh token here
                     // example:
                     try {
-                        const result = await refresh()
+                        const result = await refresh(localRefreshToken!)
                         if (!result) {
+                            console.log("refresh failed", result)
                             await signOut()
                         }
                     } catch (err) {
+                        console.log("refresh failed", err)
                         // token refreshing failed, let's log the user out
                         await signOut()
                     }

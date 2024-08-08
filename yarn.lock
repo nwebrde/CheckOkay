@@ -3186,6 +3186,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@logrocket/react-native@npm:^1.35.0":
+  version: 1.35.0
+  resolution: "@logrocket/react-native@npm:1.35.0"
+  peerDependencies:
+    expo: ">=45.0.0"
+    react: "*"
+    react-native: ">=0.60.0-rc.0 <1.0.x"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+  checksum: 59e6c100bf37db65092e49cf06b1d0b31246f0147f09826544623d7f3affc97e2348690c8ff7db865cf58abf39ba78becb91e025cea1f7bd6d6ea3ad9f6a084a
+  languageName: node
+  linkType: hard
+
 "@motionone/animation@npm:^10.12.0":
   version: 10.18.0
   resolution: "@motionone/animation@npm:10.18.0"
@@ -10049,6 +10063,7 @@ __metadata:
   resolution: "expo-app@workspace:apps/expo"
   dependencies:
     "@babel/core": ^7.24.3
+    "@logrocket/react-native": ^1.35.0
     "@react-native-async-storage/async-storage": 1.23.1
     "@react-native-community/datetimepicker": 8.0.1
     app: "*"

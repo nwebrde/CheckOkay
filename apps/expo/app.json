@@ -2,7 +2,7 @@
   "expo": {
     "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
     "scheme": "checkokay",
     "platforms": [
@@ -14,7 +14,7 @@
       "bundleIdentifier": "de.nweber.checkokay",
       "supportsTablet": true,
       "usesAppleSignIn": true,
-      "buildNumber": "8"
+      "buildNumber": "17"
     },
     "android": {
       "package": "de.nweber.checkokay",
@@ -24,6 +24,7 @@
     "plugins": [
       "expo-secure-store",
       "expo-router",
+      "@logrocket/react-native",
       [
         "expo-build-properties",
         {

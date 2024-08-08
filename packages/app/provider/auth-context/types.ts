@@ -1,5 +1,5 @@
 export interface NativeAuthContext extends CommonAuthContext {
-    refresh: () => Promise<boolean>
+    refresh: (refreshTokenLocal: string) => Promise<boolean>
     accessToken: string | null
     refreshToken: string | null
 }

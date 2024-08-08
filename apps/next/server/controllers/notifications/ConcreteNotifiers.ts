@@ -71,7 +71,7 @@ export abstract class RepeatingNotifier extends Notifier {
             this.currentRound++;
             this.sentSucceed = true;
 
-            if(this.currentRound == 2) {
+            if(this.currentRound == 2 && this.repeatTimes >= 2) {
                 // add job to queue. Subsequent repeatings will delay this job (see respective worker in instrumentation)
                 await repeat(this, this.getJobId(), this.getRescheduleDelayInSeconds())
             }
