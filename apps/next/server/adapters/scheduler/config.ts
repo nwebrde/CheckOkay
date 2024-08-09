@@ -106,6 +106,6 @@ export const pushQueue = new Queue<PushJob>(PUSH_QUEUE, {
             type: 'exponential',
             delay: 30000, // half minute
         },
-        removeOnComplete: true
+        removeOnComplete: false
     },
 });
