@@ -6,7 +6,7 @@ const customizedAuthRoutes = {
     // error: "/api/auth/error",
 };
 function middleware(request: NextRequest) {
-    if(request.nextUrl.pathname.startsWith("/auth/signin")) {
+    if(request.nextUrl.pathname.startsWith("/auth/signin") || request.nextUrl.pathname.startsWith("/auth/demo")) {
         const sessionToken = request.cookies.get("__Secure-next-auth.session-token");
         if(sessionToken != null) {
             return NextResponse.redirect(new URL('/', request.url))
