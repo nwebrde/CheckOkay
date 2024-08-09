@@ -5,7 +5,7 @@ import { Notification, Recipient } from '../../entities/notifications/Notificati
 // optionally providing an access token if you have enabled push security
 let expo = new Expo({
     //accessToken: process.env.EXPO_ACCESS_TOKEN,
-    useFcmV1: false // this can be set to true in order to use the FCM v1 API
+    useFcmV1: true // this can be set to true in order to use the FCM v1 API
 });
 export type PushResponse = {
     deregisterTokens: string[]
@@ -37,7 +37,6 @@ export const send = async (
     for (let pushToken of pushTokens) {
         // Check that all your push tokens appear to be valid Expo push tokens
         if (!Expo.isExpoPushToken(pushToken)) {
-            throw new Error(`Push token ${pushToken} is not a valid Expo push token`)
             console.error(`Push token ${pushToken} is not a valid Expo push token`);
             continue;
         }
@@ -88,13 +87,11 @@ export const send = async (
                         break;
                     default:
                         // unsolvable error
-                        throw new Error(ticket.details?.error)
-                        //console.error("failed to send push notification", ticket.details?.error);
+                        console.error("failed to send push notification", ticket.details?.error);
                 }
             }
         }
     } catch (error) {
-        throw new Error(error)
         failedTokens.push(...pushTokens)
     }
 
