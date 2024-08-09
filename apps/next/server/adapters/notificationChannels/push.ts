@@ -37,6 +37,7 @@ export const send = async (
     for (let pushToken of pushTokens) {
         // Check that all your push tokens appear to be valid Expo push tokens
         if (!Expo.isExpoPushToken(pushToken)) {
+            throw new Error(`Push token ${pushToken} is not a valid Expo push token`)
             console.error(`Push token ${pushToken} is not a valid Expo push token`);
             continue;
         }
@@ -47,7 +48,6 @@ export const send = async (
         sound: 'default',
         body: notification.pushOnlyText ? notification.pushOnlyText : notification.text,
         title: notification.subject,
-        data: { withSome: 'data' },
         categoryId: notification.pushCategoryIdentifier,
         ttl: 604800 // one week
     };
@@ -88,11 +88,13 @@ export const send = async (
                         break;
                     default:
                         // unsolvable error
-                        console.error("failed to send push notification", ticket.details?.error);
+                        throw new Error(ticket.details?.error)
+                        //console.error("failed to send push notification", ticket.details?.error);
                 }
             }
         }
     } catch (error) {
+        throw new Error(error)
         failedTokens.push(...pushTokens)
     }
 
