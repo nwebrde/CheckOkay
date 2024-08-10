@@ -7,6 +7,7 @@ import { useAuth } from 'app/provider/auth-context'
 import { localAccessToken } from 'app/provider/auth-context/state.native'
 import { View } from 'app/design/view'
 import { VSpacer } from 'app/design/layout'
+import {Dimensions} from 'react-native';
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,7 +47,7 @@ const Screen = ({
             showsVerticalScrollIndicator={false}
             className={clsx("p-3 w-fit h-fit", paddingTop ? "" : "pt-0")}
             stickyHeaderIndices={stickyHeaderIndices}
-            contentContainerStyle={{flexGrow: 1, justifyContent: stickyHeaderIndices.length <= 0 ? "center" : "flex-start"}}
+            contentContainerStyle={{flexGrow: 1, justifyContent: stickyHeaderIndices.length <= 0 && Dimensions.get('window').width >= 800 ? "center" : "flex-start"}}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
