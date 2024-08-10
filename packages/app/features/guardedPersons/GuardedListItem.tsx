@@ -20,7 +20,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
 
     return (
         <Card
-            className={`flex-col w-fit grow p-2 ${
+            className={`p-2 md:shrink md:max-w-[calc(49%)] w-full ${
                 item.state == CheckState.OK
                     ? 'bg-lime-200'
                     : item.state == CheckState.NOTIFIED
@@ -28,7 +28,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
                       : 'bg-orange-200'
             }`}
         >
-            <View className="w-full flex-row items-center justify-between">
+            <View className="flex-row items-center justify-between">
                 <View className="basis-4/5 truncate">
                     <AvatarName name={item.name} email={item.email} image={item.image} />
                 </View>
@@ -44,26 +44,27 @@ const renderItem = ({ item }: { item: Guarded }) => {
             </View>
             <VSpacer />
             {item.lastCheckIn && (
-                <Text>
+                <Text className="font-medium">
                     Letzte {item.step ? 'automatische ' : 'manuelle '}
                     Rückmeldung{' '}
                     <Moment
                         element={Text}
+                        className="font-bold"
                         locale="de"
                         date={item.lastCheckIn}
                         fromNow
-                    />
-                </Text>
-            )}
-            {item.nextRequiredCheckIn && (
-                <Text>
-                    Nächste Rückmeldung bis{' '}
-                    <Moment
-                        element={Text}
-                        locale="de"
-                        date={item.nextRequiredCheckIn}
-                        fromNow
-                    />
+                    />.
+                    {item.nextRequiredCheckIn && (
+                        <Text className="">
+                            {' '}Nächste Rückmeldung bis{' '}
+                            <Moment
+                                element={Text}
+                                locale="de"
+                                date={item.nextRequiredCheckIn}
+                                fromNow
+                            />.
+                        </Text>
+                    )}
                 </Text>
             )}
         </Card>

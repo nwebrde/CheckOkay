@@ -63,13 +63,13 @@ export function CheckIn() {
         });
     }
     return (
-        <View className="w-fit">
+        <View className="w-auto">
             <Skeleton colorMode="light" width={'100%'} show={user.isLoading}>
                 {user.data && (
                     <>
                         {(isSetup() && checkInPossible) && (
                             <Card
-                                className={`w-fit ${
+                                className={`w-full ${
                                     user.data?.state == CheckState.OK
                                         ? 'bg-lime-200'
                                         : user.data?.state ==
@@ -84,37 +84,35 @@ export function CheckIn() {
                                     </Text>
                                 </Row>
 
-                                <Row className="mt-5">
+                                <Row className="mt-5 gap-5 items-center">
                                     <AnimatedPressable onClick={check}>
                                         <Text
                                             type="unstyled"
                                             selectable={false}
-                                            className="text-base font-bold text-xl"
+                                            className="text-base font-bold rounded-xl p-3 overflow-hidden bg-primary text-ok text-[3rem]"
                                         >
                                             Ja &#128077;
                                         </Text>
                                     </AnimatedPressable>
-                                    <HSpacer />
-                                    <StyledLink
-                                        href="/callEmergency"
-                                    >
-                                        <Text className="text-red-500 font-bold text-xl">Nein &#128078;</Text>
-                                    </StyledLink>
+                                    <View className="flex-col shrink">
+
+
+                                        {user.data?.nextRequiredCheckIn && (
+                                            <Text className="font-medium">
+                                                Beantworte diese Frage bis{' '}
+                                                <Moment
+                                                    element={Text}
+                                                    locale="de"
+                                                    className="font-bold"
+                                                    date={user.data.nextRequiredCheckIn}
+                                                    fromNow
+                                                />.
+                                            </Text>
+                                        )}
+                                    </View>
                                 </Row>
-                                {user.data?.nextRequiredCheckIn && (
-                                    <Text className="mt-5">
-                                        Beantworte diese Frage bis{' '}
-                                        <Moment
-                                            element={Text}
-                                            locale="de"
-                                            date={user.data.nextRequiredCheckIn}
-                                            fromNow
-                                        />
-                                        {'\n'}
-                                    </Text>
-                                )}
                                 {user.data?.lastCheckIn && (
-                                    <Text>
+                                    <Text className="mt-5">
                                         Deine letzte Rückmeldung war{' '}
                                         {user.data?.step
                                             ? 'automatisch '
@@ -128,15 +126,16 @@ export function CheckIn() {
                                                 )
                                             }
                                             fromNow
-                                        />
+                                        />.
                                     </Text>
                                 )}
                             </Card>
                         )}
                         {(isSetup() && !checkInPossible) && (
-                            <Text>Du kannst dich erst in{' '}
+                            <Text className="font-medium">Du kannst dich erst in{' '}
                                 <Moment
                                     element={Text}
+                                    className="font-bold"
                                     locale="de"
                                     date={user.data.nextCheckInPossibleFrom}
                                     fromNow

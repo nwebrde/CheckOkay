@@ -9,41 +9,39 @@ import { clsx } from 'clsx'
 
 export function SettingsNavigator({ header, currentPath, useRelative }: { header: boolean, currentPath: string, useRelative: boolean }) {
     const auth = useAuth()
-    return (
-        <View>
-            {header &&
-                <View className="fixed z-50 bg-secondary w-full">
+    return [
+        <>{header &&
+                <View className="z-50 bg-secondary w-full">
                     <Link href="/"><Text>Zurück</Text></Link>
                     <Text type="H1" className="mt-0.5">Einstellungen</Text>
                 </View>
-            }
-            <View className={clsx(header ? "mt-20" : "")}>
-            <SettingsGroup title="Profil">
-                {
-                    /*
-                    <SettingsRow label="Anmeldeinformationen" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={true} />
-                <SettingsRow label="Notfalldaten" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={false} />
-                     */
-                }
+            }</>,
+            <View className={clsx(header ? "mt-5" : "")}>
+                <SettingsGroup title="Profil">
+                    {
+                        /*
+                        <SettingsRow label="Anmeldeinformationen" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={true} />
+                    <SettingsRow label="Notfalldaten" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={false} />
+                         */
+                    }
 
-                <SettingsRow label="Öffentliches Profil" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={true} />
-                <SettingsRow label="Konto löschen" link={"user/deleteUser"} useRelative={useRelative} />
-                <SettingsRow label="Abmelden" onPress={auth?.signOut} separator={false} />
-            </SettingsGroup>
-            <SettingsGroup>
-                <SettingsRow label="Check-In Zeitpunkte" active={currentPath.includes("checks")} link="checks" useRelative={useRelative} separator={false} />
-            </SettingsGroup>
-            <SettingsGroup>
-                <SettingsRow label="Deine Beschützer" active={currentPath.includes("guards")} link="guards" useRelative={useRelative} separator={false} />
-            </SettingsGroup>
-            <SettingsGroup title="Benachrichtigungen">
-                <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} useRelative={useRelative} />
-                <SettingsRow label="Erhalte Benachrichtigungen über" active={currentPath.includes("channels")} link={"channels"} separator={false} useRelative={useRelative} />
-            </SettingsGroup>
+                    <SettingsRow label="Öffentliches Profil" active={currentPath.includes("user")} link={"user"} useRelative={useRelative} separator={true} />
+                    <SettingsRow label="Konto löschen" link={"user/deleteUser"} useRelative={useRelative} />
+                    <SettingsRow label="Abmelden" onPress={auth?.signOut} separator={false} />
+                </SettingsGroup>
                 <SettingsGroup>
-                    <SettingsRow label="Rechtliche Dokumente" description="Hier findest du die Datenschutzerklärung, Nutzungsvereinbarung und das Impressum dieser App" link="https://checkokay.com/legal" useRelative={false} />
+                    <SettingsRow label="Check-In Zeitpunkte" active={currentPath.includes("checks")} link="checks" useRelative={useRelative} separator={false} />
+                </SettingsGroup>
+                <SettingsGroup>
+                    <SettingsRow label="Deine Beschützer" active={currentPath.includes("guards")} link="guards" useRelative={useRelative} separator={false} />
+                </SettingsGroup>
+                <SettingsGroup title="Benachrichtigungen">
+                    <SettingsRow label="Erinnerungen und zeitverzögerte Warnungen" active={currentPath.includes("reminder_delay")} link={"reminder_delay"} useRelative={useRelative} />
+                    <SettingsRow label="Erhalte Benachrichtigungen über" active={currentPath.includes("channels")} link={"channels"} separator={false} useRelative={useRelative} />
+                </SettingsGroup>
+                <SettingsGroup>
+                    <SettingsRow separator={false} label="Rechtliche Dokumente" description="Hier findest du die Datenschutzerklärung, Nutzungsvereinbarung und das Impressum dieser App" link="https://checkokay.com/legal" useRelative={false} />
                 </SettingsGroup>
             </View>
-        </View>
-    )
+        ]
 }

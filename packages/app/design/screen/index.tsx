@@ -6,6 +6,7 @@ import { RefreshControl } from 'react-native'
 import { useAuth } from 'app/provider/auth-context'
 import { localAccessToken } from 'app/provider/auth-context/state.native'
 import { View } from 'app/design/view'
+import { VSpacer } from 'app/design/layout'
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -16,11 +17,13 @@ const Screen = ({
                            stickyHeaderIndices = [],
                            stickyHeaderWeb,
                            paddingTop = true,
+                            width = "max-w-4xl"
                        }: {
     children: ReactNode
     stickyHeaderIndices: number[]
     stickyHeaderWeb?: number
     paddingTop: boolean
+    width: string
 }) => {
     const [refreshing, setRefreshing] = React.useState(false);
     const auth = useAuth();
@@ -37,17 +40,19 @@ const Screen = ({
     }, []);
 
     return (
-        <View className="flex-1 md:justify-center h-full w-fit">
-    <View className={clsx("h-full", "md:max-h-fit", "w-fit")}>
+        <View className="max-h-fit">
+    <View className={clsx("self-center", width)}>
         <ScrollView
             showsVerticalScrollIndicator={false}
-            className={clsx("p-3 w-fit", paddingTop ? "" : "pt-0")}
+            className={clsx("p-3 w-fit h-fit", paddingTop ? "" : "pt-0")}
             stickyHeaderIndices={stickyHeaderIndices}
+            contentContainerStyle={{flexGrow: 1, justifyContent: stickyHeaderIndices.length <= 0 ? "center" : "flex-start"}}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
         >
             {children}
+            <VSpacer />
         </ScrollView>
     </View>
         </View>

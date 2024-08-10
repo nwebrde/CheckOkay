@@ -34,10 +34,10 @@ const GuardedList = () => {
                     }}
                     scrollEnabled={false}
                     columnWrapperStyle={{
-                        flexWrap: 'wrap',
-                        flex: 1,
+                        marginTop: 15,
+                        flexWrap: 1,
                         gap: 15,
-                        marginTop: 5
+                        flexShrink: 0
                     }}
                     ListEmptyComponent={<EmptyItem />}
                     renderItem={renderItem}
