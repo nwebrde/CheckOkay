@@ -16,7 +16,7 @@ import { VSpacer } from 'app/design/layout'
 export function HomeScreen() {
     return (
         <Screen stickyHeaderIndices={[0,2]} stickyHeaderWeb={2} paddingTop={false}>
-                <View className="pt-3">
+                <View className="pt-3 max-w-xl">
                     <CheckIn />
                 </View>
                 <VSpacer />
