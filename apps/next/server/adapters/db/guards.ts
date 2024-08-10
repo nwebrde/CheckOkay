@@ -60,14 +60,15 @@ export const switchType = async (guardId: string, guardedId: string) => {
  * @param guard
  */
 export const toGuard = (guard: GuardWithGuardUserDB): Guard => {
+    const guardUser = toUser(guard.guardUser)
     return {
         priority: guard.priority,
         since: guard.createdAt,
 
         id: guard.guardUserId,
-        email: guard.guardUser.email,
-        name: guard.guardUser.name ?? undefined,
-        image: guard.guardUser.image ?? undefined
+        email: guardUser.email,
+        name: guardUser.name ?? undefined,
+        image: guardUser.image ?? undefined
     }
 }
 
