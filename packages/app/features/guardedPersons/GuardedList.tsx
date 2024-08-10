@@ -35,7 +35,7 @@ const GuardedList = () => {
                     scrollEnabled={false}
                     columnWrapperStyle={{
                         marginTop: 15,
-                        flexWrap: 1,
+                        flexWrap: 'wrap',
                         gap: 15,
                         flexShrink: 0
                     }}
