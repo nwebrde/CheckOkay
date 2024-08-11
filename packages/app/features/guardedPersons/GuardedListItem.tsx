@@ -22,10 +22,10 @@ const renderItem = ({ item }: { item: Guarded }) => {
         <Card
             className={`p-2 md:shrink md:max-w-[calc(49%)] w-full ${
                 item.state == CheckState.OK
-                    ? 'bg-lime-200'
+                    ? 'bg-lime-200 border border-lime-600'
                     : item.state == CheckState.NOTIFIED
-                      ? 'bg-amber-200'
-                      : 'bg-orange-200'
+                      ? 'bg-amber-200 border border-amber-400'
+                      : 'bg-orange-200 border border-orange-400'
             }`}
         >
             <View className="flex-row items-center justify-between">

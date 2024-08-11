@@ -24,5 +24,5 @@ export function HSpacer({ className, ...props }) {
 }
 
 export function Card({ className, ...props }) {
-    return (<View className={"p-5 rounded-xl shadow-sm " + className} {...props } />)
+    return (<View className={"p-5 rounded-xl " + className} {...props } />)
 }

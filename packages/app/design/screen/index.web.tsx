@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { ScrollView } from 'react-native'
+import { ScrollView } from 'app/design/scrollView'
 
 /**
  *
@@ -24,7 +24,7 @@ const Screen = ({
 
                     <ScrollView className="screenWrapper w-full items-center flex-1"
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
-                                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                                contentClassName="grow justify-center">
                                 {children}
                     </ScrollView>
 

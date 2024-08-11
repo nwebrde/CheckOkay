@@ -71,11 +71,11 @@ export function CheckIn() {
                             <Card
                                 className={`w-full ${
                                     user.data?.state == CheckState.OK
-                                        ? 'bg-lime-200'
+                                        ? 'bg-lime-200 border-2 border-lime-600'
                                         : user.data?.state ==
                                             CheckState.NOTIFIED
-                                          ? 'bg-amber-200'
-                                          : 'bg-orange-200'
+                                          ? 'bg-amber-200 border-2 border-amber-400'
+                                          : 'bg-orange-200 border-2 border-orange-400'
                                 }`}
                             >
                                 <Row className="items-center justify-between">
