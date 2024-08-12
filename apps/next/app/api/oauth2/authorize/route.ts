@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
     const query = Object.fromEntries(req.nextUrl.searchParams)
     const bodyParams = new URLSearchParams(await req.text())
     const body = Object.fromEntries(bodyParams)
+
+
     try {
         // Validate the HTTP request and return an AuthorizationRequest.
         const authRequest =
@@ -22,9 +24,20 @@ export async function GET(req: NextRequest) {
             })
 
         const session = await getServerSession(authOptions())
-        if (session) {
-            // Signed in
-            authRequest.user = session.user
+        if (session || req.cookies.has("demo") || req.nextUrl.searchParams.has("demo")) {
+
+            if(session) {
+                // Signed in
+                authRequest.user = session.user
+            }
+            else {
+                authRequest.user = {
+                    name: process.env.DEMO_USER_NAME,
+                    email: process.env.DEMO_USER_EMAIL,
+                    id: process.env.DEMO_USER_ID!,
+                    image: process.env.DEMO_USER_IMAGE
+                }
+            }
 
             // Once the user has approved or denied the client update the status
             // (true = approved, false = denied)
