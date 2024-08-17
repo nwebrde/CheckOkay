@@ -123,7 +123,6 @@ export default function RootLayout({
                                 {children}
                             </View>
                         </View>
-            <AppBanner />
         </>
     )
 }
