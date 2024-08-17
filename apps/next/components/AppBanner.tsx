@@ -6,6 +6,7 @@ import Image from "next/image"
 import imgSrc from 'app/design/assets/mobileLogo.png'
 import { useEffect, useState } from 'react'
 import { clsx } from 'clsx'
+import { appLinks } from '../appLinks'
 
 export function AppBanner() {
     const [visible, setVisible] = useState(false);
@@ -76,7 +77,7 @@ export function AppBanner() {
             <div className="flex flex-col">
 
                 <Link
-                    href={ios ? process.env.IOS_APP_LINK : process.env.ANDROID_APP_LINK}
+                    href={ios ? appLinks.ios.link : appLinks.android.link}
                     className="inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-secondary-foreground border border-input bg-white shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 text-slate-900"
                 >
                     <span className="hidden min-[400px]:block">{ios ? "im App Store" : "in Google Play"} laden</span>

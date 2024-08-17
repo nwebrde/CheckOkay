@@ -8,6 +8,7 @@ import 'setimmediate'
 import 'raf/polyfill'
 import { StylesProvider } from './styles-provider'
 import React from 'react'
+import { appLinks } from '../appLinks'
 
 export const metadata = {
     title: 'CheckOkay App',
@@ -22,7 +23,7 @@ export const metadata = {
     authors: [{ name: "Niklas Weber", url: "https://github.com/nikwebr" }],
     creator: "Niklas Weber",
     other: {
-        'apple-itunes-app': 'app-id='+process.env.IOS_APP_ID+', app-argument=',
+        'apple-itunes-app': 'app-id='+appLinks.ios.id+', app-argument=',
     },
 }
 
