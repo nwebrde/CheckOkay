@@ -10,8 +10,20 @@ import { StylesProvider } from './styles-provider'
 import React from 'react'
 
 export const metadata = {
-    title: 'CheckOkay',
+    title: 'CheckOkay App',
     description: 'Deine Freunde beschützen dich',
+    keywords: [
+        "Schutzengel",
+        "Aufpasser",
+        "Notfall Erkennung",
+        "Zustandsabfragen",
+        "Geht es dir gut?",
+    ],
+    authors: [{ name: "Niklas Weber", url: "https://github.com/nikwebr" }],
+    creator: "Niklas Weber",
+    other: {
+        'apple-itunes-app': 'app-id='+process.env.IOS_APP_ID+', app-argument=',
+    },
 }
 
 export default function RootLayout({

@@ -6459,6 +6459,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/ua-parser-js@npm:^0.7.39":
+  version: 0.7.39
+  resolution: "@types/ua-parser-js@npm:0.7.39"
+  checksum: 81046605eb2815b098228743b7dfde887cc8990369f2ad56e71f1400b4cef5078481c7ca91ca3dddf2e8d4e183fe93224bfdeee13bfe034a1e62d55cfbac9e26
+  languageName: node
+  linkType: hard
+
 "@types/uuid@npm:^10.0.0":
   version: 10.0.0
   resolution: "@types/uuid@npm:10.0.0"
@@ -14273,6 +14280,7 @@ __metadata:
     "@types/nodemailer": ^6.4.14
     "@types/randomstring": ^1.1.11
     "@types/react": ~18.2.79
+    "@types/ua-parser-js": ^0.7.39
     "@types/uuid": ^10.0.0
     app: "*"
     autoprefixer: ^10.4.17
@@ -14301,6 +14309,7 @@ __metadata:
     tailwindcss: 3.4.4
     timepicker-ui: ^2.6.1
     typescript: 5.3.3
+    ua-parser-js: ^1.0.38
     zod: ^3.22.4
   languageName: unknown
   linkType: soft
@@ -18261,7 +18270,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ua-parser-js@npm:^1.0.35":
+"ua-parser-js@npm:^1.0.35, ua-parser-js@npm:^1.0.38":
   version: 1.0.38
   resolution: "ua-parser-js@npm:1.0.38"
   checksum: d0772b22b027338d806ab17d1ac2896ee7485bdf9217c526028159f3cd6bb10272bb18f6196d2f94dde83e3b36dc9d2533daf08a414764f6f4f1844842383838

@@ -9,6 +9,7 @@ import { AvatarName } from 'app/features/user/AvatarName'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { useLargeSettings } from '../../hooks/windowDimensions'
+import { AppBanner } from '../../components/AppBanner'
 
 const getWidthForPath = (path: string) => {
     if(path.startsWith("settings")) {
@@ -85,6 +86,7 @@ export default function RootLayout({
     const width = getWidthForPath(path)
 
     return (
+        <>
 
                         <View className={clsx("center flex-1 items-center max-h-screen", getBreakpointDependantStyles(width).root)}>
 
@@ -115,10 +117,13 @@ export default function RootLayout({
                                 </View>
                             }
 
+
+
                             <View className={clsx('w-full w-fit', topbarVisible() ? getBreakpointDependantStyles(width).scrollView : "max-h-screen", topbarVisible() ? "max-h-[calc(100dvh-5rem)]" : "", getW(width))}>
                                 {children}
                             </View>
                         </View>
-
+            <AppBanner />
+        </>
     )
 }
