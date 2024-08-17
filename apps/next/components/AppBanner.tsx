@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/navigation"
+import Link from "next/link"
 import parser from 'ua-parser-js';
 import Image from "next/image"
 import imgSrc from 'app/design/assets/mobileLogo.png'
