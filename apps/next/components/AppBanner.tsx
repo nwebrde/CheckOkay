@@ -49,7 +49,7 @@ export function AppBanner() {
             className={clsx("bg-primary gap-3 h-fit w-full bottom-0 fixed z-50 flex flex-row items-center justify-evenly p-3 overflow-hidden", !visible ? "hidden" : "")}>
 
             <div
-                className="absolute bottom-[-200px] inset-x-0 m-auto h-80 max-w-lg bg-gradient-to-tr from-lime-400 via-teal-900 to-[#C084FC] opacity-50 md:opacity-100 blur-[11rem] dark:blur-[10rem]"></div>
+                className="absolute pointer-events-none bottom-[-200px] inset-x-0 m-auto h-80 max-w-lg bg-gradient-to-tr from-lime-400 via-teal-900 to-[#C084FC] opacity-30 md:opacity-100 blur-[11rem] dark:blur-[10rem]"></div>
 
             <svg xmlns="http://www.w3.org/2000/svg" onClick={hide} fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                  stroke="currentColor" className="size-6 stroke-slate-400 hover:stroke-white">
