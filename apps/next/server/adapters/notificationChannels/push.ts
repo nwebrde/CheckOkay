@@ -52,7 +52,7 @@ export const send = async (
         mutableContent: true,
         ttl: 604800, // one week
         data: {
-            criticalAlert: true
+            criticalAlert: "1"
         }
     };
 
