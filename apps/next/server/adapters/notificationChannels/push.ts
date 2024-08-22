@@ -50,10 +50,7 @@ export const send = async (
         categoryId: notification.pushCategoryIdentifier,
         priority: "high",
         mutableContent: true,
-        ttl: 604800, // one week
-        data: {
-            criticalAlert: "1"
-        }
+        ttl: 604800 // one week
     };
 
 // The Expo push notification service accepts batches of notifications so

@@ -56,7 +56,7 @@ export class WarningNotification extends Notification {
     relatedCheckId: number // check id that fired this warning
 
     constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
-        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `)
+        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, undefined, "warning")
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
@@ -95,7 +95,7 @@ export class WarningNotification extends Notification {
 export class NewGuardNotification extends Notification {
     constructor(guardName: string) {
         super(ConcreteNotificationType.NEW_GUARD_NOTIFICATION, `${guardName} passt auf dich auf`, `ab sofort passt ${guardName} mit auf dich auf. \n
-        War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`);
+        War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`, undefined, undefined, "newGuard");
     }
 
     async refresh() {
