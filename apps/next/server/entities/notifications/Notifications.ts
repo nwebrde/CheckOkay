@@ -13,13 +13,18 @@ export abstract class Notification {
     public pushOnlyText: string | undefined
     public mailOnlyText: string | undefined
 
-    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string) {
+    public isCritical: boolean
+    public isSensitive: boolean
+
+    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string, isCritical = false, isSensitive = false) {
         this.notificationType = notificationType
         this.subject = subject
         this.text = text
         this.mailOnlyText = mailOnlyText
         this.pushOnlyText = pushOnlyText
         this.pushCategoryIdentifier = pushCategoryIdentifier
+        this.isCritical = isCritical
+        this.isSensitive = isSensitive
     }
 
     /**

@@ -19,7 +19,7 @@ export class ReminderNotification extends Notification {
     userId: string
 
     constructor(userId: string, nextRequiredCheckIn: Date) {
-        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder")
+        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", false, true)
         this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
         this.userId = userId
     }
@@ -87,6 +87,7 @@ export class WarningNotification extends Notification {
 
         this.lastCheckIn = new Date(getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!)
         this.text = `Es scheint ein Problem bei ${this.guardedPersonName} zu geben. ${this.guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(this.lastCheckIn).fromNow(true)} statt. `
+        this.isCritical = true
 
         return true
     }
