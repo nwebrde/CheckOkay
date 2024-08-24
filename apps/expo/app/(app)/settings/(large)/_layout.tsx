@@ -29,17 +29,17 @@ export default function SettingsLayout() {
                         }}
                     >
                         <Stack.Screen name="channels/addMail" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
-                            animationDuration: 100, gestureEnabled: true}} />
+                            animationDuration: 100, gestureEnabled: false}} />
                         <Stack.Screen name="reminder_delay/setReminder" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
-                            animationDuration: 100, gestureEnabled: true}} />
+                            animationDuration: 100, gestureEnabled: false}} />
                         <Stack.Screen name="reminder_delay/setDelay" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
-                            animationDuration: 100, gestureEnabled: true}} />
+                            animationDuration: 100, gestureEnabled: false}} />
                         <Stack.Screen name="checks/addCheck" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
-                            animationDuration: 100, gestureEnabled: true}} />
+                            animationDuration: 100, gestureEnabled: false}} />
                         <Stack.Screen name="guards/invite" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
-                            animationDuration: 100, gestureEnabled: true}} />
+                            animationDuration: 100, gestureEnabled: false}} />
                         <Stack.Screen name="user/deleteUser" options={{presentation: "modal", headerTitleAlign: "center", headerShown:true, animation: "slide_from_bottom",
-                            animationDuration: 100, gestureEnabled: true}} />
+                            animationDuration: 100, gestureEnabled: false}} />
                     </Stack>
                 </View>
             </SettingsNavigatorLayout>

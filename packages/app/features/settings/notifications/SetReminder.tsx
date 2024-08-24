@@ -77,7 +77,7 @@ export const SetReminder = forwardRef<HandlerRef, Props>((props, ref) => {
             <TimePicker minMinutes={10} onChange={(hour, minute) => {setHour(hour); setMinute(minute)}} displayTimeInLocalFormat={false} hour={checkSettings.data.reminderBeforeCheck.hour} minute={checkSettings.data.reminderBeforeCheck.minute} />
                 }
             </Skeleton>
-                <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern dich rückzumelden. Ziehe dafür die Zahlen an die gewünschte Position. Wir erinnern dich außerdem noch ein mal 5 Minuten davor.</Text>
+                <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern dich rückzumelden, solltest du das nicht bereits getan haben. Wir erinnern dich außerdem noch ein mal 5 Minuten vor dem Rückmeldezeitpunkt mit einem kritischen Warnton.</Text>
             </View>
     )
 } )
