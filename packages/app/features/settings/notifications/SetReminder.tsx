@@ -74,10 +74,10 @@ export const SetReminder = forwardRef<HandlerRef, Props>((props, ref) => {
             <View className="self-center p-5 pt-10">
             <Skeleton colorMode="light" width={'100%'}>
                 {checkSettings.data &&
-            <TimePicker onChange={(hour, minute) => {setHour(hour); setMinute(minute)}} displayTimeInLocalFormat={false} hour={checkSettings.data.reminderBeforeCheck.hour} minute={checkSettings.data.reminderBeforeCheck.minute} />
+            <TimePicker minMinutes={10} onChange={(hour, minute) => {setHour(hour); setMinute(minute)}} displayTimeInLocalFormat={false} hour={checkSettings.data.reminderBeforeCheck.hour} minute={checkSettings.data.reminderBeforeCheck.minute} />
                 }
             </Skeleton>
-                <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern dich rückzumelden. Ziehe dafür die Zahlen an die gewünschte Position</Text>
+                <Text className="mt-10">Wähle aus, wie viele Stunden und Minuten vor einem Check-In wir dich daran erinnern dich rückzumelden. Ziehe dafür die Zahlen an die gewünschte Position. Wir erinnern dich außerdem noch ein mal 5 Minuten davor.</Text>
             </View>
     )
 } )

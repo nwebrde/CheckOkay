@@ -36,7 +36,7 @@ export function ReminderAndBackupScreen() {
                     <Skeleton colorMode="light" width={'100%'}>
                         {checkSettings.data &&
                             <>
-                                <Text type="labelDescription">Falls du dich noch nicht zurückgemeldet hast, erinnern wir dich <Text type="unstyled" className="font-bold">{formatReminderTime(checkSettings.data.reminderBeforeCheck.hour, checkSettings.data.reminderBeforeCheck.minute)}</Text> vor dem nächsten Check-In Zeitpunkt</Text>
+                                <Text type="labelDescription">Falls du dich noch nicht zurückgemeldet hast, erinnern wir dich <Text type="unstyled" className="font-bold">{formatReminderTime(checkSettings.data.reminderBeforeCheck.hour, checkSettings.data.reminderBeforeCheck.minute)}</Text> und noch ein mal <Text type="unstyled" className="font-bold">5 Minuten</Text> vor dem nächsten Check-In Zeitpunkt</Text>
                             </>
                         }
                     </Skeleton>

@@ -27,6 +27,7 @@ export const TimePicker = ({
     onChange,
     hour,
     minute,
+    minMinutes = 0,
     displayTimeInLocalFormat,
     unit,
 }: Props) => {
@@ -55,11 +56,14 @@ export const TimePicker = ({
         }
     }, [onChange, displayTimeInLocalFormat])
 
+    const today = new Date();
+
     return (
         <View className="flex-row">
             <TimePickerComponent
                 className="timepicker-ui-input"
                 disableClock
+                minTime={displayTimeInLocalFormat ? undefined : new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, minMinutes, 0).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit', second: '2-digit'})}
                 clearIcon={<></>}
                 onBlur={changeHandler}
                 onChange={(value: string) => {

@@ -3,16 +3,19 @@ import { LinearGradient } from "expo-linear-gradient"; // or `import LinearGradi
 import * as Haptics from "expo-haptics";
 import { StyleProp, ViewStyle } from 'react-native'
 import { localToUTC, UTCToLocal } from 'app/lib/time'
+import { useState } from 'react'
 
 type Props = {
     hour: number // in UTC format
     minute: number // in UTC format
     displayTimeInLocalFormat?: boolean // false default
+    minMinutes: number
     onChange: (hour: number, minute: number) => void // hour and minute in UTC format
     unit?: string
     style?: StyleProp<ViewStyle>
 }
-export function TimePicker({hour, minute, displayTimeInLocalFormat, onChange, unit}: Props) {
+export function TimePicker({hour, minute, displayTimeInLocalFormat, minMinutes = 0, onChange, unit}: Props) {
+    const [hourIntern, setHourIntern] = useState(displayTimeInLocalFormat ? UTCToLocal(hour, minute).hour : hour)
     const change = (hour, minute) => {
         if(displayTimeInLocalFormat) {
             const utc = localToUTC(hour, minute)
@@ -21,6 +24,7 @@ export function TimePicker({hour, minute, displayTimeInLocalFormat, onChange, un
         else {
             onChange(hour, minute)
         }
+        setHourIntern(displayTimeInLocalFormat ? localToUTC(hour, minute).hour : hour)
     }
     return (
             <TimerPicker
@@ -28,6 +32,7 @@ export function TimePicker({hour, minute, displayTimeInLocalFormat, onChange, un
                 hideSeconds
                 minuteLabel="min"
                 hourLabel="h"
+                minuteLimit={{min: hourIntern > 0 ? 0 : minMinutes}}
                 onDurationChange={({hours, minutes}) => {change(hours, minutes)}}
                 initialValue={{
                     hours: displayTimeInLocalFormat ? UTCToLocal(hour, minute).hour : hour,

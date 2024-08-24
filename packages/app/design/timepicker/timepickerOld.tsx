@@ -20,6 +20,7 @@ export type Props = {
     hour: number // in UTC format
     minute: number // in UTC format
     displayTimeInLocalFormat?: boolean // false default
+    minMinutes: number
     onChange: (hour: number, minute: number) => void // hour and minute in UTC format
     unit?: string
     style?: StyleProp<ViewStyle>

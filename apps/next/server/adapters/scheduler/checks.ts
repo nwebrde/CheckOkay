@@ -13,23 +13,28 @@ const STRINGIFIER = "_string";
  * @param backup time in seconds after the check time to warn backup guards
  */
 export const addCheck = async (userId: string, checkId: number, time: Date, reminder: number, backup: number) => {
-    let checkTime = (Number(time) - Number(new Date())) - reminder * 1000;
+    let delay = (Number(time) - Number(new Date())) - 60 * 5 * 1000;
 
-    if(checkTime < 0) {
-        checkTime = 0
+    if(reminder > 0) {
+        delay = (Number(time) - Number(new Date())) - reminder * 1000;
+    }
+
+    if(delay < 0) {
+        delay = 0
     }
 
     const backupTime = new Date(time)
     backupTime.setUTCSeconds(backup)
 
     const res = await checkQueue.add('check', {
-        step: reminder > 0 ? CheckSteps.REMINDER : CheckSteps.CHECK,
+        step: CheckSteps.REMINDER,
+        firstReminderSent: reminder <= 0,
         checkDate: time,
         backupDate: backup > 0 ? backupTime : undefined,
         userId: userId
     }, {
         jobId: checkId.toString() + STRINGIFIER,
-        delay: checkTime
+        delay: delay
     });
 
     return res != null
@@ -65,14 +70,19 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
 
     switch (job.data.step) {
         case CheckSteps.REMINDER:
-            delay = (Number(checkDate) - Number(new Date())) - reminder * 1000;
+
+            delay = (Number(checkDate) - Number(new Date())) - 60 * 5 * 1000;
+            if(!job.data.firstReminderSent) {
+                delay = (Number(checkDate) - Number(new Date())) - reminder * 1000;
+            }
 
             if(delay < 0) {
                 delay = 0
             }
 
             await job.updateData({
-                step: reminder > 0 ? CheckSteps.REMINDER : CheckSteps.CHECK,
+                step: CheckSteps.REMINDER,
+                firstReminderSent: reminder <= 0 || job.data.firstReminderSent,
                 checkDate: checkDate,
                 backupDate: backup > 0 ? backupTime : undefined,
                 userId: job.data.userId
@@ -89,6 +99,7 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
 
             await job.updateData({
                 step: job.data.step,
+                firstReminderSent: job.data.firstReminderSent,
                 checkDate: checkDate,
                 backupDate: backup > 0 ? backupTime : undefined,
                 userId: job.data.userId
@@ -122,7 +133,7 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
  */
 export const updateReminderTime = async (checkId: number, reminder: number) => {
     const job = await checkQueue.getJob(checkId.toString() + STRINGIFIER)
-    if(!job || job.data.step != CheckSteps.REMINDER) {
+    if(!job || job.data.step != CheckSteps.REMINDER || job.data.firstReminderSent) {
         return false
     }
 
@@ -158,6 +169,7 @@ export const updateBackupTime = async (checkId: number, backup: number) => {
 
                 await job.updateData({
                     step: job.data.step,
+                    firstReminderSent: job.data.firstReminderSent,
                     checkDate: job.data.checkDate,
                     backupDate: backupTime,
                     userId: job.data.userId
@@ -175,6 +187,7 @@ export const updateBackupTime = async (checkId: number, backup: number) => {
 
                 await job.updateData({
                     step: job.data.step,
+                    firstReminderSent: job.data.firstReminderSent,
                     checkDate: job.data.checkDate,
                     backupDate: backupTime,
                     userId: job.data.userId

@@ -18,8 +18,8 @@ export class ReminderNotification extends Notification {
     nextRequiredCheckIn: Date
     userId: string
 
-    constructor(userId: string, nextRequiredCheckIn: Date) {
-        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", false, true)
+    constructor(userId: string, nextRequiredCheckIn: Date, isCritical = false) {
+        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", isCritical, true)
         this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
         this.userId = userId
     }
@@ -110,7 +110,7 @@ export const toConcreteNotification = (plainObject: any): Notification => {
     let result: Notification
     switch (plainObject.notificationType) {
         case ConcreteNotificationType.REMINDER_NOTIFICATION:
-            result = new ReminderNotification(plainObject.userId, plainObject.nextRequiredCheckIn)
+            result = new ReminderNotification(plainObject.userId, plainObject.nextRequiredCheckIn, plainObject.isCritical)
             break;
         case ConcreteNotificationType.WARNING_NOTIFICATION:
             result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.sender.image, plainObject.lastCheckIn, plainObject.relatedCheckId, plainObject.relatedRequiredCheckInDate)

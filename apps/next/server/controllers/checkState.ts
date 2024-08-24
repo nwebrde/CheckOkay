@@ -21,7 +21,7 @@ export class UserDeleted extends Error {
  * checks whether a reminder is necessary and performs the reminder
  * @param userId
  */
-export const remind = async (userId: string) => {
+export const remind = async (userId: string, criticalReminder: boolean) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
@@ -30,7 +30,7 @@ export const remind = async (userId: string) => {
     })
 
     if(!data) {
-        throw new UserDeleted("User not found. Check was not added.")
+        throw new UserDeleted("User not found. User is not reminded.")
     }
 
     if(!data.nextRequiredCheckDate) {
@@ -43,7 +43,7 @@ export const remind = async (userId: string) => {
         const recipient: Recipient = {
             name: data.name ?? ""
         }
-        const notification = new ReminderNotification(data.id, data.nextRequiredCheckDate)
+        const notification = new ReminderNotification(data.id, data.nextRequiredCheckDate, criticalReminder)
         const notifier = new StandardNotifier(notification, await getMainSubmitters(recipient, undefined, data.email, data.notificationChannels))
         await notifier.submit()
         await updateCheckState(userId, CheckState.NOTIFIED)

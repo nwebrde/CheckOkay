@@ -16,7 +16,7 @@ export class CheckStateController {
     state: CheckState
 
     needsReminder() {
-        if (this.state != CheckState.OK || (new Date()).getTime() < this.getReminderTime().getTime()) {
+        if ((new Date()).getTime() < this.getReminderTime().getTime()) {
             return false
         }
         return true

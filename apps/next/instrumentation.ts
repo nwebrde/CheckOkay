@@ -1,4 +1,4 @@
-import { CheckJob, EmailJob, PushJob } from './server/adapters/scheduler/config'
+import { CheckJob, CheckSteps, EmailJob, PushJob } from './server/adapters/scheduler/config'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/de'
 import dayjs from 'dayjs'
@@ -42,7 +42,7 @@ export const register = async () => {
                 switch (job.data.step) {
                     case CheckSteps.REMINDER:
                         try {
-                            await remind(job.data.userId)
+                            await remind(job.data.userId, job.data.firstReminderSent)
                         } catch (e) {
                             if (e instanceof UserDeleted) {
                                 // stop the job as user is deleted
@@ -51,14 +51,20 @@ export const register = async () => {
                                 throw e; // re-throw the error unchanged
                             }
                         }
-                        
-                        delay = Number(new Date(job.data.checkDate)) - Number(new Date())
+
+                        delay = Number(new Date(job.data.checkDate)) - Number(new Date()) - 5 * 60 * 1000
+
+                        if(job.data.firstReminderSent) {
+                            delay = Number(new Date(job.data.checkDate)) - Number(new Date())
+                        }
+
                         if(delay < 0) {
                             delay = 0;
                         }
                         await job.moveToDelayed(Date.now() + delay, token);
                         await job.updateData({
-                            step: CheckSteps.CHECK,
+                            step: job.data.firstReminderSent ? CheckSteps.CHECK : CheckSteps.REMINDER,
+                            firstReminderSent: true,
                             checkDate: job.data.checkDate,
                             userId: job.data.userId,
                             backupDate: job.data.backupDate
@@ -83,6 +89,7 @@ export const register = async () => {
                             await job.moveToDelayed(Date.now() + delay, token);
                             await job.updateData({
                                 step: CheckSteps.BACKUP,
+                                firstReminderSent: job.data.firstReminderSent,
                                 checkDate: job.data.checkDate,
                                 userId: job.data.userId,
                                 backupDate: job.data.backupDate
