@@ -39,7 +39,14 @@ async function registerForPushNotificationsAsync(setToken: (token: string | unde
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
+            const { status } = await Notifications.requestPermissionsAsync({
+                android: {},
+                ios: {
+                    allowAlert: true,
+                    allowSound: true,
+                    allowCriticalAlerts: true,
+                }
+            });
             finalStatus = status;
         }
         if (finalStatus !== 'granted') {

@@ -2650,6 +2650,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expo/image-utils@npm:^0.3.22":
+  version: 0.3.23
+  resolution: "@expo/image-utils@npm:0.3.23"
+  dependencies:
+    "@expo/spawn-async": 1.5.0
+    chalk: ^4.0.0
+    fs-extra: 9.0.0
+    getenv: ^1.0.0
+    jimp-compact: 0.16.1
+    mime: ^2.4.4
+    node-fetch: ^2.6.0
+    parse-png: ^2.1.0
+    resolve-from: ^5.0.0
+    semver: 7.3.2
+    tempy: 0.3.0
+  checksum: 74057f8f963243a68bbc930406200cf203fe433d009dc937d0270b75bcfc77d3ac2cbbfcbf1e80d62682907bb6f371dd13b993c4930c01fcd8157dccd2aa6408
+  languageName: node
+  linkType: hard
+
 "@expo/image-utils@npm:^0.5.0":
   version: 0.5.1
   resolution: "@expo/image-utils@npm:0.5.1"
@@ -2844,6 +2863,15 @@ __metadata:
     debug: ^4.3.4
     source-map-support: ~0.5.21
   checksum: baac54bd5a800667253004cd097bd2f19538748cb95b133d581ec360fe25e1f1414b39c6a20c7de2f71c11c743abf849f9e1301ef051f6845f85ddbf7c4ac4c9
+  languageName: node
+  linkType: hard
+
+"@expo/spawn-async@npm:1.5.0":
+  version: 1.5.0
+  resolution: "@expo/spawn-async@npm:1.5.0"
+  dependencies:
+    cross-spawn: ^6.0.5
+  checksum: 5b144726f66426d9198aa07cca6944deab328369f806c0d30836a19a014d32106e8230c41dde7857a5a3f45f9381a0858df27edc3506be2b7e863fc024290442
   languageName: node
   linkType: hard
 
@@ -3370,9 +3398,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@logrocket/react-native@npm:^1.35.1":
-  version: 1.35.1
-  resolution: "@logrocket/react-native@npm:1.35.1"
+"@logrocket/react-native@npm:1.35.2":
+  version: 1.35.2
+  resolution: "@logrocket/react-native@npm:1.35.2"
   peerDependencies:
     expo: ">=45.0.0"
     react: "*"
@@ -3380,7 +3408,7 @@ __metadata:
   peerDependenciesMeta:
     expo:
       optional: true
-  checksum: a84c3e54c4f823eef067cb81a619556118396a738454adbda70b4c92acfc25f6f9b1fd6163cae32ae6540d226a644081ce69f0c93c8576324591acd5e05c1ec3
+  checksum: 54a1e9d76d3e2317ea5cfdcdfc045311b629ed42a0c58a8471c4386ddf44b9a12bbbc95ea6adf8417501e3f1a9dc6f352c2e5a4f97afa6de1d9ab4562708d2e2
   languageName: node
   linkType: hard
 
@@ -8662,7 +8690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^6.0.0":
+"cross-spawn@npm:^6.0.0, cross-spawn@npm:^6.0.5":
   version: 6.0.5
   resolution: "cross-spawn@npm:6.0.5"
   dependencies:
@@ -10254,7 +10282,7 @@ __metadata:
   resolution: "expo-app@workspace:apps/expo"
   dependencies:
     "@babel/core": ^7.24.3
-    "@logrocket/react-native": ^1.35.1
+    "@logrocket/react-native": 1.35.2
     "@react-native-async-storage/async-storage": 1.23.1
     "@react-native-community/datetimepicker": 8.0.1
     app: "*"
@@ -10272,6 +10300,7 @@ __metadata:
     expo-image: ~1.12.12
     expo-linear-gradient: ~13.0.2
     expo-linking: ~6.3.1
+    expo-notification-service-extension-plugin: ^1.0.0
     expo-notifications: ~0.28.9
     expo-router: 3.5.17
     expo-secure-store: ~13.0.1
@@ -10570,6 +10599,15 @@ __metadata:
   dependencies:
     invariant: ^2.2.4
   checksum: f634bafecc9cd3fa508ea5c6ae7b1dd19ee23471636a92f90c8cec009dabb60ed687811414112379f19033487e0d0990f88007d481cf9da178dcb5ac284c25e3
+  languageName: node
+  linkType: hard
+
+"expo-notification-service-extension-plugin@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "expo-notification-service-extension-plugin@npm:1.0.0"
+  dependencies:
+    "@expo/image-utils": ^0.3.22
+  checksum: 0ae6e7aea3e137fdb47454fe9167e7ef7b100e07a7ed37afdf095d75e1967ac1694f8e2ef5b1ff24577ce23716bd40cd1724099bca526ef8c22169e2bf063b9d
   languageName: node
   linkType: hard
 
@@ -14038,7 +14076,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime@npm:^2.4.1":
+"mime@npm:^2.4.1, mime@npm:^2.4.4":
   version: 2.6.0
   resolution: "mime@npm:2.6.0"
   bin:
@@ -17022,6 +17060,15 @@ __metadata:
     "@types/node-forge": ^1.3.0
     node-forge: ^1
   checksum: 38b91c56f1d7949c0b77f9bbe4545b19518475cae15e7d7f0043f87b1626710b011ce89879a88969651f650a19d213bb15b7d5b4c2877df9eeeff7ba8f8b9bfa
+  languageName: node
+  linkType: hard
+
+"semver@npm:7.3.2":
+  version: 7.3.2
+  resolution: "semver@npm:7.3.2"
+  bin:
+    semver: bin/semver.js
+  checksum: 692f4900dadb43919614b0df9af23fe05743051cda0d1735b5e4d76f93c9e43a266fae73cfc928f5d1489f022c5c0e65dfd2900fcf5b1839c4e9a239729afa7b
   languageName: node
   linkType: hard
 
