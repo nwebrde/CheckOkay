@@ -9,6 +9,7 @@ import { NewGuardNotification } from './notifications/ConcreteNotifications'
 import { StandardNotifier } from './notifications/ConcreteNotifiers'
 import { getMainSubmitters } from './notifications/NotificationSubmitters'
 import { Recipient } from '../entities/notifications/Notifications'
+import { toExternalUserImage } from '../adapters/db/users'
 
 const INVITATION_EXPIRATION_DAYS = 2
 
@@ -78,7 +79,7 @@ export const acceptInvitation = async (code: string, guardUserId: string) => {
             return false
         }
 
-        const notification = new NewGuardNotification(guard.name ?? guard.email, guard.image);
+        const notification = new NewGuardNotification(guard.name ?? guard.email, guard.image ? toExternalUserImage(guard.image) : null);
 
         const recipient: Recipient = {
             name: invitation.guardedUser.name!

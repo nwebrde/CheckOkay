@@ -2,7 +2,7 @@ import { db } from 'db'
 import { eq } from 'drizzle-orm'
 import { users } from 'db/schema/auth'
 import { CheckStateController } from '../entities/checks/CheckStateController'
-import { getLastCheckIn, toSeconds, updateCheckState } from '../adapters/db/users'
+import { getLastCheckIn, toExternalUserImage, toSeconds, updateCheckState } from '../adapters/db/users'
 import { Recipient } from '../entities/notifications/Notifications'
 import { CheckState } from 'app/lib/types/check'
 import { ReminderNotification, WarningNotification } from './notifications/ConcreteNotifications'
@@ -83,7 +83,7 @@ export const warn = async (userId: string, backup: boolean) => {
     const stateController = new CheckStateController(data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), data.state)
 
     if((!backup && stateController.needsWarning()) || (backup && stateController.needsBackupWarning())) {
-        const notification = new WarningNotification(data.name ?? data.email, userId, data.image, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!, data.currentCheckId!, data.nextRequiredCheckDate)
+        const notification = new WarningNotification(data.name ?? data.email, userId, data.image ? toExternalUserImage(data.image) : null, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!, data.currentCheckId!, data.nextRequiredCheckDate)
         const notifier = new WarningNotifier(userId, backup ? GuardType.BACKUP : GuardType.IMPORTANT, notification)
         await notifier.submit()
         await updateCheckState(userId, CheckState.WARNED)

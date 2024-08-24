@@ -51,13 +51,17 @@ export const toUser = (user: UserDB): User => {
         id: user.id,
         name: user.name ?? undefined,
         email: user.email,
-        image: user.image ? (process.env.S3_DOWNLOAD_URL + "/" + (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + user.image) : undefined,
+        image: user.image ? toExternalUserImage(user.image) : undefined,
         state: user.state,
         step: isLastCheckInByStep(user.lastManualCheck, user.lastStepCheck),
         lastCheckIn: getLastCheckIn(user.lastManualCheck, user.lastStepCheck),
         nextRequiredCheckIn: user.nextRequiredCheckDate ?? undefined,
         nextCheckInPossibleFrom: user.nextCheckInPossibleFrom ?? undefined
     }
+}
+
+export const toExternalUserImage = (internalPath: string) => {
+    return (process.env.S3_DOWNLOAD_URL + "/" + (process.env.S3_PROFILE_IMAGE_DIR ? (process.env.S3_PROFILE_IMAGE_DIR + "/") : "") + internalPath)
 }
 
 
