@@ -55,8 +55,8 @@ export class WarningNotification extends Notification {
     relatedRequiredCheckInDate: Date
     relatedCheckId: number // check id that fired this warning
 
-    constructor(guardedPersonName: string, guardedUserId: string, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
-        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, undefined, "warning")
+    constructor(guardedPersonName: string, guardedUserId: string, guardedUserImage: string | null, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
+        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, undefined, "warning", false, false, {name: guardedPersonName, image: guardedUserImage})
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
@@ -94,9 +94,9 @@ export class WarningNotification extends Notification {
 }
 
 export class NewGuardNotification extends Notification {
-    constructor(guardName: string) {
+    constructor(guardName: string, guardImage: string | null) {
         super(ConcreteNotificationType.NEW_GUARD_NOTIFICATION, `${guardName} passt auf dich auf`, `ab sofort passt ${guardName} mit auf dich auf. \n
-        War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`, undefined, undefined, "newGuard");
+        War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`, undefined, undefined, "newGuard", false, false, {name: guardName, image: guardImage});
     }
 
     async refresh() {
@@ -111,10 +111,10 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             result = new ReminderNotification(plainObject.userId, plainObject.nextRequiredCheckIn)
             break;
         case ConcreteNotificationType.WARNING_NOTIFICATION:
-            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.lastCheckIn, plainObject.relatedCheckId, plainObject.relatedRequiredCheckInDate)
+            result = new WarningNotification(plainObject.guardedPersonName, plainObject.guardedUserId, plainObject.sender.image, plainObject.lastCheckIn, plainObject.relatedCheckId, plainObject.relatedRequiredCheckInDate)
             break;
         case ConcreteNotificationType.NEW_GUARD_NOTIFICATION:
-            result = new NewGuardNotification(plainObject.guardName)
+            result = new NewGuardNotification(plainObject.guardName, plainObject.sender.image)
             break;
         default:
             throw new Error("Concrete notification is not correctly implemented")

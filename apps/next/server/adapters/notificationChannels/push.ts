@@ -53,7 +53,11 @@ export const send = async (
         ttl: 604800, // one week
         data: {
             "criticalAlert": notification.isCritical ? "1" : "0",
-            "timeSensitive": notification.isSensitive ? "1" : "0"
+            "timeSensitive": notification.isSensitive ? "1" : "0",
+            "sender": {
+                "name": notification.sender?.name ?? "",
+                "image": notification.sender?.image ?? ""
+            }
         }
     };
 

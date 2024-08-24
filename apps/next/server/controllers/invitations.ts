@@ -70,9 +70,15 @@ export const acceptInvitation = async (code: string, guardUserId: string) => {
     .where(eq(invitations.code, code))
 
     if (insertRes[0].affectedRows > 0) {
-        const notification = new NewGuardNotification((await db.query.users.findFirst({
+        const guard = await db.query.users.findFirst({
             where: eq(users.id, guardUserId)
-        }))?.name!);
+        });
+
+        if(!guard) {
+            return false
+        }
+
+        const notification = new NewGuardNotification(guard.name ?? guard.email, guard.image);
 
         const recipient: Recipient = {
             name: invitation.guardedUser.name!

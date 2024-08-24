@@ -4,6 +4,11 @@ export type Recipient = {
     name: string;
 }
 
+export type Sender = {
+    name: string;
+    image: string | null;
+}
+
 export abstract class Notification {
     public notificationType: ConcreteNotificationType
     public subject: string
@@ -15,8 +20,10 @@ export abstract class Notification {
 
     public isCritical: boolean
     public isSensitive: boolean
+    public sender: Sender | undefined
 
-    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string, isCritical = false, isSensitive = false) {
+
+    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string, isCritical = false, isSensitive = false, sender?: Sender) {
         this.notificationType = notificationType
         this.subject = subject
         this.text = text
@@ -25,6 +32,7 @@ export abstract class Notification {
         this.pushCategoryIdentifier = pushCategoryIdentifier
         this.isCritical = isCritical
         this.isSensitive = isSensitive
+        this.sender = sender
     }
 
     /**
