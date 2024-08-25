@@ -18,12 +18,12 @@ export function Notifications() {
         if (emailState) {
             // deregister
             emailNotificationMutation.mutate({
-                state: emailState,
+                state: false,
             })
             setEmailState(false)
         } else {
             emailNotificationMutation.mutate({
-                state: emailState,
+                state: true,
             })
             setEmailState(true)
         }
