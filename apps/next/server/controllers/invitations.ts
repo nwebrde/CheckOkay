@@ -85,7 +85,7 @@ export const acceptInvitation = async (code: string, guardUserId: string) => {
             name: invitation.guardedUser.name!
         }
         
-        await (new StandardNotifier(notification, await getMainSubmitters(recipient, undefined, invitation.guardedUser.email, invitation.guardedUser.notificationChannels)).submit())
+        await (new StandardNotifier(notification, await getMainSubmitters(recipient, undefined, invitation.guardedUser.email, invitation.guardedUser.notificationChannels, !invitation.guardedUser.notificationsByEmail)).submit())
 
         return true
     }

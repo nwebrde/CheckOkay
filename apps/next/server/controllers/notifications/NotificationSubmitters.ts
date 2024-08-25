@@ -42,15 +42,17 @@ export class PushSubmitter implements NotificationSubmitter {
  * @param recipient
  * @param includedTypes ChannelTypes in this array will be included in the returned submitters
  * @param onlyPrimaryEmail If true, only the primary mail address will be added to the returned submitters and all other email addresses are omitted. Only applicable if includedTypes contains EMAIL
- * @param userId Either userId or (notificationChannels & primaryEmailAddress) is required
- * @param primaryEmailAddress Either userId or (notificationChannels & primaryEmailAddress) is required
- * @param notificationChannels Either userId or (notificationChannels & primaryEmailAddress) is required
+ * @param userId Either userId or (notificationChannels & primaryEmailAddress & disabledProfileEmailNotifications) is required
+ * @param primaryEmailAddress Either userId or (notificationChannels & primaryEmailAddress & disabledProfileEmailNotifications) is required
+ * @param notificationChannels Either userId or (notificationChannels & primaryEmailAddress & disabledProfileEmailNotifications) is required
+ * @param disabledProfileEmailNotifications
  */
-export const getSubmitters = async (recipient: Recipient, includedTypes: ChannelType[], onlyPrimaryEmail: boolean, userId?: string, primaryEmailAddress?: string, notificationChannels?: ChannelDB[]) => {
+export const getSubmitters = async (recipient: Recipient, includedTypes: ChannelType[], onlyPrimaryEmail: boolean, userId?: string, primaryEmailAddress?: string, notificationChannels?: ChannelDB[], disabledProfileEmailNotifications = false) => {
     const ERROR_PREFIX = "Error while parsing notification channel from DB: "
 
     let channels = notificationChannels
     let primaryMail = primaryEmailAddress
+    let disableProfileMail = disabledProfileEmailNotifications
 
     if (!channels) {
         if (!userId) {
@@ -69,6 +71,7 @@ export const getSubmitters = async (recipient: Recipient, includedTypes: Channel
 
         channels = user.notificationChannels
         primaryMail = user.email
+        disableProfileMail = !user.notificationsByEmail
     }
 
     const submitters: NotificationSubmitter[] = [];
@@ -77,7 +80,9 @@ export const getSubmitters = async (recipient: Recipient, includedTypes: Channel
         if(!primaryMail) {
             throw new Error(ERROR_PREFIX + "primary email address must be provided")
         }
-        submitters.push(new EmailSubmitter(recipient, primaryMail))
+        if(!disabledProfileEmailNotifications) {
+            submitters.push(new EmailSubmitter(recipient, primaryMail))
+        }
     }
 
     const pushTokens: string[] = [];
@@ -115,13 +120,23 @@ export const getSubmitters = async (recipient: Recipient, includedTypes: Channel
  * @param primaryEmailAddress
  * @param notificationChannels
  */
-export const getAllSubmitters = async (recipient: Recipient, userId?: string, primaryEmailAddress?: string, notificationChannels?: ChannelDB[]) => {
-    return await getSubmitters(recipient, [ChannelType.EMAIL, ChannelType.PUSH], false, userId, primaryEmailAddress, notificationChannels)
+export const getAllSubmitters = async (recipient: Recipient, userId?: string, primaryEmailAddress?: string, notificationChannels?: ChannelDB[], disabledProfileEmailNotifications = false) => {
+    return await getSubmitters(recipient, [ChannelType.EMAIL, ChannelType.PUSH], false, userId, primaryEmailAddress, notificationChannels, disabledProfileEmailNotifications)
 }
 
 /**
  * Returns only the primary mail submitter and submitters for push channels of a user
  */
-export const getMainSubmitters = async (recipient: Recipient, userId?: string, primaryEmailAddress?: string, notificationChannels?: ChannelDB[]) => {
-    return await getSubmitters(recipient, [ChannelType.EMAIL, ChannelType.PUSH], true, userId, primaryEmailAddress, notificationChannels)
+export const getMainSubmitters = async (recipient: Recipient, userId?: string, primaryEmailAddress?: string, notificationChannels?: ChannelDB[], disabledProfileEmailNotifications = false) => {
+    return await getSubmitters(recipient, [ChannelType.EMAIL, ChannelType.PUSH], true, userId, primaryEmailAddress, notificationChannels, disabledProfileEmailNotifications)
+}
+
+/**
+ * Returns only push channels of a user
+ * @param recipient
+ * @param userId
+ * @param notificationChannels
+ */
+export const getPushSubmitters = async (recipient: Recipient, userId?: string, notificationChannels?: ChannelDB[]) => {
+    return await getSubmitters(recipient, [ChannelType.PUSH], true, userId, undefined, notificationChannels)
 }

@@ -1,0 +1,724 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "id": "cad49d0a-01fb-4cf9-bf8b-448f2af8c5bb",
+  "prevId": "2beadf5b-e2a3-46ec-b811-03a0bf802c9b",
+  "tables": {
+    "bwell_account": {
+      "name": "bwell_account",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider": {
+          "name": "provider",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "access_token": {
+          "name": "access_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "token_type": {
+          "name": "token_type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "session_state": {
+          "name": "session_state",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "bwell_account_provider_providerAccountId_pk": {
+          "name": "bwell_account_provider_providerAccountId_pk",
+          "columns": [
+            "provider",
+            "providerAccountId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_session": {
+      "name": "bwell_session",
+      "columns": {
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "userId_idx": {
+          "name": "userId_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "bwell_session_sessionToken": {
+          "name": "bwell_session_sessionToken",
+          "columns": [
+            "sessionToken"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_user": {
+      "name": "bwell_user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "notificationsByEmail": {
+          "name": "notificationsByEmail",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp(3)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP(3)"
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "nextRequiredCheckDate": {
+          "name": "nextRequiredCheckDate",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "nextCheckInPossibleFrom": {
+          "name": "nextCheckInPossibleFrom",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "currentCheckId": {
+          "name": "currentCheckId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lastManualCheck": {
+          "name": "lastManualCheck",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lastStepCheck": {
+          "name": "lastStepCheck",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "state": {
+          "name": "state",
+          "type": "enum('OK','WARNED','BACKUP','NOTIFIED')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'OK'"
+        },
+        "notifyBackupAfter": {
+          "name": "notifyBackupAfter",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'03:00' CHECK (HOUR(notifyBackupAfter) < 24)"
+        },
+        "reminderBeforeCheck": {
+          "name": "reminderBeforeCheck",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'00:25' CHECK (HOUR(reminderBeforeCheck) < 24)"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "bwell_user_id": {
+          "name": "bwell_user_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_verificationToken": {
+      "name": "bwell_verificationToken",
+      "columns": {
+        "identifier": {
+          "name": "identifier",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "bwell_verificationToken_identifier_token_pk": {
+          "name": "bwell_verificationToken_identifier_token_pk",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_checks": {
+      "name": "bwell_checks",
+      "columns": {
+        "guardedUserId": {
+          "name": "guardedUserId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "time": {
+          "name": "time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'00:00' CHECK (HOUR(time) < 24)"
+        },
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_checks_guardedUserId_bwell_user_id_fk": {
+          "name": "bwell_checks_guardedUserId_bwell_user_id_fk",
+          "tableFrom": "bwell_checks",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "guardedUserId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_checks_guardedUserId_time_pk": {
+          "name": "bwell_checks_guardedUserId_time_pk",
+          "columns": [
+            "guardedUserId",
+            "time"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "bwell_checks_id_unique": {
+          "name": "bwell_checks_id_unique",
+          "columns": [
+            "id"
+          ]
+        }
+      }
+    },
+    "bwell_guards": {
+      "name": "bwell_guards",
+      "columns": {
+        "guardedUserId": {
+          "name": "guardedUserId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "guardUserId": {
+          "name": "guardUserId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "enum('important','backup')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_guards_guardedUserId_bwell_user_id_fk": {
+          "name": "bwell_guards_guardedUserId_bwell_user_id_fk",
+          "tableFrom": "bwell_guards",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "guardedUserId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "bwell_guards_guardUserId_bwell_user_id_fk": {
+          "name": "bwell_guards_guardUserId_bwell_user_id_fk",
+          "tableFrom": "bwell_guards",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "guardUserId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_guards_guardUserId_guardedUserId_pk": {
+          "name": "bwell_guards_guardUserId_guardedUserId_pk",
+          "columns": [
+            "guardUserId",
+            "guardedUserId"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_invitations": {
+      "name": "bwell_invitations",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "guardedUserId": {
+          "name": "guardedUserId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_invitations_guardedUserId_bwell_user_id_fk": {
+          "name": "bwell_invitations_guardedUserId_bwell_user_id_fk",
+          "tableFrom": "bwell_invitations",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "guardedUserId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_invitations_code": {
+          "name": "bwell_invitations_code",
+          "columns": [
+            "code"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_notificationChannel": {
+      "name": "bwell_notificationChannel",
+      "columns": {
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "enum('EMAIL','PUSH')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_notificationChannel_userId_bwell_user_id_fk": {
+          "name": "bwell_notificationChannel_userId_bwell_user_id_fk",
+          "tableFrom": "bwell_notificationChannel",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_notificationChannel_userId_address_pk": {
+          "name": "bwell_notificationChannel_userId_address_pk",
+          "columns": [
+            "userId",
+            "address"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_authCodes": {
+      "name": "bwell_authCodes",
+      "columns": {
+        "authCode": {
+          "name": "authCode",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "clientId": {
+          "name": "clientId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'all'"
+        },
+        "codeChallenge": {
+          "name": "codeChallenge",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "codeChallengeMethod": {
+          "name": "codeChallengeMethod",
+          "type": "enum('plain','S256')",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "redirectUri": {
+          "name": "redirectUri",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "issuedAt": {
+          "name": "issuedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "expiresAt": {
+          "name": "expiresAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_authCodes_userId_bwell_user_id_fk": {
+          "name": "bwell_authCodes_userId_bwell_user_id_fk",
+          "tableFrom": "bwell_authCodes",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_authCodes_authCode": {
+          "name": "bwell_authCodes_authCode",
+          "columns": [
+            "authCode"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bwell_refreshTokens": {
+      "name": "bwell_refreshTokens",
+      "columns": {
+        "refreshToken": {
+          "name": "refreshToken",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "clientId": {
+          "name": "clientId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'all'"
+        },
+        "issuedAt": {
+          "name": "issuedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "expiresAt": {
+          "name": "expiresAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bwell_refreshTokens_userId_bwell_user_id_fk": {
+          "name": "bwell_refreshTokens_userId_bwell_user_id_fk",
+          "tableFrom": "bwell_refreshTokens",
+          "tableTo": "bwell_user",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bwell_refreshTokens_refreshToken": {
+          "name": "bwell_refreshTokens_refreshToken",
+          "columns": [
+            "refreshToken"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

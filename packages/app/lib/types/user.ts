@@ -7,7 +7,8 @@ export const ZUser = ZProfile.merge(z.object({
     lastCheckIn: z.date().optional(),
     step: z.boolean().optional(),
     nextRequiredCheckIn: z.date().optional(),
-    nextCheckInPossibleFrom: z.date().optional()
+    nextCheckInPossibleFrom: z.date().optional(),
+    notificationsByEmail: z.boolean()
 }));
 
 export type User = z.infer<typeof ZUser>;

@@ -42,6 +42,11 @@ export const setUserName = async (userId: string, name: string) => {
     return res[0].affectedRows > 0
 }
 
+export const setEmailNotifications = async (userId: string, state: boolean) => {
+    const res = await db.update(users).set({notificationsByEmail: state}).where(eq(users.id, userId))
+    return res[0].affectedRows > 0
+}
+
 /**
  * Converts a DB object to corresponding User type
  * @param user
@@ -56,7 +61,8 @@ export const toUser = (user: UserDB): User => {
         step: isLastCheckInByStep(user.lastManualCheck, user.lastStepCheck),
         lastCheckIn: getLastCheckIn(user.lastManualCheck, user.lastStepCheck),
         nextRequiredCheckIn: user.nextRequiredCheckDate ?? undefined,
-        nextCheckInPossibleFrom: user.nextCheckInPossibleFrom ?? undefined
+        nextCheckInPossibleFrom: user.nextCheckInPossibleFrom ?? undefined,
+        notificationsByEmail: user.notificationsByEmail
     }
 }
 

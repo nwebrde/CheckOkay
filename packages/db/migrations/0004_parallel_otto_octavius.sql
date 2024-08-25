@@ -1,0 +1,1 @@
+ALTER TABLE `bwell_user` ADD `notificationsByEmail` boolean DEFAULT true NOT NULL;

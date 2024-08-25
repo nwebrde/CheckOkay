@@ -1,6 +1,7 @@
 import type { AdapterAccount } from '@auth/core/adapters'
 import { relations, sql } from 'drizzle-orm'
 import {
+    boolean,
     datetime,
     index,
     int,
@@ -9,7 +10,7 @@ import {
     text,
     time,
     timestamp,
-    varchar,
+    varchar
 } from 'drizzle-orm/mysql-core'
 
 import { mySqlTable } from './_table'
@@ -22,6 +23,7 @@ export const users = mySqlTable('user', {
     id: varchar('id', { length: 255 }).notNull().primaryKey(),
     name: varchar('name', { length: 255 }),
     email: varchar('email', { length: 255 }).notNull(),
+    notificationsByEmail: boolean('notificationsByEmail').default(true).notNull(),
     emailVerified: timestamp('emailVerified', {
         mode: 'date',
         fsp: 3,

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { deleteCurrentProfileImage, getUploadUrl, setProfileImage } from '../controllers/profileImage'
 import { TRPCError } from '@trpc/server'
 import { NextResponse } from 'next/server'
-import { setUserName } from '../adapters/db/users'
+import { setEmailNotifications, setUserName } from '../adapters/db/users'
 import { deleteUser } from '../controllers/user'
 
 export const userRouter = router({
@@ -51,6 +51,16 @@ export const userRouter = router({
     }),
     deleteUser: authorizedProcedure.mutation(async (opts) => {
         const result = await deleteUser(opts.ctx.userId!)
+        if (!result) {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+            })
+        }
+    }),
+    setEmailNotifications: authorizedProcedure.input(z.object({
+        state: z.boolean()
+    })).mutation(async (opts) => {
+        const result = await setEmailNotifications(opts.ctx.userId!, opts.input.state)
         if (!result) {
             throw new TRPCError({
                 code: 'INTERNAL_SERVER_ERROR',

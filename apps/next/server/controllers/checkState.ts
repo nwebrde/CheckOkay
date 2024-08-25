@@ -7,7 +7,7 @@ import { Recipient } from '../entities/notifications/Notifications'
 import { CheckState } from 'app/lib/types/check'
 import { ReminderNotification, WarningNotification } from './notifications/ConcreteNotifications'
 import { StandardNotifier, WarningNotifier } from './notifications/ConcreteNotifiers'
-import { getMainSubmitters } from './notifications/NotificationSubmitters'
+import { getMainSubmitters, getPushSubmitters } from './notifications/NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
 
 export class UserDeleted extends Error {
@@ -44,7 +44,17 @@ export const remind = async (userId: string, criticalReminder: boolean) => {
             name: data.name ?? ""
         }
         const notification = new ReminderNotification(data.id, data.nextRequiredCheckDate, criticalReminder)
-        const notifier = new StandardNotifier(notification, await getMainSubmitters(recipient, undefined, data.email, data.notificationChannels))
+
+        let submitters = undefined
+        if(criticalReminder) {
+            submitters = await getMainSubmitters(recipient, undefined, data.email, data.notificationChannels, !data.notificationsByEmail)
+        }
+        else {
+            submitters = await getPushSubmitters(recipient, undefined, data.notificationChannels)
+        }
+
+        const notifier = new StandardNotifier(notification, submitters)
+
         await notifier.submit()
         await updateCheckState(userId, CheckState.NOTIFIED)
     }

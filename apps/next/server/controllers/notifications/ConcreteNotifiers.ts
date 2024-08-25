@@ -145,7 +145,7 @@ export class WarningNotifier extends RepeatingNotifier {
                     name: guard.guardUser.name!
                 }
 
-                submitters.push(...await getAllSubmitters(recipient, undefined, guard.guardUser.email, guard.guardUser.notificationChannels))
+                submitters.push(...await getAllSubmitters(recipient, undefined, guard.guardUser.email, guard.guardUser.notificationChannels, !guard.guardUser.notificationsByEmail))
             }
         }
 
