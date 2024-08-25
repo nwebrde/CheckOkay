@@ -12,6 +12,8 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { VSpacer } from 'app/design/layout'
+import { BlurView, ExperimentalBlurMethod } from 'expo-blur';
+
 
 export function HomeScreen() {
     return (
@@ -20,9 +22,10 @@ export function HomeScreen() {
                     <CheckIn />
                 </View>
                 <VSpacer />
-                <View className="bg-white">
-                    <Text type="H1">Zustand deiner Freunde</Text>
-                </View>
+            <BlurView intensity={85} tint="light" experimentalBlurMethod="dimezisBlurView">
+                <Text type="H1">Zustand deiner Freunde</Text>
+            </BlurView>
+
                 <Guarded />
         </Screen>
     )

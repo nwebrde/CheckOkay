@@ -25,7 +25,7 @@
       "bundleIdentifier": "de.nweber.checkokay",
       "supportsTablet": true,
       "usesAppleSignIn": true,
-      "buildNumber": "31"
+      "buildNumber": "32"
     },
     "android": {
       "package": "de.nweber.checkokay",

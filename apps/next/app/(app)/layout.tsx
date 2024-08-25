@@ -83,6 +83,13 @@ export default function RootLayout({
         return true
     }
 
+    const appbarVisible = () => {
+        if(path.includes("/auth")) {
+            return false
+        }
+        return true
+    }
+
     const width = getWidthForPath(path)
 
     return (
@@ -123,7 +130,9 @@ export default function RootLayout({
                                 {children}
                             </View>
                         </View>
+            {appbarVisible() &&
             <AppBanner />
+            }
         </>
     )
 }
