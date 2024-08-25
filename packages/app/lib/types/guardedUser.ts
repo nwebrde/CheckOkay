@@ -7,6 +7,7 @@ import {ZProfile} from "app/lib/types/userProfile";
 export const ZGuarded = ZProfile.merge(z.object({
     since: z.date(),
     priority: z.nativeEnum(GuardType),
+    pausedForNextReqCheckInDate: z.date().optional(),
     state: z.nativeEnum(CheckState),
     lastCheckIn: z.date().optional(),
     step: z.boolean().optional(),

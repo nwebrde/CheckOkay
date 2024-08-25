@@ -119,6 +119,7 @@ export const toGuarded = (guarded: GuardWithGuardedUserDB): Guarded => {
         step: guardedUser.step,
         lastCheckIn: guardedUser.lastCheckIn,
         nextRequiredCheckIn: guardedUser.nextRequiredCheckIn,
+        pausedForNextReqCheckInDate: guarded.pausedForNextReqCheckInDate ?? undefined,
         id: guardedUser.id,
         email: guardedUser.email,
         name: guardedUser.name,
