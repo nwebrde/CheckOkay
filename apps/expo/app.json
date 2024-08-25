@@ -2,7 +2,7 @@
   "expo": {
     "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
     "scheme": "checkokay",
     "platforms": [
@@ -13,7 +13,9 @@
     "ios": {
       "infoPlist": {
         "com.apple.developer.usernotifications.critical-alerts": 1,
-        "NSUserActivityTypes": ["INSendMessageIntent"]
+        "NSUserActivityTypes": [
+          "INSendMessageIntent"
+        ]
       },
       "entitlements": {
         "com.apple.developer.usernotifications.critical-alerts": true,
@@ -23,7 +25,7 @@
       "bundleIdentifier": "de.nweber.checkokay",
       "supportsTablet": true,
       "usesAppleSignIn": true,
-      "buildNumber": "24"
+      "buildNumber": "26"
     },
     "android": {
       "package": "de.nweber.checkokay",

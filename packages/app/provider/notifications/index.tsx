@@ -10,6 +10,7 @@ import Constants from 'expo-constants'
 import { Button } from 'app/design/button'
 import * as Linking from 'expo-linking';
 import { VSpacer } from 'app/design/layout'
+import { openAppSettings } from 'app/lib/notifications/permissionsUtil'
 
 const NotificationsContext = React.createContext<NotificationsContextType | null>(null)
 
@@ -161,27 +162,22 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
 
     const sheetRef = useRef<BottomSheetMethods>(null);
 
-
-    const openAppSettings = () => {
-        Linking.openSettings()
-    }
-
     return (
         <NotificationsContext.Provider value={value}>
             <>
                 {props.children}
                 <BottomSheet ref={sheetRef} style={styles.container}>
-                    <View className="bg-white w-full h-full p-2">
+                    <View className="bg-white w-full p-2 items-center flex flex-col">
                         <Text type="H1">
                             Aktiviere Benachrichtigungen in den Einstellungen
                         </Text>
                         <Text>
                             Damit dich CheckOkay benachrichtigen kann, musst du in den Einstellungen von deinem Gerät Benachrichtigungen aktivieren. Navigiere dazu zu Einstellungen > Mitteilungen > CheckOkay
                         </Text>
-                        <View className="mt-10 w-1/2">
+                        <View className="mt-10 mb-10">
                             <Button  onClick={openAppSettings} text="Öffne Einstellungen" />
                         </View>
-
+                        <VSpacer />
                     </View>
 
                 </BottomSheet>

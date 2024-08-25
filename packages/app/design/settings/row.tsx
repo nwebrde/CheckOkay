@@ -5,7 +5,7 @@ import { cn } from 'app/lib/utils'
 import { StyledLink, StyledPressable } from 'app/design/button'
 import { useRelativePush } from 'app/lib/routing/push'
 import Link from 'app/lib/routing/Link'
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 type Props = {
     label: string
@@ -16,11 +16,12 @@ type Props = {
     active: boolean // whether current item is selected
     link: string | undefined, // link to page on click
     linkTitle: string | undefined, // placed left to the chevron
+    linkIcon: React.ReactElement,
     useRelative: boolean,
     onPress: (() => void) | undefined
 }
 
-function Row({children, headerChild, label, description, separator = true, link, linkTitle, active = false}: Props) {
+function Row({children, headerChild, label, description, separator = true, link, onPress, linkTitle, linkIcon = <ChevronRight className="text-[#c9ba97] stroke-2" />, active = false}: Props) {
     return (
         <View className={cn(
             'flex p-3 flex-col gap-2',
@@ -41,12 +42,13 @@ function Row({children, headerChild, label, description, separator = true, link,
                     </View>
                 }
 
-                {(link && !active) &&
+                {((link || onPress) && !active) &&
                     <View className="flex flex-row w-fit max-w-[75%]">
                         {linkTitle &&
                             <Text type="unstyled" className="w-fit font-semibold text-lg text-[#c9ba97]">{linkTitle}</Text>
                         }
-                        <ChevronRight className="text-[#c9ba97] stroke-2" />
+
+                        {linkIcon}
                     </View>
                 }
             </View>
@@ -63,25 +65,25 @@ function Row({children, headerChild, label, description, separator = true, link,
     )
 }
 
-export function SettingsRow({children, headerChild, label, description, separator = true, link, linkTitle, useRelative = true, active = false, onPress}: Props) {
+export function SettingsRow({children, headerChild, label, description, separator = true, link, linkTitle, linkIcon, useRelative = true, active = false, onPress}: Props) {
 
     return (
         <>
             {(link && !active) &&
             <StyledLink className="active:bg-white hover:bg-white" useRelative={useRelative} href={link}>
-                <Row headerChild={headerChild} label={label} separator={separator} active={active} link={link} linkTitle={linkTitle} description={description}>
+                <Row headerChild={headerChild} label={label} separator={separator} active={active} link={link} linkTitle={linkTitle} linkIcon={linkIcon} description={description}>
                     {children}
                 </Row>
             </StyledLink>
             }
             {((!link && !onPress) || active) &&
-                <Row headerChild={headerChild} label={label} separator={separator} active={active} link={link} linkTitle={linkTitle} description={description}>
+                <Row headerChild={headerChild} label={label} separator={separator} active={active} link={link} linkTitle={linkTitle} linkIcon={linkIcon} description={description}>
                     {children}
                 </Row>
             }
             {(onPress) &&
                 <StyledPressable className="active:bg-white hover:bg-white" onPress={onPress}>
-                    <Row headerChild={headerChild} label={label} separator={separator} active={active} link={link} linkTitle={linkTitle} description={description}>
+                    <Row headerChild={headerChild} label={label} separator={separator} active={active} link={link} onPress={onPress} linkTitle={linkTitle} linkIcon={linkIcon} description={description}>
                         {children}
                     </Row>
                 </StyledPressable>

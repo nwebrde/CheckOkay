@@ -115,9 +115,9 @@ export function PublicProfileScreen() {
                     <SettingsRow headerChild={nameLoading ? <ActivityIndicator /> : (nameEditing ? <HeaderLink title="Speichern" icon={<></>} /> : <></>)} separator={true} label="Name" description="Gebe einen Namen an, der deinen Beschützern angezeigt werden soll">
                         <Input className="min-w-full w-full" value={name} onChangeText={setName} onFocus={() => setNameEditing(true)} onBlur={changeName} />
                     </SettingsRow>
-                    <SettingsRow onPress={pickImage} headerChild={loading ? <ActivityIndicator /> : <HeaderLink title="" icon={<Photo className="stroke-2 text-primary" />} />} separator={userQuery.data?.image != undefined} label="Neues Profilbild auswählen" description="Wähle ein Profilbild aus, damit dich deine Beschützer leichter erkennen" />
+                    <SettingsRow onPress={pickImage} linkIcon={loading ? <ActivityIndicator /> : <Photo className="stroke-2 text-primary" />} separator={userQuery.data?.image != undefined} label="Neues Profilbild auswählen" description="Wähle ein Profilbild aus, damit dich deine Beschützer leichter erkennen" />
                     {(userQuery.data?.image) &&
-                        <SettingsRow headerChild={<HeaderLink title="" icon={deleteLoading ? <ActivityIndicator /> : <Trash className="stroke-2 text-primary" />} />} label="Profilbild löschen" separator={false} onPress={deleteImage} />
+                        <SettingsRow linkIcon={deleteLoading ? <ActivityIndicator /> : <Trash className="stroke-2 text-primary" />} label="Profilbild löschen" separator={false} onPress={deleteImage} />
                     }
                 </SettingsGroup>
             </DismissKeyboardView>

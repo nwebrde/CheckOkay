@@ -22,8 +22,10 @@ export function TimePicker({hour, minute, displayTimeInLocalFormat, minMinutes =
             onChange(utc.hour, utc.minute)
         }
         else {
-            if(hour == 0 && minute < minMinutes)
-            onChange(hour, minMinutes)
+            if(hour == 0 && minute < minMinutes) {
+                onChange(hour, minMinutes)
+            }
+            onChange(hour, minute)
         }
         setHourIntern(displayTimeInLocalFormat ? localToUTC(hour, minute).hour : hour)
     }
