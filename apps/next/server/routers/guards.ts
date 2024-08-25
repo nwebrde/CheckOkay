@@ -71,10 +71,10 @@ export const guardsRouter = router({
             return result
         }),
     checkInForGuardedUser: authorizedProcedure.input(z.object({
-        guradedUserId: z.string(),
+        guardedUserId: z.string(),
     })).mutation(async (opts) => {
-        if(await hasGuardedUser(opts.ctx.userId!, opts.input.guradedUserId)) {
-            await checkIn(opts.input.guradedUserId, false)
+        if(await hasGuardedUser(opts.ctx.userId!, opts.input.guardedUserId)) {
+            await checkIn(opts.input.guardedUserId, false)
         }
         else {
             throw new TRPCError({
@@ -83,10 +83,10 @@ export const guardsRouter = router({
         }
     }),
     pauseWarningsForGuardedUser: authorizedProcedure.input(z.object({
-        guradedUserId: z.string(),
+        guardedUserId: z.string(),
         pause: z.boolean()
     })).output(z.boolean()).mutation(async (opts) => {
-        const result = await pauseWarningsForGuardedUser(opts.ctx.userId!, opts.input.guradedUserId, opts.input.pause)
+        const result = await pauseWarningsForGuardedUser(opts.ctx.userId!, opts.input.guardedUserId, opts.input.pause)
 
         if (!result) {
             throw new TRPCError({

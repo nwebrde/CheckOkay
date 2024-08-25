@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'app/design/view'
 import { trpc } from 'app/provider/trpc-client'
-import { StyledPressable } from 'app/design/button'
+import { Button, StyledPressable } from 'app/design/button'
 import { Text } from 'app/design/typography'
 import { Card, VSpacer } from 'app/design/layout'
 import Moment from 'react-moment'
@@ -9,13 +9,65 @@ import {CheckState} from "app/lib/types/check";
 import {Guarded} from "app/lib/types/guardedUser";
 import { AvatarName } from 'app/features/user/AvatarName'
 import { XMark } from 'app/design/icons'
+import { ActivityIndicator } from 'react-native'
+import * as Burnt from 'burnt'
+import { clsx } from 'clsx'
 
 const renderItem = ({ item }: { item: Guarded }) => {
     const deleteMutation = trpc.guards.deleteGuardedUser.useMutation()
+    const checkIn = trpc.guards.checkInForGuardedUser.useMutation()
+    const pause =  trpc.guards.pauseWarningsForGuardedUser.useMutation()
+
+
     const remove = () => {
         deleteMutation.mutate({
             guardedUserId: item.id,
         })
+    }
+
+    const checkGuardedIn = async () => {
+        await checkIn.mutateAsync({
+            guardedUserId: item.id
+        })
+        Burnt.toast({
+            title: item.name + " ist zurückgemeldet", // required
+
+            preset: "done", // or "error", "none", "custom"
+
+            haptic: "success", // or "success", "warning", "error"
+
+            duration: 2, // duration in seconds
+
+            shouldDismissByDrag: true,
+
+            from: "top", // "top" or "bottom"
+        });
+    }
+
+    const isActive = () => {
+        return item.pausedForNextReqCheckInDate === undefined ||
+        (new Date(item.pausedForNextReqCheckInDate)).getTime() < (new Date(item.nextRequiredCheckIn!)).getTime()
+    }
+
+    const pauseGuard = async () => {
+        const isActiveNow = isActive()
+        await pause.mutateAsync({
+            guardedUserId: item.id,
+            pause: isActiveNow
+        })
+        Burnt.toast({
+            title: "Warnungen für " + item.name + (isActiveNow ? " pausiert" : "  fortgesetzt"), // required
+
+            preset: "done", // or "error", "none", "custom"
+
+            haptic: "success", // or "success", "warning", "error"
+
+            duration: 2, // duration in seconds
+
+            shouldDismissByDrag: true,
+
+            from: "top", // "top" or "bottom"
+        });
     }
 
     return (
@@ -42,7 +94,34 @@ const renderItem = ({ item }: { item: Guarded }) => {
                     <XMark className="text-red-500 stroke-red-500 stroke-2" />
                 </StyledPressable>
             </View>
-            <VSpacer />
+
+            <View className="mb-8" />
+
+            {item.state == CheckState.WARNED &&
+                <>
+
+                <View className="flex flex-row grow mb-2 gap-2">
+                    <StyledPressable className="bg-primary rounded-xl p-2 grow" onPress={checkGuardedIn}>
+                        {checkIn.isLoading &&
+                        <ActivityIndicator />
+                        }
+                        {!checkIn.isLoading &&
+                        <Text className="w-full text-lime-200 font-bold text-center">Alles ok &#128077;</Text>
+                        }
+                    </StyledPressable>
+                    <StyledPressable className={clsx("rounded-xl p-2 grow", isActive() ? "bg-white" : "bg-amber-600")} onPress={pauseGuard}>
+                        {pause.isLoading &&
+                            <ActivityIndicator />
+                        }
+                        {!pause.isLoading &&
+                            <Text className={clsx("w-full text-center", isActive() ? "" : "text-amber-200")}>Warnungen {isActive() ? "pausieren" : "fortsetzen"}</Text>
+                        }
+                    </StyledPressable>
+                </View>
+                </>
+            }
+
+
             {item.lastCheckIn && (
                 <Text className="font-medium">
                     Letzte {item.step ? 'automatische ' : 'manuelle '}
