@@ -1,0 +1,1 @@
+ALTER TABLE `bwell_guards` ADD `pausedForNextReqCheckInDate` datetime;
