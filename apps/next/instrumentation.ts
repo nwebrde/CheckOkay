@@ -147,7 +147,7 @@ export const register = async () => {
                 switch (job.name) {
                     case STANDARD_QUEUE_JOBS.REPEATING_NOTIFIER:
                         // TODO switch for different repeating notifier implementations
-                        const notifier = new WarningNotifier(job.data.notifier.userId, job.data.notifier.guardType, toConcreteNotification(job.data.notifier.notification), job.data.notifier.currentRound)
+                        const notifier = new WarningNotifier(job.data.notifier.userId, job.data.notifier.guardType, job.data.notifier.nextRequiredCheckIn, toConcreteNotification(job.data.notifier.notification), job.data.notifier.currentRound)
                         await notifier.submit()
                         if(notifier.shouldReschedule()) {
                             await job.moveToDelayed(Date.now() + 1000 * notifier.getRescheduleDelayInSeconds(), token);

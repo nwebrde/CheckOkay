@@ -80,7 +80,7 @@ export const getSubmitters = async (recipient: Recipient, includedTypes: Channel
         if(!primaryMail) {
             throw new Error(ERROR_PREFIX + "primary email address must be provided")
         }
-        if(!disabledProfileEmailNotifications) {
+        if(!disableProfileMail) {
             submitters.push(new EmailSubmitter(recipient, primaryMail))
         }
     }

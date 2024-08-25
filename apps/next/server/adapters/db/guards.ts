@@ -1,6 +1,6 @@
 import {Guard, GuardType} from "app/lib/types/guardUser";
 import {Guarded} from "app/lib/types/guardedUser";
-import {toUser} from "./users";
+import { getUser, toUser } from './users'
 import {guards} from "db/schema/guards";
 import {users} from "db/schema/auth";
 import {db} from "db";
@@ -52,6 +52,35 @@ export const switchType = async (guardId: string, guardedId: string) => {
         ),
     )
     return res[0].affectedRows > 0
+}
+
+export const pauseWarningsForGuardedUser = async (guardId: string, guardedUserId: string, pause: boolean) => {
+    if(pause) {
+        const guardedUser = await getUser(guardedUserId, false, false)
+
+        const res = await db
+        .update(guards)
+        .set({ pausedForNextReqCheckInDate: guardedUser?.nextRequiredCheckIn })
+        .where(
+            and(
+                eq(guards.guardUserId, guardId),
+                eq(guards.guardedUserId, guardedUserId),
+            ),
+        )
+        return res[0].affectedRows > 0
+    }
+    else {
+        const res = await db
+        .update(guards)
+        .set({ pausedForNextReqCheckInDate: undefined })
+        .where(
+            and(
+                eq(guards.guardUserId, guardId),
+                eq(guards.guardedUserId, guardedUserId),
+            ),
+        )
+        return res[0].affectedRows > 0
+    }
 }
 
 

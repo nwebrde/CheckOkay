@@ -94,7 +94,7 @@ export const warn = async (userId: string, backup: boolean) => {
 
     if((!backup && stateController.needsWarning()) || (backup && stateController.needsBackupWarning())) {
         const notification = new WarningNotification(data.name ?? data.email, userId, data.image ? toExternalUserImage(data.image) : null, getLastCheckIn(data.lastManualCheck, data.lastStepCheck)!, data.currentCheckId!, data.nextRequiredCheckDate)
-        const notifier = new WarningNotifier(userId, backup ? GuardType.BACKUP : GuardType.IMPORTANT, notification)
+        const notifier = new WarningNotifier(userId, backup ? GuardType.BACKUP : GuardType.IMPORTANT, data.nextRequiredCheckDate, notification)
         await notifier.submit()
         await updateCheckState(userId, CheckState.WARNED)
     }

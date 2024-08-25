@@ -23,7 +23,7 @@
     NSString *timeSensitive = request.content.userInfo[@"body"][@"timeSensitive"];
 
     if ([criticalAlert isEqual: @"1"]) {
-        NSString *customSoundName = @"criticalAlert.caf"; // Name der Sounddatei
+        NSString *customSoundName = @"criticalalert.caf"; // Name der Sounddatei
 
         UNNotificationSound *criticalSound = [UNNotificationSound soundNamed:customSoundName];
 

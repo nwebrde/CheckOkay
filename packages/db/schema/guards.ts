@@ -3,7 +3,7 @@ import {
     timestamp,
     varchar,
     primaryKey,
-    mysqlEnum,
+    mysqlEnum, datetime
 } from 'drizzle-orm/mysql-core'
 
 import { mySqlTable } from './_table'
@@ -32,6 +32,7 @@ export const guards = mySqlTable(
         createdAt: timestamp('created_at')
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        pausedForNextReqCheckInDate: datetime('pausedForNextReqCheckInDate')
     },
     (table) => {
         return {

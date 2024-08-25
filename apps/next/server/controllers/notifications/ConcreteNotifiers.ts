@@ -106,11 +106,13 @@ export abstract class RepeatingNotifier extends Notifier {
 export class WarningNotifier extends RepeatingNotifier {
     userId: string
     guardType: GuardType
+    nextRequiredCheckIn: Date
 
-    constructor(userId: string, guardType: GuardType, notification: Notification, currentRound = 1) {
+    constructor(userId: string, guardType: GuardType, nextRequiredCheckIn: Date, notification: Notification, currentRound = 1) {
         super(notification, 10, 30, 2, currentRound);
         this.userId = userId;
         this.guardType = guardType
+        this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
     }
 
     getJobId(): string {
@@ -140,7 +142,7 @@ export class WarningNotifier extends RepeatingNotifier {
         const submitters: NotificationSubmitter[] = []
 
         for (const guard of data?.guards) {
-            if(guard.priority == this.guardType) {
+            if(guard.priority == this.guardType && (!guard.pausedForNextReqCheckInDate || (new Date(guard.pausedForNextReqCheckInDate)).getTime() < this.nextRequiredCheckIn.getTime())) {
                 const recipient: Recipient = {
                     name: guard.guardUser.name!
                 }

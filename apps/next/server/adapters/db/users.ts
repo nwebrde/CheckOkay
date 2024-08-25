@@ -2,9 +2,10 @@ import {users} from "db/schema/auth";
 import {User} from "app/lib/types/user";
 import {toHourMinute} from "./checks";
 import {db} from "db";
-import {eq} from "drizzle-orm";
+import {eq, and} from "drizzle-orm";
 import {toGuardedUsers, toGuards} from "./guards";
 import {CheckState} from "app/lib/types/check";
+import { guards } from 'db/schema/guards'
 
 type UserDB = typeof users.$inferSelect
 
@@ -45,6 +46,11 @@ export const setUserName = async (userId: string, name: string) => {
 export const setEmailNotifications = async (userId: string, state: boolean) => {
     const res = await db.update(users).set({notificationsByEmail: state}).where(eq(users.id, userId))
     return res[0].affectedRows > 0
+}
+
+export const hasGuardedUser = async (userId: string, guardedUserId: string) => {
+    return (await db.query.guards.findFirst({
+        where: and(eq(guards.guardUserId, userId), eq(guards.guardedUserId, guardedUserId))})) !== undefined
 }
 
 /**

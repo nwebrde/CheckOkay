@@ -56,7 +56,7 @@ export class WarningNotification extends Notification {
     relatedCheckId: number // check id that fired this warning
 
     constructor(guardedPersonName: string, guardedUserId: string, guardedUserImage: string | null, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
-        super(ConcreteNotificationType.WARNING_NOTIFICATION, `${guardedPersonName} reagiert nicht mehr`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, `Ich reagiere nicht mehr. Meine letzte Rückmeldung war vor ${dayjs(lastCheckIn).fromNow(true)}. Bitte schaue nach, ob es mir gut geht.`, "warning", false, false, {name: guardedPersonName, image: guardedUserImage})
+        super(ConcreteNotificationType.WARNING_NOTIFICATION, `Bei ${guardedPersonName} gibt es ein Problem`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, `Ich reagiere nicht mehr. Meine letzte Rückmeldung war vor ${dayjs(lastCheckIn).fromNow(true)}. Bitte schaue nach, ob es mir gut geht.`, "warning", false, false, {name: guardedPersonName, image: guardedUserImage})
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
@@ -97,7 +97,7 @@ export class WarningNotification extends Notification {
 
 export class NewGuardNotification extends Notification {
     constructor(guardName: string, guardImage: string | null) {
-        super(ConcreteNotificationType.NEW_GUARD_NOTIFICATION, `${guardName} passt auf dich auf`, `ab sofort passt ${guardName} mit auf dich auf. \n
+        super(ConcreteNotificationType.NEW_GUARD_NOTIFICATION, `${guardName} ist jetzt dein Beschützer`, `ab sofort passt ${guardName} mit auf dich auf. \n
         War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`, undefined, "Ich passe ab sofort auf dich auf.", "newGuard", false, false, {name: guardName, image: guardImage});
     }
 

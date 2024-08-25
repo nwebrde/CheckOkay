@@ -1,8 +1,11 @@
 import { authorizedProcedure, router } from '../trpc'
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
-import {deleteRelation, switchType} from "../adapters/db/guards";
+import { deleteRelation, pauseWarningsForGuardedUser, switchType } from '../adapters/db/guards'
 import {invite} from "../controllers/invitations";
+import { setProfileImage } from '../controllers/profileImage'
+import { checkIn } from '../controllers/checks'
+import { hasGuardedUser } from '../adapters/db/users'
 
 export const guardsRouter = router({
     invite: authorizedProcedure.output(z.string()).mutation(async (opts) => {
@@ -67,4 +70,29 @@ export const guardsRouter = router({
             }
             return result
         }),
+    checkInForGuardedUser: authorizedProcedure.input(z.object({
+        guradedUserId: z.string(),
+    })).mutation(async (opts) => {
+        if(await hasGuardedUser(opts.ctx.userId!, opts.input.guradedUserId)) {
+            await checkIn(opts.input.guradedUserId, false)
+        }
+        else {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+            })
+        }
+    }),
+    pauseWarningsForGuardedUser: authorizedProcedure.input(z.object({
+        guradedUserId: z.string(),
+        pause: z.boolean()
+    })).output(z.boolean()).mutation(async (opts) => {
+        const result = await pauseWarningsForGuardedUser(opts.ctx.userId!, opts.input.guradedUserId, opts.input.pause)
+
+        if (!result) {
+            throw new TRPCError({
+                code: 'INTERNAL_SERVER_ERROR',
+            })
+        }
+        return result
+    }),
 })
