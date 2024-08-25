@@ -72,7 +72,7 @@ export const pauseWarningsForGuardedUser = async (guardId: string, guardedUserId
     else {
         const res = await db
         .update(guards)
-        .set({ pausedForNextReqCheckInDate: undefined })
+        .set({ pausedForNextReqCheckInDate: null })
         .where(
             and(
                 eq(guards.guardUserId, guardId),

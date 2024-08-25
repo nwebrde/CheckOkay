@@ -100,7 +100,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
             {item.state == CheckState.WARNED &&
                 <>
 
-                <View className="flex flex-row grow mb-2 gap-2">
+                <View className="flex flex-row grow mb-2 flex-wrap gap-2">
                     <StyledPressable className="bg-primary rounded-xl p-2 grow" onPress={checkGuardedIn}>
                         {checkIn.isLoading &&
                         <ActivityIndicator />
