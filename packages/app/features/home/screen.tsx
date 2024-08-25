@@ -6,8 +6,6 @@ import React from 'react'
 import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { VSpacer } from 'app/design/layout'
-import { BlurView } from 'expo-blur';
-
 
 export function HomeScreen() {
     return (
@@ -16,10 +14,9 @@ export function HomeScreen() {
                     <CheckIn />
                 </View>
                 <VSpacer />
-            <BlurView intensity={85} tint="light" experimentalBlurMethod="dimezisBlurView">
-                <Text type="H1">Zustand deiner Freunde</Text>
-            </BlurView>
-
+                <View className="bg-white">
+                    <Text type="H1">Zustand deiner Freunde</Text>
+                </View>
                 <Guarded />
         </Screen>
     )

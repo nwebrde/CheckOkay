@@ -7330,7 +7330,6 @@ __metadata:
     burnt: ^0.12.2
     class-variance-authority: ^0.7.0
     clsx: ^2.1.1
-    expo-blur: ^13.0.2
     expo-image-picker: ~15.0.7
     expo-linear-gradient: ~13.0.2
     expo-modules-core: ^1.12.19
@@ -10365,15 +10364,6 @@ __metadata:
     expo-web-browser: ~13.0.0
     invariant: ^2.2.4
   checksum: 6cf87a03c2aadcf33df6eea4d97abf2d4bc3ddadc7bd2df09f9c234436bbd6f7a0dede7d2c4d06c1c6780e0b0cfb58349119077990e9057cfd4274d726576ab7
-  languageName: node
-  linkType: hard
-
-"expo-blur@npm:^13.0.2":
-  version: 13.0.2
-  resolution: "expo-blur@npm:13.0.2"
-  peerDependencies:
-    expo: "*"
-  checksum: 66badeee2002a6aed63b7e122bcd9efa514bf954a28844649a1312d3dca2c37f96cf075938850be7e56904c884c5165ae9606d553458cf8a6a9cf26f148be2b4
   languageName: node
   linkType: hard
 

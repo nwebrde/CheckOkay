@@ -30,7 +30,7 @@
     "android": {
       "package": "de.nweber.checkokay",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 12
+      "versionCode": 13
     },
     "plugins": [
       [
