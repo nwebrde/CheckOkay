@@ -79,7 +79,7 @@ export const acceptInvitation = async (code: string, guardUserId: string) => {
             return false
         }
 
-        const notification = new NewGuardNotification(guard.name ?? guard.email, guard.image ? toExternalUserImage(guard.image) : null);
+        const notification = new NewGuardNotification(guard.id, guard.name ?? guard.email, guard.image ? toExternalUserImage(guard.image) : null);
 
         const recipient: Recipient = {
             name: invitation.guardedUser.name!

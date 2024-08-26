@@ -7,6 +7,7 @@ export type Recipient = {
 export type Sender = {
     name: string;
     image: string | null;
+    id: string;
 }
 
 export abstract class Notification {

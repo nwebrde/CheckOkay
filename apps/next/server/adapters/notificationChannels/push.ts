@@ -56,7 +56,8 @@ export const send = async (
             "timeSensitive": notification.isSensitive ? "1" : "0",
             "sender": {
                 "name": notification.sender?.name ?? "",
-                "image": notification.sender?.image ?? ""
+                "image": notification.sender?.image ?? "",
+                "id": notification.sender?.id ?? ""
             }
         }
     };
