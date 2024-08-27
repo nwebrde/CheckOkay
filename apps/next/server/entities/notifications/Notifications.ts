@@ -22,9 +22,10 @@ export abstract class Notification {
     public isCritical: boolean
     public isSensitive: boolean
     public sender: Sender | undefined
+    public isDataOnly: boolean
 
 
-    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string, isCritical = false, isSensitive = false, sender?: Sender) {
+    constructor(notificationType: ConcreteNotificationType, subject: string, text: string, mailOnlyText?: string, pushOnlyText?: string, pushCategoryIdentifier?: string, isCritical = false, isSensitive = false, isDataOnly = false, sender?: Sender) {
         this.notificationType = notificationType
         this.subject = subject
         this.text = text
@@ -33,6 +34,7 @@ export abstract class Notification {
         this.pushCategoryIdentifier = pushCategoryIdentifier
         this.isCritical = isCritical
         this.isSensitive = isSensitive
+        this.isDataOnly = isDataOnly
         this.sender = sender
     }
 

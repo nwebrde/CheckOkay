@@ -10,6 +10,7 @@ export const enum ConcreteNotificationType {
     REMINDER_NOTIFICATION = "REMINDER_NOTIFICATION",
     WARNING_NOTIFICATION = "WARNING_NOTIFICATION",
     NEW_GUARD_NOTIFICATION = "NEW_GUARD_NOTIFICATION",
+    CHECK_IN_NOTIFICATION = "CHECK_IN_NOTIFICATION",
 }
 
 // All attributes of concrete notifications must be of primitive types (no class instances!) as they are serialized into json or need proper handling in toConcreteNotification()
@@ -56,7 +57,7 @@ export class WarningNotification extends Notification {
     relatedCheckId: number // check id that fired this warning
 
     constructor(guardedPersonName: string, guardedUserId: string, guardedUserImage: string | null, lastCheckIn: Date, relatedCheckId: number, relatedRequiredCheckInDate: Date) {
-        super(ConcreteNotificationType.WARNING_NOTIFICATION, `Bei ${guardedPersonName} gibt es ein Problem`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, `Ich reagiere nicht mehr. Meine letzte Rückmeldung war vor ${dayjs(lastCheckIn).fromNow(true)}. Bitte schaue nach, ob es mir gut geht.`, "warning", false, true, {name: guardedPersonName, image: guardedUserImage, id: guardedUserId})
+        super(ConcreteNotificationType.WARNING_NOTIFICATION, `Bei ${guardedPersonName} gibt es ein Problem`, `Es scheint ein Problem bei ${guardedPersonName} zu geben. ${guardedPersonName} hat nicht auf eine Statusabfrage reagiert. \n Die letzte Reaktion fand vor ${dayjs(lastCheckIn).fromNow(true)} statt. `, undefined, `Ich reagiere nicht mehr. Meine letzte Rückmeldung war vor ${dayjs(lastCheckIn).fromNow(true)}. Bitte schaue nach, ob es mir gut geht.`, "warning", false, true, false, {name: guardedPersonName, image: guardedUserImage, id: guardedUserId})
         this.guardedUserId = guardedUserId
         this.guardedPersonName = guardedPersonName
         this.lastCheckIn = new Date(lastCheckIn)
@@ -99,8 +100,18 @@ export class NewGuardNotification extends Notification {
     guardName: string
     constructor(guardId: string, guardName: string, guardImage: string | null) {
         super(ConcreteNotificationType.NEW_GUARD_NOTIFICATION, `${guardName} ist jetzt dein Beschützer`, `ab sofort passt ${guardName} mit auf dich auf. \n
-        War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`, undefined, "Ich passe ab sofort auf dich auf.", "newGuard", false, false, {name: guardName, image: guardImage, id: guardId});
+        War das ein Fehler? Du kannst deinen Guard jederzeit wieder entfernen.`, undefined, "Ich passe ab sofort auf dich auf.", "newGuard", false, false, false,{name: guardName, image: guardImage, id: guardId});
         this.guardName = guardName;
+    }
+
+    async refresh() {
+        return false
+    }
+}
+
+export class CheckInNotification extends Notification {
+    constructor(userId: string) {
+        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, "", "", undefined, undefined, "checkIn", false, false, true, {name: "", image: "", id: userId})
     }
 
     async refresh() {
@@ -119,6 +130,9 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             break;
         case ConcreteNotificationType.NEW_GUARD_NOTIFICATION:
             result = new NewGuardNotification(plainObject.sender.id, plainObject.guardName, plainObject.sender.image)
+            break;
+        case ConcreteNotificationType.CHECK_IN_NOTIFICATION:
+            result = new CheckInNotification(plainObject.sender.id)
             break;
         default:
             throw new Error("Concrete notification is not correctly implemented")

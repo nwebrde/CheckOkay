@@ -8,23 +8,57 @@ import {
     addCheck as addCheckToQueue,
     updateCheck as updateCheckInQueue, updateBackupTime, updateReminderTime
 } from "../adapters/scheduler/checks";
-import { getLastCheckIn, toSeconds, updateNextRequiredCheckIn } from '../adapters/db/users'
+import {
+    getLastCheckIn,
+    toExternalUserImage,
+    toSeconds,
+    updateCheckState,
+    updateNextRequiredCheckIn
+} from '../adapters/db/users'
 import {Hour, Minute} from "app/lib/types/time";
 import {ChecksController} from "../entities/checks/ChecksController";
 import { CheckState } from 'app/lib/types/check'
 import { deleteRepeatingNotifier } from '../adapters/scheduler/repeatingNotifiers'
+import { CheckStateController } from '../entities/checks/CheckStateController'
+import { CheckInNotification, WarningNotification } from './notifications/ConcreteNotifications'
+import { StandardNotifier, WarningNotifier } from './notifications/ConcreteNotifiers'
+import { GuardType } from 'app/lib/types/guardUser'
+import { UserDeleted } from './checkState'
+import { NotificationSubmitter } from '../entities/notifications/NotificationSubmitter'
+import { Recipient } from '../entities/notifications/Notifications'
+import { getAllSubmitters, getPushSubmitters } from './notifications/NotificationSubmitters'
 
-export const checkIn = async (userId: string, step: boolean) => {
+/**
+ *
+ * @param userId
+ * @param step
+ * @param external external checkins are only successfull if user state is WARNED or BACKUP
+ */
+export const checkIn = async (userId: string, step: boolean, external = false) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
             checks: true,
-            currentCheck: true
+            currentCheck: true,
+            notificationChannels: true,
+            guards: {
+                with: {
+                    guardUser: {
+                        with: {
+                            notificationChannels: true
+                        }
+                    }
+                }
+            }
         }
     })
 
     if(!data) {
         throw new Error("User not found. Check was not added.")
+    }
+
+    if(external && data.state != CheckState.WARNED && data.state != CheckState.BACKUP) {
+        throw new Error("User can not be checked in as it is not in WARNED or BACKUP state.")
     }
 
     const checksController = toChecksController(data.checks)
@@ -42,6 +76,29 @@ export const checkIn = async (userId: string, step: boolean) => {
     }
 
     await reschedule(userId, checksController, data.currentCheckId, new Date(), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
+
+    // notify all guards and user self that checkIn happend by dataOnly push notification
+    if(data.state != CheckState.OK) {
+        const notification = new CheckInNotification(data.id)
+        const submitters: NotificationSubmitter[] = []
+
+        const recipient: Recipient = {
+            name: data.name ?? data.email
+        }
+        submitters.push(...await getPushSubmitters(recipient, undefined, data.notificationChannels))
+
+        if(data.state != CheckState.NOTIFIED) {
+            for (const guard of data.guards) {
+                const recipient: Recipient = {
+                    name: guard.guardUser.name ?? guard.guardUser.email
+                }
+                submitters.push(...await getPushSubmitters(recipient, undefined, guard.guardUser.notificationChannels))
+            }
+        }
+
+        const notifier = new StandardNotifier(notification, submitters)
+        await notifier.submit()
+    }
 
     if(data.state == CheckState.WARNED || data.state == CheckState.BACKUP) {
         await deleteRepeatingNotifier(userId)

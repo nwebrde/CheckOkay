@@ -74,7 +74,7 @@ export const guardsRouter = router({
         guardedUserId: z.string(),
     })).mutation(async (opts) => {
         if(await hasGuardedUser(opts.ctx.userId!, opts.input.guardedUserId)) {
-            await checkIn(opts.input.guardedUserId, false)
+            await checkIn(opts.input.guardedUserId, false, true)
         }
         else {
             throw new TRPCError({

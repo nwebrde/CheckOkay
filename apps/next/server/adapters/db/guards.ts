@@ -5,6 +5,7 @@ import {guards} from "db/schema/guards";
 import {users} from "db/schema/auth";
 import {db} from "db";
 import {and, eq} from "drizzle-orm";
+import { CheckState } from 'app/lib/types/check'
 
 type GuardDB = typeof guards.$inferSelect
 type UserDB = typeof users.$inferSelect
@@ -58,9 +59,17 @@ export const pauseWarningsForGuardedUser = async (guardId: string, guardedUserId
     if(pause) {
         const guardedUser = await getUser(guardedUserId, false, false)
 
+        if(!guardedUser) {
+            return false
+        }
+
+        if(guardedUser.state != CheckState.WARNED && guardedUser.state != CheckState.BACKUP) {
+            return false
+        }
+
         const res = await db
         .update(guards)
-        .set({ pausedForNextReqCheckInDate: guardedUser?.nextRequiredCheckIn })
+        .set({ pausedForNextReqCheckInDate: guardedUser.nextRequiredCheckIn })
         .where(
             and(
                 eq(guards.guardUserId, guardId),

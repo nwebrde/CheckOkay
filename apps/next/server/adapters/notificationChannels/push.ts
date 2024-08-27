@@ -42,25 +42,48 @@ export const send = async (
         }
     }
 
-    const message: ExpoPushMessage = {
-        to: pushTokens,
-        sound: 'default',
-        body: notification.pushOnlyText ? notification.pushOnlyText : notification.text,
-        title: notification.subject,
-        categoryId: notification.pushCategoryIdentifier,
-        priority: "high",
-        mutableContent: true,
-        ttl: 604800, // one week
-        data: {
-            "criticalAlert": notification.isCritical ? "1" : "0",
-            "timeSensitive": notification.isSensitive ? "1" : "0",
-            "sender": {
-                "name": notification.sender?.name ?? "",
-                "image": notification.sender?.image ?? "",
-                "id": notification.sender?.id ?? ""
-            }
+    let message: ExpoPushMessage | undefined = undefined
+
+    if(notification.isDataOnly) {
+        message = {
+            to: pushTokens,
+            categoryId: notification.pushCategoryIdentifier,
+            priority: "high",
+            ttl: 604800, // one week
+            data: {
+                "criticalAlert": notification.isCritical ? "1" : "0",
+                "timeSensitive": notification.isSensitive ? "1" : "0",
+                "sender": {
+                    "name": notification.sender?.name ?? "",
+                    "image": notification.sender?.image ?? "",
+                    "id": notification.sender?.id ?? ""
+                }
+            },
+            // @ts-ignore
+            _contentAvailable: notification.isDataOnly
         }
-    };
+    }
+    else {
+        message = {
+            to: pushTokens,
+            sound: 'default',
+            body: notification.pushOnlyText ? notification.pushOnlyText : notification.text,
+            title: notification.subject,
+            categoryId: notification.pushCategoryIdentifier,
+            priority: "high",
+            mutableContent: true,
+            ttl: 604800, // one week
+            data: {
+                "criticalAlert": notification.isCritical ? "1" : "0",
+                "timeSensitive": notification.isSensitive ? "1" : "0",
+                "sender": {
+                    "name": notification.sender?.name ?? "",
+                    "image": notification.sender?.image ?? "",
+                    "id": notification.sender?.id ?? ""
+                }
+            }
+        };
+    }
 
 // The Expo push notification service accepts batches of notifications so
 // that you don't need to send 1000 requests to send 1000 notifications. We
