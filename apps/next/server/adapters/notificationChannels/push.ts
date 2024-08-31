@@ -74,6 +74,7 @@ export const send = async (
             mutableContent: true,
             ttl: 604800, // one week
             data: {
+                "categoryId": notification.pushCategoryIdentifier,
                 "criticalAlert": notification.isCritical ? "1" : "0",
                 "timeSensitive": notification.isSensitive ? "1" : "0",
                 "sender": {

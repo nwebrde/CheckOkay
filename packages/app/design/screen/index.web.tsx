@@ -27,7 +27,7 @@ const Screen = ({
 
                     <ScrollView className="screenWrapper w-full items-center flex-1"
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
-                                contentClassName={clsx("grow justify-center", paddingSide ? "p-3" : "")}>
+                                contentClassName={clsx("grow justify-center py-3", paddingSide ? "px-3" : "")}>
                                 {children}
                     </ScrollView>
 

@@ -7,7 +7,20 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { VSpacer } from 'app/design/layout'
 import { BlurView } from 'expo-blur';
+import { Platform } from 'react-native'
 
+function SubHeader() {
+if (Platform.OS === 'ios') {
+    return ( <BlurView intensity={100} tint="extraLight" className="px-3" experimentalBlurMethod="dimezisBlurView">
+        <Text type="H1">Zustand deiner Freunde</Text>
+    </BlurView>)
+}
+
+return (<View className="px-3 bg-white">
+    <Text type="H1">Zustand deiner Freunde</Text>
+</View>)
+
+}
 
 export function HomeScreen() {
     return (
@@ -16,9 +29,7 @@ export function HomeScreen() {
                     <CheckIn />
                 </View>
                 <VSpacer />
-            <BlurView intensity={100} tint="light" className="p-3" experimentalBlurMethod="dimezisBlurView">
-                <Text type="H1">Zustand deiner Freunde</Text>
-            </BlurView>
+            <SubHeader />
             <View className="mx-3">
                 <Guarded />
             </View>
