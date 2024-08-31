@@ -6,18 +6,22 @@ import React from 'react'
 import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { VSpacer } from 'app/design/layout'
+import { BlurView } from 'expo-blur';
+
 
 export function HomeScreen() {
     return (
-        <Screen stickyHeaderIndices={[0,2]} stickyHeaderWeb={2} paddingTop={false}>
-                <View className="pt-3 max-w-xl">
+        <Screen stickyHeaderIndices={[0,2]} stickyHeaderWeb={2} paddingTop={false} paddingSide={false}>
+                <View className="pt-3 mx-3 max-w-xl">
                     <CheckIn />
                 </View>
                 <VSpacer />
-                <View className="bg-white">
-                    <Text type="H1">Zustand deiner Freunde</Text>
-                </View>
+            <BlurView intensity={100} tint="extraLight" experimentalBlurMethod="dimezisBlurView">
+                <Text type="H1">Zustand deiner Freunde</Text>
+            </BlurView>
+            <View className="mx-3">
                 <Guarded />
+            </View>
         </Screen>
     )
 }

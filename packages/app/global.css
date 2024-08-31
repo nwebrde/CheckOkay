@@ -10,16 +10,16 @@
 
 @layer base {
     .wxl .screenWrapper > div {
-        @apply max-w-xl p-3;
+        @apply max-w-xl;
     }
     .w2xl .screenWrapper > div {
-        @apply max-w-2xl p-3;
+        @apply max-w-2xl;
     }
     .w3xl .screenWrapper > div {
-        @apply max-w-3xl p-3;
+        @apply max-w-3xl;
     }
     .w4xl .screenWrapper > div {
-        @apply max-w-4xl p-3;
+        @apply max-w-4xl;
     }
     :root {
         --background: 0 0% 100%;

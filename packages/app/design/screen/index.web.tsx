@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { ScrollView } from 'app/design/scrollView'
+import { clsx } from 'clsx'
 
 /**
  *
@@ -13,9 +14,11 @@ const Screen = ({
                            children,
                            stickyHeaderIndices,
                            stickyHeaderWeb,
+    paddingSide = true
                        }: {
     children: ReactNode
     stickyHeaderIndices: number[]
+    paddingSide: boolean
     stickyHeaderWeb?: number
 }) => {
 
@@ -24,7 +27,7 @@ const Screen = ({
 
                     <ScrollView className="screenWrapper w-full items-center flex-1"
                                 stickyHeaderIndices={stickyHeaderWeb ? [stickyHeaderWeb] : stickyHeaderIndices}
-                                contentClassName="grow justify-center">
+                                contentClassName={clsx("grow justify-center", paddingSide ? "p-3" : "")}>
                                 {children}
                     </ScrollView>
 
