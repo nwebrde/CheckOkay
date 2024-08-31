@@ -7330,6 +7330,7 @@ __metadata:
     burnt: ^0.12.2
     class-variance-authority: ^0.7.0
     clsx: ^2.1.1
+    expo-blur: ^13.0.2
     expo-image-picker: ~15.0.7
     expo-linear-gradient: ~13.0.2
     expo-modules-core: ^1.12.19
@@ -10291,7 +10292,6 @@ __metadata:
     expo: 51.0.17
     expo-apple-authentication: ~6.4.1
     expo-auth-session: ~5.5.2
-    expo-blur: ~13.0.2
     expo-build-properties: ~0.12.3
     expo-constants: ~16.0.2
     expo-crypto: ~13.0.2
@@ -10304,7 +10304,7 @@ __metadata:
     expo-notification-service-extension-plugin: ^1.0.0
     expo-notifications: 0.28.16
     expo-router: 3.5.17
-    expo-secure-store: ~13.0.1
+    expo-secure-store: ~13.0.2
     expo-splash-screen: ~0.27.5
     expo-status-bar: ~1.12.1
     expo-task-manager: ~11.8.2
@@ -10369,7 +10369,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-blur@npm:~13.0.2":
+"expo-blur@npm:^13.0.2":
   version: 13.0.2
   resolution: "expo-blur@npm:13.0.2"
   peerDependencies:
@@ -10673,7 +10673,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-secure-store@npm:~13.0.1":
+"expo-secure-store@npm:~13.0.2":
   version: 13.0.2
   resolution: "expo-secure-store@npm:13.0.2"
   peerDependencies:
