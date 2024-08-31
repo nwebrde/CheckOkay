@@ -20,7 +20,7 @@ export class ReminderNotification extends Notification {
     userId: string
 
     constructor(userId: string, nextRequiredCheckIn: Date, isCritical = false) {
-        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", isCritical, true)
+        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", isCritical, true, false, {id: userId, name: undefined, image: undefined})
         this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
         this.userId = userId
     }
