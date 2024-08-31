@@ -16,7 +16,7 @@ export function HomeScreen() {
                     <CheckIn />
                 </View>
                 <VSpacer />
-            <BlurView intensity={100} tint="extraLight" experimentalBlurMethod="dimezisBlurView">
+            <BlurView intensity={100} tint="light" className="p-3" experimentalBlurMethod="dimezisBlurView">
                 <Text type="H1">Zustand deiner Freunde</Text>
             </BlurView>
             <View className="mx-3">
