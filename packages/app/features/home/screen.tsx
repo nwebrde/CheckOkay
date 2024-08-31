@@ -7,18 +7,18 @@ import { View } from 'app/design/view'
 import { Text } from 'app/design/typography'
 import { VSpacer } from 'app/design/layout'
 import { BlurView } from 'expo-blur';
-import { Platform } from 'react-native'
+import { Dimensions, Platform } from 'react-native'
 
 function SubHeader() {
-if (Platform.OS === 'ios') {
-    return ( <BlurView intensity={100} tint="extraLight" className="px-3" experimentalBlurMethod="dimezisBlurView">
+if (Platform.OS === 'web' && Dimensions.get("window").width > 928) {
+    return (<View className="px-3 bg-white">
         <Text type="H1">Zustand deiner Freunde</Text>
-    </BlurView>)
+    </View>)
 }
 
-return (<View className="px-3 bg-white">
-    <Text type="H1">Zustand deiner Freunde</Text>
-</View>)
+    return ( <BlurView intensity={100} tint="regular" className="px-3" style={{backgroundColor: "rgba(255,255,255,0.8)"}} experimentalBlurMethod="dimezisBlurView">
+        <Text type="H1">Zustand deiner Freunde</Text>
+    </BlurView>)
 
 }
 
