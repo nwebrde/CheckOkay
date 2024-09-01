@@ -5,6 +5,7 @@ import {
     jwtService,
 } from '../../../../server/lib/typescirpt-node-oauth-server'
 import { NextRequest } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 
 export async function POST(req: NextRequest) {
     const query = Object.fromEntries(req.nextUrl.searchParams)
@@ -12,14 +13,17 @@ export async function POST(req: NextRequest) {
     const body = Object.fromEntries(bodyParams)
 
     try {
+        Sentry.captureMessage("refreshing");
         const oauthResponse =
             await authorizationServer.respondToAccessTokenRequest({
                 headers: req.headers,
                 body: body,
                 query: query,
             })
+        Sentry.captureMessage("refreshing status: " + oauthResponse.status);
         return handleResponse(oauthResponse)
     } catch (e) {
+        Sentry.captureMessage("refreshing failed: " + e);
         console.error(e)
         return handleError(e)
     }

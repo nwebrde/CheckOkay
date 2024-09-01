@@ -124,3 +124,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     -ms-overflow-style: scrollbar;
 }
+
+.blurredBackground {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+}
