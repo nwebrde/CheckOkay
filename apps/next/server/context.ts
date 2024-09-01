@@ -3,6 +3,7 @@ import { jwtService } from './lib/typescirpt-node-oauth-server'
 //@ts-ignore
 import { getServerSession } from 'next-auth'
 import { authOptions } from './lib/nextAuthOptions'
+import * as Sentry from "@sentry/nextjs";
 
 export async function createContext({
     req,
@@ -17,11 +18,13 @@ export async function createContext({
         let userId = undefined
         if (req.headers.has('authorization')) {
             const token = req.headers.get('authorization')
+            Sentry.captureMessage("authorization token: " + (token ?? ""));
             if (token) {
                 try {
                     userId = (await jwtService.verify(token)).sub
                 } catch (e) {
                     console.error('Error verifying jwt', e)
+                    Sentry.captureMessage("verifying token failed: " + e);
                 }
             }
         } else {

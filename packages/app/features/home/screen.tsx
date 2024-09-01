@@ -16,7 +16,7 @@ if (Platform.OS === 'web' && Dimensions.get("window").width > 928) {
     </View>)
 }
 
-    return ( <BlurView intensity={100} tint="regular" className="px-3" style={{backgroundColor: "rgba(255,255,255,0.8)"}} experimentalBlurMethod="dimezisBlurView">
+    return ( <BlurView intensity={100} tint="light" className="px-3 blurredBackground" style={{backgroundColor: "rgba(255,255,255,0.75)"}} experimentalBlurMethod="dimezisBlurView">
         <Text type="H1">Zustand deiner Freunde</Text>
     </BlurView>)
 

@@ -6,6 +6,7 @@ import {invite} from "../controllers/invitations";
 import { setProfileImage } from '../controllers/profileImage'
 import { checkIn } from '../controllers/checks'
 import { hasGuardedUser } from '../adapters/db/users'
+import * as Sentry from '@sentry/nextjs'
 
 export const guardsRouter = router({
     invite: authorizedProcedure.output(z.string()).mutation(async (opts) => {
@@ -73,6 +74,7 @@ export const guardsRouter = router({
     checkInForGuardedUser: authorizedProcedure.input(z.object({
         guardedUserId: z.string(),
     })).mutation(async (opts) => {
+        Sentry.captureMessage("called with data: " + opts.input.guardedUserId + " & " +  opts.ctx.userId ?? "");
         if(await hasGuardedUser(opts.ctx.userId!, opts.input.guardedUserId)) {
             await checkIn(opts.input.guardedUserId, false, true)
         }
