@@ -3,7 +3,6 @@ import { httpBatchLink, loggerLink } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
 import { useState } from 'react'
 import type { AppRouter } from 'next-app/server/routers/_app'
-import { useAuth } from 'app/provider/auth-context/index.native'
 import { jwtDecode } from 'jwt-decode'
 import superjson from 'superjson';
 
@@ -12,7 +11,7 @@ import superjson from 'superjson';
 import atob from 'core-js-pure/stable/atob'
 import btoa from 'core-js-pure/stable/btoa'
 import { tokenRefreshLink } from 'app/provider/trpc-client/refreshLink'
-import { localAccessToken, localRefreshToken } from 'app/provider/auth-context/state.native'
+import { getAccessToken, getRefreshToken, refresh, signOut } from 'expo-app/lib/OAuthClient'
 
 global.atob = atob
 global.btoa = btoa
@@ -43,42 +42,37 @@ function getBaseUrl() {
 }
 
 export function TRPCProvider(props: { children: React.ReactNode }) {
-    const { refresh, signOut } = useAuth()!
     const trpcClient = trpc.createClient({
         links: [
             loggerLink({
-                enabled: () => false,
+                enabled: () => false
             }),
 
             tokenRefreshLink({
                 // access to the original tRPC query operation object
                 // is accessible on both methods
-                tokenRefreshNeeded: (query) => {
+                tokenRefreshNeeded: async (query) => {
+                    const accessToken = await getAccessToken()
+                    const refreshToken = await getRefreshToken()
+
                     // on every request, this function is called
-                    if (!localAccessToken || !localRefreshToken) {
-                        console.log("refresh needed as localAccessToken is undefined")
+                    if (!accessToken || !refreshToken) {
                         return true
                     }
 
-                    console.log("local refesh token", localRefreshToken)
-
                     let decodedToken
                     try {
-                        decodedToken = jwtDecode(localAccessToken!)
-                        console.log("decoded token", decodedToken)
-                    } catch {
-                        console.log("localAccessToken decodation failed")
-                        signOut()
+                        decodedToken = jwtDecode(accessToken)
+                    } catch (e) {
+                        await signOut()
                     }
 
                     if (!decodedToken || !decodedToken.exp) {
-                        console.log("refresh needed as:", decodedToken.exp)
                         return true
                     }
 
                     // if access token expires in the next 10 sec
                     if (decodedToken.exp! - Date.now() / 1000 <= 5) {
-                        console.log("refresh needed as expired")
                         return true
                     }
 
@@ -90,13 +84,11 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                     // do your magic to fetch a refresh token here
                     // example:
                     try {
-                        const result = await refresh(localRefreshToken!)
+                        const result = await refresh()
                         if (!result) {
-                            console.log("refresh failed", result)
                             await signOut()
                         }
                     } catch (err) {
-                        console.log("refresh failed", err)
                         // token refreshing failed, let's log the user out
                         await signOut()
                     }
@@ -105,8 +97,9 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
 
             httpBatchLink({
                 url: process.env.EXPO_PUBLIC_API_URL!,
-                headers: () => {
-                    return {authorization: localAccessToken!}
+                headers: async () => {
+                    const token = await getAccessToken()
+                    return {authorization: token!}
                 }
             }),
         ],

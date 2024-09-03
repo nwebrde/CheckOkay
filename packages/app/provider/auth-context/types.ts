@@ -1,14 +1,10 @@
-export interface NativeAuthContext extends CommonAuthContext {
-    refresh: (refreshTokenLocal: string) => Promise<boolean>
-    accessToken: string | null
-    refreshToken: string | null
+export interface WebAuthContext extends CommonAuthContext {
+    isLoading: boolean
 }
 
 export type CommonAuthContext = {
     signOut: () => Promise<boolean>
     signIn: () => Promise<boolean>
-    user?: User
-    isLoading: boolean
 }
 
 export type User = {

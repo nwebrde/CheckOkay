@@ -1,27 +1,25 @@
 import * as AuthSession from 'expo-auth-session'
 import { router } from 'expo-router'
 import { DiscoveryDocument } from 'expo-auth-session'
-import {
-    setLocalAccessToken,
-    setLocalRefreshToken,
-} from 'app/provider/auth-context/state.native'
+import * as SecureStore from 'expo-secure-store';
 
 const redirectUri = AuthSession.makeRedirectUri({})
 
 // Endpoint
 const discovery: DiscoveryDocument = {
-    authorizationEndpoint: process.env.EXPO_PUBLIC_OAUTH_AUTHORIZATION_ENDPOINT,
-    tokenEndpoint: process.env.EXPO_PUBLIC_OAUTH_TOKEN_ENDPOINT,
-    revocationEndpoint: process.env.EXPO_PUBLIC_OAUTH_REVOCATION_ENDPOINT,
+    authorizationEndpoint: process.env.EXPO_PUBLIC_OAUTH_AUTHORIZATION_ENDPOINT!,
+    tokenEndpoint: process.env.EXPO_PUBLIC_OAUTH_TOKEN_ENDPOINT!,
+    revocationEndpoint: process.env.EXPO_PUBLIC_OAUTH_REVOCATION_ENDPOINT!,
 }
 const clientId = process.env.EXPO_PUBLIC_OAUTH_CLIENT_ID!
 
-type TokenSetter = (token: string | null) => void
+const accessTokenKey = "accessToken"
+const refreshTokenKey = "refreshToken"
 
-export const signIn = async (
-    setAccessToken: TokenSetter,
-    setRefreshToken: TokenSetter,
-) => {
+export const getAccessToken = () => SecureStore.getItemAsync(accessTokenKey)
+export const getRefreshToken = () => SecureStore.getItemAsync(refreshTokenKey)
+
+export const signIn = async () => {
     const state = generateShortUUID()
     // Get Authorization code
     const authRequestOptions: AuthSession.AuthRequestConfig = {
@@ -46,19 +44,19 @@ export const signIn = async (
                 extraParams: {
                     code_verifier: authRequest.codeVerifier || '',
                 },
+                scopes: ['all']
             },
             discovery,
         )
 
-        setLocalAccessToken(tokenResult.accessToken)
-        setLocalRefreshToken(
-            tokenResult.refreshToken ? tokenResult.refreshToken : null,
-        )
+        await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken);
 
-        setAccessToken(tokenResult.accessToken)
-        setRefreshToken(
-            tokenResult.refreshToken ? tokenResult.refreshToken : null,
-        )
+        if(!tokenResult.refreshToken) {
+            await SecureStore.deleteItemAsync(refreshTokenKey)
+        } else {
+            await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken)
+        }
+
 
         // Navigate after signing in. You may want to tweak this to ensure sign-in is
         // successful before navigating.
@@ -69,45 +67,33 @@ export const signIn = async (
     return false
 }
 
-export const refresh = async (
-    setAccessToken: TokenSetter,
-    setRefreshToken: TokenSetter,
-    refreshToken: string | null,
-) => {
+export const refresh = async () => {
+    const refreshToken = await getRefreshToken()
     if (!refreshToken) {
         return false
     }
-    console.log("refresh pass a")
-    console.log("refresh token", refreshToken)
-    console.log("clientid", clientId)
+
     const refreshTokenObject: AuthSession.RefreshTokenRequestConfig = {
         clientId: clientId,
         refreshToken: refreshToken,
         scopes: ['all'],
     }
-    console.log("refresh pass b")
     const tokenResult = await AuthSession.refreshAsync(
         refreshTokenObject,
         discovery,
     )
-    console.log("refresh pass c", tokenResult)
 
-    setLocalAccessToken(tokenResult.accessToken)
-    setLocalRefreshToken(
-        tokenResult.refreshToken ? tokenResult.refreshToken : null,
-    )
-    console.log("refresh pass d")
-    setAccessToken(tokenResult.accessToken)
-    setRefreshToken(tokenResult.refreshToken ? tokenResult.refreshToken : null)
-    console.log("refresh pass e")
+    await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken);
+    if(!tokenResult.refreshToken) {
+        await SecureStore.deleteItemAsync(refreshTokenKey)
+    } else {
+        await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken)
+    }
     return true
 }
 
-export const signOut = async (
-    setAccessToken: TokenSetter,
-    setRefreshToken: TokenSetter,
-    refreshToken: string | null,
-) => {
+export const signOut = async () => {
+    const refreshToken = await getRefreshToken()
     if (!refreshToken) {
         return false
     }
@@ -117,26 +103,10 @@ export const signOut = async (
     )
     if (!revoked) return false
 
-    setLocalAccessToken(null)
-    setLocalRefreshToken(null)
-
-    setAccessToken(null)
-    setRefreshToken(null)
+    await SecureStore.deleteItemAsync(accessTokenKey)
+    await SecureStore.deleteItemAsync(refreshTokenKey)
 
     return true
-
-    // The default revokeAsync method doesn't work for Keycloak, we need to explicitely invoke the OIDC endSessionEndpoint with the correct parameters
-    /*
-    const logoutUrl = `${discovery.endSessionEndpoint!}?client_id=${clientId}&post_logout_redirect_uri=${redirectUrl}&id_token_hint=${idToken}`;
-
-    const res = await WebBrowser.openAuthSessionAsync(logoutUrl, redirectUrl);
-    if (res.type === "success") {
-        setAccessToken(undefined);
-        setIdToken(undefined);
-        setRefreshToken(undefined);
-    }
-
-     */
 }
 
 export function generateShortUUID() {

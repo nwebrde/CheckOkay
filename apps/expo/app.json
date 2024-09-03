@@ -9,13 +9,14 @@
       "ios",
       "android"
     ],
-    "icon": "./icon.png",
+    "icon": "./assets/icon.png",
     "ios": {
       "infoPlist": {
         "com.apple.developer.usernotifications.critical-alerts": 1,
         "NSUserActivityTypes": [
           "INSendMessageIntent"
-        ]
+        ],
+        "UIBackgroundModes": ["remote-notification", "processing"]
       },
       "entitlements": {
         "com.apple.developer.usernotifications.critical-alerts": true,
@@ -25,6 +26,9 @@
       "bundleIdentifier": "de.nweber.checkokay",
       "supportsTablet": true,
       "usesAppleSignIn": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      },
       "buildNumber": "32"
     },
     "android": {

@@ -1,16 +1,25 @@
 import { P, Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 
-import { useAuth } from 'app/provider/auth-context'
 import { ActivityIndicator } from 'react-native'
 import { Button } from 'app/design/button'
 
 import { Logo } from 'app/design/logo'
+import { useEffect, useState } from 'react'
+import { getRefreshToken, signIn } from 'expo-app/lib/OAuthClient'
 
 export function SignInScreen() {
-    const { signIn, isLoading } = useAuth()!
+    const [needLogin, setNeedLogin] = useState<boolean | undefined>(undefined)
 
-    if (isLoading) {
+    useEffect(() => {
+        getRefreshToken().then(token => {
+            setNeedLogin(!token);
+        }).catch((e) => {
+            setNeedLogin(true)
+        });
+    }, []);
+
+    if (needLogin == undefined) {
         return <ActivityIndicator />
     }
 

@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import { CommonAuthContext } from 'app/provider/auth-context/types'
+import { WebAuthContext } from 'app/provider/auth-context/types'
 import { useSession, getSession } from 'next-auth/react'
 import { signOut, signIn } from 'next-auth/react'
 
-const AuthContext = React.createContext<CommonAuthContext | null>(null)
+const AuthContext = React.createContext<WebAuthContext | null>(null)
 
 // This hook can be used to access the user info.
 export function useAuth() {
@@ -31,7 +31,6 @@ export function AuthProvider(props: React.PropsWithChildren) {
             await signOut()
             return true
         },
-        user: session?.user,
         isLoading: status === 'loading',
     }
 

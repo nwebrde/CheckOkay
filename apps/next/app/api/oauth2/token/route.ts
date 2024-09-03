@@ -13,14 +13,12 @@ export async function POST(req: NextRequest) {
     const body = Object.fromEntries(bodyParams)
 
     try {
-        Sentry.captureMessage("refreshing");
         const oauthResponse =
             await authorizationServer.respondToAccessTokenRequest({
                 headers: req.headers,
                 body: body,
                 query: query,
             })
-        Sentry.captureMessage("refreshing status: " + oauthResponse.status);
         return handleResponse(oauthResponse)
     } catch (e) {
         Sentry.captureMessage("refreshing failed: " + e);

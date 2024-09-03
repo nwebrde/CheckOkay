@@ -8,9 +8,10 @@ import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 import Constants from 'expo-constants'
 import { Button } from 'app/design/button'
-import * as Linking from 'expo-linking';
 import { VSpacer } from 'app/design/layout'
 import { openAppSettings } from 'app/lib/notifications/permissionsUtil'
+import { trpc } from 'app/provider/trpc-client'
+import * as TaskManager from 'expo-task-manager';
 
 const NotificationsContext = React.createContext<NotificationsContextType | null>(null)
 
@@ -21,6 +22,39 @@ Notifications.setNotificationHandler({
         shouldSetBadge: false,
     }),
 });
+
+enum ActionIdentifiers {
+    CHECKIN = "checkin",
+    EXTERNAL_CHECKIN = "externalcheckin",
+    PAUSE = "pause",
+}
+
+const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+
+TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }) => {
+    console.error('Received a notification in the background!');
+    console.error('Received a notification in the background!', data)
+
+
+// data.categoryId == "checkIk"
+    /*
+    if(1==1) {
+        const senderId = ""
+        const notifications = await Notifications.getPresentedNotificationsAsync()
+        for (const notification of notifications) {
+            if(notification.request.content.data.categoryId == "reminder" || notification.request.content.data.categoryId == "warning") {
+                if(notification.request.content.data.sender.id == senderId) {
+                    Notifications.dismissNotificationAsync(notification.request.identifier)
+                }
+            }
+        }
+    }
+
+     */
+    // Do something with the notification data
+});
+
+Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 function handleRegistrationError(errorMessage: string) {
     alert(errorMessage);
@@ -88,6 +122,19 @@ async function init() {
             lightColor: '#FF231F7C',
         });
     }
+
+    if (Platform.OS === 'ios') {
+        await Notifications.setNotificationCategoryAsync("reminder", [{buttonTitle: "Es ist alles okay 👍", identifier: ActionIdentifiers.CHECKIN, options: {
+                opensAppToForeground: false
+            }}])
+
+        await Notifications.setNotificationCategoryAsync("warning", [{buttonTitle: "Es ist alles okay 👍", identifier: ActionIdentifiers.EXTERNAL_CHECKIN, options: {
+                opensAppToForeground: false
+            }}, {buttonTitle: "Warnungen für diese Person pausieren", identifier: ActionIdentifiers.PAUSE, options: {
+                opensAppToForeground: false,
+                isDestructive: true
+            }}])
+    }
     if (Device.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         if (existingStatus !== 'granted') {
@@ -131,6 +178,64 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
     );
     const notificationListener = useRef<Notifications.Subscription>();
     const responseListener = useRef<Notifications.Subscription>();
+
+    const checkInMod = trpc.checks.checkIn.useMutation();
+    const pauseMod = trpc.guards.pauseWarningsForGuardedUser.useMutation()
+    const checkInExternalMod = trpc.guards.checkInForGuardedUser.useMutation()
+
+
+    /*
+        instead of addNotificationResponseReceivedListener, the code works also with lastNotificationResponse. For android we probably need to switch to lastNotificationResponse as addNotificationResponseReceivedListener is not working here
+
+    const lastNotificationResponse = Notifications.useLastNotificationResponse();
+    const [[lastNotificationIdWithResponseLoading, lastNotificationIdWithResponse], setLastNotificationIdWithResponse] =
+        useStorageState('lastNotificationIdWithResponse')
+
+    useEffect(() => {
+        console.error("checkokay.step2", !lastNotificationIdWithResponseLoading, lastNotificationResponse != undefined && lastNotificationResponse != null, lastNotificationResponse?.notification.request.identifier != lastNotificationIdWithResponse, auth != null, !auth?.isLoading);
+        if (
+            lastNotificationResponse &&
+            !lastNotificationIdWithResponseLoading &&
+            lastNotificationResponse.notification.request.identifier != lastNotificationIdWithResponse &&
+            lastNotificationResponse.notification.request.content.data &&
+            lastNotificationResponse.actionIdentifier && auth && !auth.isLoading
+        ) {
+            console.error("checkokay.step3");
+            console.error("checkpoint", auth.refreshToken?.length, auth.accessToken?.length, localRefreshToken == auth.refreshToken, localAccessToken == auth.accessToken)
+            setLastNotificationIdWithResponse(lastNotificationResponse.notification.request.identifier)
+            setLocalAccessToken(auth.accessToken)
+            setLocalRefreshToken(auth.refreshToken)
+            console.error("checkpoint 2", auth.refreshToken, auth.accessToken, localRefreshToken, localAccessToken)
+            let userId = undefined
+            if(lastNotificationResponse.notification.request.content.data.sender) {
+                userId = lastNotificationResponse.notification.request.content.data.sender.id;
+            }
+
+
+            console.error("checkokay.step4: "+userId)
+            console.error("checkokay.step4a: " + lastNotificationResponse.actionIdentifier)
+            switch (lastNotificationResponse.actionIdentifier) {
+                case ActionIdentifiers.CHECKIN:
+                    checkInMod.mutate({step: false})
+                    break;
+                case ActionIdentifiers.EXTERNAL_CHECKIN:
+                    console.error("checkokay.step4b")
+                    console.error("checkokay.step4c: ", pauseMod.status)
+                    checkInExternalMod.mutate({guardedUserId: userId!})
+                    break;
+                case ActionIdentifiers.PAUSE:
+                    console.error("checkokay.step4b")
+                    console.error("checkokay.step4c: ", pauseMod.status)
+                    pauseMod.mutate({ guardedUserId: userId!, pause: true })
+                    break;
+                default:
+                    break;
+            }
+        }
+    }, [lastNotificationResponse, lastNotificationIdWithResponseLoading, auth, auth?.isLoading])
+
+     */
+
     useEffect(() => {
         init()
         .then(token => setExpoPushToken(token))
@@ -140,8 +245,27 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
             setNotification(notification);
         });
 
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(async response => {
+            if (response) {
+                let userId = undefined
+                if (response.notification.request.content.data.sender) {
+                    userId = response.notification.request.content.data.sender.id;
+                }
+
+                switch (response.actionIdentifier) {
+                    case ActionIdentifiers.CHECKIN:
+                        await checkInMod.mutateAsync({ step: false })
+                        break;
+                    case ActionIdentifiers.EXTERNAL_CHECKIN:
+                        await checkInExternalMod.mutateAsync({ guardedUserId: userId! })
+                        break;
+                    case ActionIdentifiers.PAUSE:
+                        await pauseMod.mutateAsync({ guardedUserId: userId!, pause: true })
+                        break;
+                    default:
+                        break;
+                }
+            }
         });
 
         return () => {
@@ -172,12 +296,12 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
                             Aktiviere Benachrichtigungen in den Einstellungen
                         </Text>
                         <Text>
-                            Damit dich CheckOkay benachrichtigen kann, musst du in den Einstellungen von deinem Gerät Benachrichtigungen aktivieren. Navigiere dazu zu Einstellungen > Mitteilungen > CheckOkay
+                            Damit dich CheckOkay benachrichtigen kann, musst du in den Einstellungen von deinem Gerät Benachrichtigungen aktivieren. Navigiere dazu zu Einstellungen &gt; Mitteilungen &gt; CheckOkay
                         </Text>
                         <View className="mt-10 mb-10">
                             <Button  onClick={openAppSettings} text="Öffne Einstellungen" />
                         </View>
-                        <VSpacer />
+                        <VSpacer className="" />
                     </View>
 
                 </BottomSheet>

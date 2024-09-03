@@ -3,7 +3,6 @@ import { trpc } from 'app/provider/trpc-client'
 import { ScrollView } from 'react-native'
 import { clsx } from 'clsx'
 import { RefreshControl } from 'react-native'
-import { useAuth } from 'app/provider/auth-context'
 import { localAccessToken } from 'app/provider/auth-context/state.native'
 import { View } from 'app/design/view'
 import { VSpacer } from 'app/design/layout'
@@ -18,24 +17,22 @@ const Screen = ({
                            stickyHeaderIndices = [],
                            stickyHeaderWeb,
                            paddingTop = true,
+                            paddingSide = true,
                             width = "max-w-4xl"
                        }: {
     children: ReactNode
     stickyHeaderIndices: number[]
     stickyHeaderWeb?: number
     paddingTop: boolean
+    paddingSide: boolean
     width: string
 }) => {
     const [refreshing, setRefreshing] = React.useState(false);
-    const auth = useAuth();
 
     const utils = trpc.useUtils();
 
     const onRefresh = React.useCallback(async () => {
         setRefreshing(true);
-        while (!auth || auth.isLoading || !localAccessToken) {
-            await sleep(100);
-        }
         await utils.invalidate();
         setRefreshing(false);
     }, []);
@@ -45,7 +42,7 @@ const Screen = ({
     <View className={clsx("self-center", width)}>
         <ScrollView
             showsVerticalScrollIndicator={false}
-            className={clsx("p-3 w-fit h-fit", paddingTop ? "" : "pt-0")}
+            className={clsx("w-fit h-fit py-3", paddingSide ? "px-3" : "", paddingTop ? "" : "pt-0")}
             stickyHeaderIndices={stickyHeaderIndices}
             contentContainerStyle={{flexGrow: 1, justifyContent: stickyHeaderIndices.length <= 0 && Dimensions.get('window').width >= 800 ? "center" : "flex-start"}}
             refreshControl={

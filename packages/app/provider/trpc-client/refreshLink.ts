@@ -8,7 +8,7 @@ const queue = new PQueue({ concurrency: 1 })
 let accessToken = null
 
 export type TokenRefreshProperties = {
-    tokenRefreshNeeded: (op: Operation) => boolean
+    tokenRefreshNeeded: (op: Operation) => Promise<boolean>
     fetchAccessToken: (op: Operation) => Promise<void>
 }
 
@@ -22,7 +22,7 @@ export const tokenRefreshLink =
             // each link needs to return an observable which propagates results
             return observable((observer) => {
                 void queue.add(async () => {
-                    const shouldRenew = tokenRefreshNeeded(op)
+                    const shouldRenew = await tokenRefreshNeeded(op)
                     if (shouldRenew) {
                         // ok we need to refresh the token
                         await fetchAccessToken(op)

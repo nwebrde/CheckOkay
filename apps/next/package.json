@@ -22,7 +22,7 @@
     "axios": "^1.7.2",
     "bullmq": "^5.7.1",
     "dayjs": "^1.11.10",
-    "db": "workspace:^",
+    "db": "*",
     "drizzle-orm": "^0.29.1",
     "expo-server-sdk": "^3.10.0",
     "next": "14.1.0",
