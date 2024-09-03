@@ -19,7 +19,7 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=start /app/out/json/ .
 COPY --from=start /app/out/yarn.lock ./yarn.lock
-RUN yarn install
+RUN yarn install --network-timeout=300000
 
 # Must be after yarn install to do not retrigger yarn installs on code changes
 COPY --from=start /app/out/full/ .
