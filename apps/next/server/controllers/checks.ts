@@ -34,7 +34,7 @@ import { getAllSubmitters, getPushSubmitters } from './notifications/Notificatio
  * @param step
  * @param external external checkins are only successfull if user state is WARNED or BACKUP
  */
-export const checkIn = async (userId: string, step: boolean, external = false) => {
+export const checkIn = async (userId: string, step: boolean, external = false, date = new Date()) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
@@ -65,17 +65,17 @@ export const checkIn = async (userId: string, step: boolean, external = false) =
 
     let res = undefined;
     if(step) {
-        res = await db.update(users).set({state: CheckState.OK, lastStepCheck: new Date()}).where(eq(users.id, userId))
+        res = await db.update(users).set({state: CheckState.OK, lastStepCheck: date}).where(eq(users.id, userId))
     }
     else {
-        res = await db.update(users).set({ state: CheckState.OK, lastManualCheck: new Date()}).where(eq(users.id, userId))
+        res = await db.update(users).set({ state: CheckState.OK, lastManualCheck: date}).where(eq(users.id, userId))
     }
 
     if(res[0].affectedRows <= 0) {
         throw new Error("Failed updating nextRequiredCheckDate in DB")
     }
 
-    await reschedule(userId, checksController, data.currentCheckId, new Date(), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
+    await reschedule(userId, checksController, data.currentCheckId, date, data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
 
     // notify all guards and user self that checkIn happend by dataOnly push notification
     if(data.state != CheckState.OK) {
