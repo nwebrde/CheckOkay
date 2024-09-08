@@ -76,7 +76,7 @@ export const guardsRouter = router({
     })).mutation(async (opts) => {
         Sentry.captureMessage("called with data: " + opts.input.guardedUserId + " & " +  opts.ctx.userId ?? "");
         if(await hasGuardedUser(opts.ctx.userId!, opts.input.guardedUserId)) {
-            await checkIn(opts.input.guardedUserId, false, true)
+            await checkIn(opts.input.guardedUserId, false, true, undefined, opts.ctx.userId!)
         }
         else {
             throw new TRPCError({
