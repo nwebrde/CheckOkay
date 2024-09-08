@@ -82,7 +82,7 @@ export const checksRouter = router({
             }),
         )
         .mutation(async (opts) => {
-            const result = await checkIn(opts.ctx.userId!, opts.input.step, false, opts.input.date)
+            const result = await checkIn(opts.ctx.userId!, opts.input.step, false, opts.input.date, opts.ctx.userId)
         }),
     modifyReminderBeforeCheck: authorizedProcedure
         .input(

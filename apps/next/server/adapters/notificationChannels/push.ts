@@ -58,7 +58,8 @@ export const send = async (
             "sender": {
                 "name": notification.sender?.name ?? "",
                 "image": notification.sender?.image ?? "",
-                "id": notification.sender?.id ?? ""
+                "id": notification.sender?.id ?? "",
+                "initiatorId": notification.sender?.initiatorId ?? ""
             }
         }
     };

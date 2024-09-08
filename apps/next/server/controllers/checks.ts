@@ -34,7 +34,7 @@ import { getAllSubmitters, getPushSubmitters } from './notifications/Notificatio
  * @param step
  * @param external external checkins are only successfull if user state is WARNED or BACKUP
  */
-export const checkIn = async (userId: string, step: boolean, external = false, date = new Date()) => {
+export const checkIn = async (userId: string, step: boolean, external = false, date = new Date(), initiatorId: string = undefined) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
@@ -77,23 +77,16 @@ export const checkIn = async (userId: string, step: boolean, external = false, d
 
     await reschedule(userId, checksController, data.currentCheckId, date, data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
 
-    // notify all guards and user self that checkIn happend by dataOnly push notification
-    if(data.state != CheckState.OK) {
-        const notification = new CheckInNotification(data.id)
+    // notify all guards that checkIn happend by push notification
+    if(data.state == CheckState.WARNED || data.state == CheckState.BACKUP ) {
+        const notification = new CheckInNotification(data.id, data.name ?? data.email, data.image ? toExternalUserImage(data.image) : null, initiatorId)
         const submitters: NotificationSubmitter[] = []
 
-        const recipient: Recipient = {
-            name: data.name ?? data.email
-        }
-        submitters.push(...await getPushSubmitters(recipient, undefined, data.notificationChannels))
-
-        if(data.state != CheckState.NOTIFIED) {
-            for (const guard of data.guards) {
-                const recipient: Recipient = {
-                    name: guard.guardUser.name ?? guard.guardUser.email
-                }
-                submitters.push(...await getPushSubmitters(recipient, undefined, guard.guardUser.notificationChannels))
+        for (const guard of data.guards) {
+            const recipient: Recipient = {
+                name: guard.guardUser.name ?? guard.guardUser.email
             }
+            submitters.push(...await getPushSubmitters(recipient, undefined, guard.guardUser.notificationChannels))
         }
 
         const notifier = new StandardNotifier(notification, submitters)

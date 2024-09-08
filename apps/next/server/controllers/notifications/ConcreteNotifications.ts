@@ -20,7 +20,7 @@ export class ReminderNotification extends Notification {
     userId: string
 
     constructor(userId: string, nextRequiredCheckIn: Date, isCritical = false) {
-        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", isCritical, true, false, {id: userId, name: undefined, image: undefined})
+        super(ConcreteNotificationType.REMINDER_NOTIFICATION, "Ist alles okay?", `denke bitte daran die Frage in spätestens ${dayjs(nextRequiredCheckIn).toNow(true)} zu beantworten.`, undefined, undefined, "reminder", isCritical, true, false)
         this.nextRequiredCheckIn = new Date(nextRequiredCheckIn)
         this.userId = userId
     }
@@ -110,8 +110,8 @@ export class NewGuardNotification extends Notification {
 }
 
 export class CheckInNotification extends Notification {
-    constructor(userId: string) {
-        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, "Geht es wieder gut", "Geht es wieder gut", undefined, undefined, "checkIn", false, false, false, {name: "", image: "", id: userId})
+    constructor(guardId: string, guardName: string, guardImage: string | null, initiatorId: string) {
+        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, `Bei ${guardName} ist alles in Ordnung`, "Mir geht es gut. Ich habe verpasst mich zurückzumelden.", undefined, undefined, "checkIn", false, false, false, {name: guardName, image: guardImage, id: guardId, initiatorId: initiatorId})
     }
 
     async refresh() {
@@ -132,7 +132,7 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             result = new NewGuardNotification(plainObject.sender.id, plainObject.guardName, plainObject.sender.image)
             break;
         case ConcreteNotificationType.CHECK_IN_NOTIFICATION:
-            result = new CheckInNotification(plainObject.sender.id)
+            result = new CheckInNotification(plainObject.sender.id, plainObject.guardName, plainObject.sender.image, plainObject.sender.initiatorId)
             break;
         default:
             throw new Error("Concrete notification is not correctly implemented")
