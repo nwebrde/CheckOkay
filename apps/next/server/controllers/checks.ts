@@ -34,7 +34,7 @@ import { getAllSubmitters, getPushSubmitters } from './notifications/Notificatio
  * @param step
  * @param external external checkins are only successfull if user state is WARNED or BACKUP
  */
-export const checkIn = async (userId: string, step: boolean, external = false, date = new Date(), initiatorId: string = undefined) => {
+export const checkIn = async (userId: string, step: boolean, external = false, date = new Date(), initiatorId = userId) => {
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
