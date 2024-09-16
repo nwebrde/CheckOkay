@@ -12,6 +12,7 @@ import { XMark } from 'app/design/icons'
 import { ActivityIndicator } from 'react-native'
 import * as Burnt from 'burnt'
 import { clsx } from 'clsx'
+import { confirmAlert } from 'app/design/confirm'
 
 const renderItem = ({ item }: { item: Guarded }) => {
     const deleteMutation = trpc.guards.deleteGuardedUser.useMutation()
@@ -20,9 +21,9 @@ const renderItem = ({ item }: { item: Guarded }) => {
 
 
     const remove = () => {
-        deleteMutation.mutate({
+        confirmAlert("Bist du sicher dass du " + ((item.name == "" || !item.name) ? item.email : item.name) + " nicht mehr beschützen möchtest?", () => deleteMutation.mutate({
             guardedUserId: item.id,
-        })
+        }), () => {}, true, ((item.name == "" || !item.name) ? item.email : item.name) + " entfernen?")
     }
 
     const checkGuardedIn = async () => {
@@ -30,7 +31,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
             guardedUserId: item.id
         })
         Burnt.toast({
-            title: item.name + " ist zurückgemeldet", // required
+            title: ((item.name == "" || !item.name) ? item.email : item.name) + " ist zurückgemeldet", // required
 
             preset: "done", // or "error", "none", "custom"
 
@@ -56,7 +57,7 @@ const renderItem = ({ item }: { item: Guarded }) => {
             pause: isActiveNow
         })
         Burnt.toast({
-            title: "Warnungen für " + item.name + (isActiveNow ? " pausiert" : "  fortgesetzt"), // required
+            title: "Warnungen für " + ((item.name == "" || !item.name) ? item.email : item.name) + (isActiveNow ? " pausiert" : "  fortgesetzt"), // required
 
             preset: "done", // or "error", "none", "custom"
 
@@ -135,10 +136,11 @@ const renderItem = ({ item }: { item: Guarded }) => {
                     />.
                     {item.nextRequiredCheckIn && (
                         <Text className="">
-                            {' '}Nächste Rückmeldung bis{' '}
+                            {' '}{(item.state == CheckState.OK || item.state == CheckState.NOTIFIED) ? "Nächste Rückmeldung bis" : "Rückmeldung ist fällig seit"}{' '}
                             <Moment
                                 element={Text}
                                 locale="de"
+                                ago={item.state != CheckState.OK && item.state != CheckState.NOTIFIED}
                                 date={item.nextRequiredCheckIn}
                                 fromNow
                             />.
