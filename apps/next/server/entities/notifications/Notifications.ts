@@ -5,9 +5,10 @@ export type Recipient = {
 }
 
 export type Sender = {
-    name: string;
-    image: string | null;
+    name: string | undefined;
+    image: string | null | undefined;
     id: string;
+    initiatorId: string | null | undefined;
 }
 
 export abstract class Notification {
