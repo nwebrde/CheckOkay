@@ -10,6 +10,7 @@ import { Toaster } from "burnt/web";
 import { PortalHost } from '@rn-primitives/portal';
 import React from 'react'
 import { NavigationProvider } from 'app/provider/navigation'
+import { StepProvider } from 'app/provider/steps'
 
 export function Provider({ children }: { children: React.ReactNode }) {
     localMoment.locale('de')
@@ -19,11 +20,14 @@ export function Provider({ children }: { children: React.ReactNode }) {
             <SessionProvider>
                 <AuthProvider>
                     <TRPCProvider>
+                        <StepProvider>
                         <NotificationsProvider>
                         {children}
                             <Toaster position='bottom-right' />
                             <PortalHost />
-                        </NotificationsProvider></TRPCProvider>
+                        </NotificationsProvider>
+                        </StepProvider>
+                        </TRPCProvider>
                 </AuthProvider>
             </SessionProvider>
             </NavigationProvider>
