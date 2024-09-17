@@ -21,9 +21,24 @@ const renderItem = ({ item }: { item: Guarded }) => {
 
 
     const remove = () => {
-        confirmAlert("Bist du sicher dass du " + ((item.name == "" || !item.name) ? item.email : item.name) + " nicht mehr beschützen möchtest?", () => deleteMutation.mutate({
-            guardedUserId: item.id,
-        }), () => {}, true, ((item.name == "" || !item.name) ? item.email : item.name) + " entfernen?")
+        confirmAlert("Bist du sicher dass du " + ((item.name == "" || !item.name) ? item.email : item.name) + " nicht mehr beschützen möchtest?", () => {
+            deleteMutation.mutate({
+                guardedUserId: item.id,
+            })
+            Burnt.toast({
+                title: ((item.name == "" || !item.name) ? item.email : item.name) + " wurde entfernt", // required
+
+                preset: "done", // or "error", "none", "custom"
+
+                haptic: "success", // or "success", "warning", "error"
+
+                duration: 2, // duration in seconds
+
+                shouldDismissByDrag: true,
+
+                from: "top", // "top" or "bottom"
+            });
+        }, () => {}, true, ((item.name == "" || !item.name) ? item.email : item.name) + " entfernen?")
     }
 
     const checkGuardedIn = async () => {
@@ -136,11 +151,10 @@ const renderItem = ({ item }: { item: Guarded }) => {
                     />.
                     {item.nextRequiredCheckIn && (
                         <Text className="">
-                            {' '}{(item.state == CheckState.OK || item.state == CheckState.NOTIFIED) ? "Nächste Rückmeldung bis" : "Rückmeldung ist fällig seit"}{' '}
+                            {' '}{(item.state == CheckState.OK || item.state == CheckState.NOTIFIED) ? "Nächste Rückmeldung bis" : "Rückmeldung war fällig"}{' '}
                             <Moment
                                 element={Text}
                                 locale="de"
-                                ago={item.state != CheckState.OK && item.state != CheckState.NOTIFIED}
                                 date={item.nextRequiredCheckIn}
                                 fromNow
                             />.

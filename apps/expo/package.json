@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@alevy97/react-native-userdefaults": "^0.2.2",
+    "@kingstinct/react-native-healthkit": "^8.2.0",
     "@logrocket/react-native": "1.35.2",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
@@ -9,6 +11,7 @@
     "expo": "51.0.17",
     "expo-apple-authentication": "~6.4.1",
     "expo-auth-session": "~5.5.2",
+    "expo-background-fetch": "~12.0.1",
     "expo-build-properties": "~0.12.3",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
@@ -22,6 +25,7 @@
     "expo-notifications": "^0.28.16",
     "expo-router": "3.5.17",
     "expo-secure-store": "~13.0.2",
+    "expo-sensors": "~13.0.9",
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "expo-task-manager": "~11.8.2",

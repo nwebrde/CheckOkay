@@ -1,6 +1,6 @@
 import * as AuthSession from 'expo-auth-session'
 import { router } from 'expo-router'
-import { DiscoveryDocument } from 'expo-auth-session'
+import { DiscoveryDocument, TokenResponse } from 'expo-auth-session'
 import * as SecureStore from 'expo-secure-store';
 
 const redirectUri = AuthSession.makeRedirectUri({})
@@ -49,12 +49,12 @@ export const signIn = async () => {
             discovery,
         )
 
-        await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken);
+        await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken, {keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK});
 
         if(!tokenResult.refreshToken) {
             await SecureStore.deleteItemAsync(refreshTokenKey)
         } else {
-            await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken)
+            await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken, {keychainAccessible: SecureStore.WHEN_UNLOCKED})
         }
 
 
@@ -78,34 +78,41 @@ export const refresh = async () => {
         refreshToken: refreshToken,
         scopes: ['all'],
     }
-    const tokenResult = await AuthSession.refreshAsync(
-        refreshTokenObject,
-        discovery,
-    )
 
-    await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken);
-    if(!tokenResult.refreshToken) {
-        await SecureStore.deleteItemAsync(refreshTokenKey)
-    } else {
-        await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken)
+    let tokenResult: undefined | TokenResponse
+
+    try {
+        tokenResult = await AuthSession.refreshAsync(
+            refreshTokenObject,
+            discovery,
+        )
+    } catch (e) {
+        return false
     }
-    return true
+
+    if(tokenResult && tokenResult.accessToken && tokenResult.refreshToken) {
+        await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken, {keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK});
+        await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken, {keychainAccessible: SecureStore.WHEN_UNLOCKED});
+        return true
+    }
+    else {
+        return false
+    }
 }
 
 export const signOut = async () => {
     const refreshToken = await getRefreshToken()
-    if (!refreshToken) {
-        return false
+    if (refreshToken) {
+        await AuthSession.revokeAsync(
+            { token: refreshToken },
+            discovery,
+        )
     }
-    const revoked = await AuthSession.revokeAsync(
-        { token: refreshToken },
-        discovery,
-    )
-    if (!revoked) return false
 
     await SecureStore.deleteItemAsync(accessTokenKey)
     await SecureStore.deleteItemAsync(refreshTokenKey)
 
+    router.replace('/sign-in')
     return true
 }
 

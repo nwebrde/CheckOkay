@@ -22,17 +22,17 @@
     NSString *criticalAlert = request.content.userInfo[@"body"][@"criticalAlert"];
     NSString *timeSensitive = request.content.userInfo[@"body"][@"timeSensitive"];
 
-    if ([criticalAlert isEqual: @"1"]) {
+    if ([criticalAlert isEqualToString: @"1"]) {
         NSString *customSoundName = @"criticalalert.caf"; // Name der Sounddatei
 
         UNNotificationSound *criticalSound = [UNNotificationSound soundNamed:customSoundName];
 
         if (@available(iOS 15.0, *)) {
-            criticalSound = [UNNotificationSound criticalSoundNamed:customSoundName withAudioVolume:1.0];
+            criticalSound = [UNNotificationSound criticalSoundNamed:customSoundName withAudioVolume:0.7];
             self.bestAttemptContent.sound = criticalSound;
         }
     }
-    else if ([timeSensitive isEqual: @"1"]) {
+    else if ([timeSensitive isEqualToString: @"1"]) {
         if (@available(iOS 15.0, *)) {
             self.bestAttemptContent.interruptionLevel = UNNotificationInterruptionLevelTimeSensitive;
         }
@@ -43,8 +43,10 @@
     NSString *name = request.content.userInfo[@"body"][@"sender"][@"name"];
     INImage *inImage = nil;
 
+    UNNotificationContent* updatedContent = nil;
+
     // treat notification as a communication notification
-    if(![name isEqual: @""] || ![profileImageUrlString isEqual: @""]) {
+    if(![name isEqualToString: @""] || ![profileImageUrlString isEqualToString: @""]) {
         if (profileImageUrlString && ![profileImageUrlString isEqual: @""]) {
             NSURL *profileImageUrl = [NSURL URLWithString:profileImageUrlString];
             NSData *imageData = [NSData dataWithContentsOfURL:profileImageUrl];
@@ -66,16 +68,49 @@
             }
         }];
 
-        UNNotificationContent* updatedContent = [self.bestAttemptContent contentByUpdatingWithProvider:intent error:nil];
+        updatedContent = [self.bestAttemptContent contentByUpdatingWithProvider:intent error:nil];
+    }
 
-        self.contentHandler(updatedContent);
+
+
+    // dismiss warning notifications from tray
+    if([request.content.userInfo[@"body"][@"categoryId"] isEqualToString: @"checkIn"]) {
+        [[UNUserNotificationCenter currentNotificationCenter] getDeliveredNotificationsWithCompletionHandler:^(NSArray<UNNotification *> * _Nonnull notifications) {
+                NSMutableArray *identifiersToDismiss = [NSMutableArray array];
+                for (UNNotification *notification in notifications) {
+                    NSString *categoryId = notification.request.content.userInfo[@"body"][@"categoryId"];
+                    NSString *senderId = notification.request.content.userInfo[@"body"][@"sender"][@"id"];
+                    if([categoryId isEqualToString: @"warning"]) {
+                        if([senderId isEqualToString: request.content.userInfo[@"body"][@"sender"][@"id"]]) {
+                            [identifiersToDismiss addObject:notification.request.identifier];
+                        }
+                    }
+                }
+                [[UNUserNotificationCenter currentNotificationCenter] removeDeliveredNotificationsWithIdentifiers:identifiersToDismiss];
+
+                NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.de.nweber.checkokay.nse"];
+                NSString *userId = [sharedDefaults objectForKey:@"userId"];
+                NSString *initiatorId = request.content.userInfo[@"body"][@"sender"][@"initiatorId"];
+
+                if ([userId isEqualToString:initiatorId]) {
+                    self.contentHandler(nil);
+                }
+
+            if(updatedContent == nil) {
+                self.contentHandler(self.bestAttemptContent);
+            } else {
+                self.contentHandler(updatedContent);
+            }
+
+            }];
     }
     else {
-        self.contentHandler(self.bestAttemptContent);
+        if(updatedContent == nil) {
+            self.contentHandler(self.bestAttemptContent);
+        } else {
+            self.contentHandler(updatedContent);
+        }
     }
-
-
-
 }
 
 - (void)serviceExtensionTimeWillExpire {

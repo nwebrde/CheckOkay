@@ -1,0 +1,17 @@
+diff --git a/node_modules/@kingstinct/react-native-healthkit/ios/ReactNativeHealthkit.swift b/node_modules/@kingstinct/react-native-healthkit/ios/ReactNativeHealthkit.swift
+index e97645a..ca46239 100644
+--- a/node_modules/@kingstinct/react-native-healthkit/ios/ReactNativeHealthkit.swift
++++ b/node_modules/@kingstinct/react-native-healthkit/ios/ReactNativeHealthkit.swift
+@@ -777,7 +777,11 @@ class ReactNativeHealthkit: RCTEventEmitter {
+           }
+ 
+         }
+-        handler()
++
++        // Delay the handler execution by 15 seconds
++                    DispatchQueue.main.asyncAfter(deadline: .now() + 15.0) {
++                        handler()  // Call the handler after 15 seconds
++                    }
+       }
+     }
+ 

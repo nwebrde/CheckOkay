@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native'
+import { AppState, Platform, StyleSheet } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import BottomSheet, { BottomSheetMethods } from '@devvie/bottom-sheet';
 import * as Device from 'expo-device';
@@ -9,9 +9,32 @@ import { View } from 'app/design/view'
 import Constants from 'expo-constants'
 import { Button } from 'app/design/button'
 import { VSpacer } from 'app/design/layout'
-import { openAppSettings } from 'app/lib/notifications/permissionsUtil'
+import { openAppSettings } from 'app/lib/permissions/notificationPermissionUtil'
 import { trpc } from 'app/provider/trpc-client'
 import * as TaskManager from 'expo-task-manager';
+import UserDefaults from "@alevy97/react-native-userdefaults";
+import { pedometerCheckIn } from 'app/provider/steps'
+
+const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+
+TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }) => handleBackgroundNotification(data));
+
+const handleBackgroundNotification = async (data) => {
+
+    let categoryId = undefined
+
+    // @ts-ignore
+    if (data && data.UIApplicationLaunchOptionsRemoteNotificationKey && data.UIApplicationLaunchOptionsRemoteNotificationKey.body && data.UIApplicationLaunchOptionsRemoteNotificationKey.body.categoryId) {
+        // @ts-ignore
+        categoryId = data.UIApplicationLaunchOptionsRemoteNotificationKey.body.categoryId;
+    }
+
+    console.error('checkokay.background.noti', categoryId);
+    await pedometerCheckIn("backgroundNoti." + categoryId ?? "undefined")
+    // Do something with the notification data
+}
+
+const groupDefaults = new UserDefaults("group.de.nweber.checkokay.nse");
 
 const NotificationsContext = React.createContext<NotificationsContextType | null>(null)
 
@@ -28,33 +51,6 @@ enum ActionIdentifiers {
     EXTERNAL_CHECKIN = "externalcheckin",
     PAUSE = "pause",
 }
-
-const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
-
-TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, ({ data, error, executionInfo }) => {
-    console.error('Received a notification in the background!');
-    console.error('Received a notification in the background!', data)
-
-
-// data.categoryId == "checkIk"
-    /*
-    if(1==1) {
-        const senderId = ""
-        const notifications = await Notifications.getPresentedNotificationsAsync()
-        for (const notification of notifications) {
-            if(notification.request.content.data.categoryId == "reminder" || notification.request.content.data.categoryId == "warning") {
-                if(notification.request.content.data.sender.id == senderId) {
-                    Notifications.dismissNotificationAsync(notification.request.identifier)
-                }
-            }
-        }
-    }
-
-     */
-    // Do something with the notification data
-});
-
-Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 function handleRegistrationError(errorMessage: string) {
     alert(errorMessage);
@@ -125,13 +121,15 @@ async function init() {
 
     if (Platform.OS === 'ios') {
         await Notifications.setNotificationCategoryAsync("reminder", [{buttonTitle: "Es ist alles okay 👍", identifier: ActionIdentifiers.CHECKIN, options: {
-                opensAppToForeground: false
+                opensAppToForeground: false,
+                isAuthenticationRequired: true
             }}])
 
         await Notifications.setNotificationCategoryAsync("warning", [{buttonTitle: "Es ist alles okay 👍", identifier: ActionIdentifiers.EXTERNAL_CHECKIN, options: {
                 opensAppToForeground: false
-            }}, {buttonTitle: "Warnungen für diese Person pausieren", identifier: ActionIdentifiers.PAUSE, options: {
+            }}, {buttonTitle: "Warnungen für Person pausieren ⏸️", identifier: ActionIdentifiers.PAUSE, options: {
                 opensAppToForeground: false,
+                isAuthenticationRequired: true,
                 isDestructive: true
             }}])
     }
@@ -182,6 +180,41 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
     const checkInMod = trpc.checks.checkIn.useMutation();
     const pauseMod = trpc.guards.pauseWarningsForGuardedUser.useMutation()
     const checkInExternalMod = trpc.guards.checkInForGuardedUser.useMutation()
+    const user = trpc.getUser.useQuery()
+
+    const utils = trpc.useUtils()
+
+
+    const dismissExpiredNotifications = async () => {
+        const user = await utils.getUser.fetch()
+        const presentedNotifications = await Notifications.getPresentedNotificationsAsync()
+        for (const presentedNotification of presentedNotifications) {
+            switch (presentedNotification.request.content.data.categoryId) {
+                case "reminder":
+                    if(!user.lastCheckIn) {
+                        continue;
+                    }
+                    if (new Date(presentedNotification.date * 1000) <= new Date(user.lastCheckIn)) {
+                        await Notifications.dismissNotificationAsync(presentedNotification.request.identifier)
+                    }
+                    break;
+                case "warning":
+                    const guardedUser = user.guardedUsers.find((user) => user.id == presentedNotification.request.content.data.sender.id)
+                    if(!guardedUser || !guardedUser.nextRequiredCheckIn) {
+                        continue;
+                    }
+                    if (new Date(presentedNotification.date * 1000) < new Date(guardedUser.nextRequiredCheckIn)) {
+                        await Notifications.dismissNotificationAsync(presentedNotification.request.identifier)
+                    }
+                    break;
+                case "checkIn":
+                    await Notifications.dismissNotificationAsync(presentedNotification.request.identifier)
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
 
     /*
@@ -236,10 +269,18 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
 
      */
 
+
+
     useEffect(() => {
         init()
         .then(token => setExpoPushToken(token))
         .catch((error: any) => setExpoPushToken(undefined));
+
+        TaskManager.isTaskRegisteredAsync(BACKGROUND_NOTIFICATION_TASK).then((state) => {
+            if(!state) {
+                Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+            }
+        })
 
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
@@ -268,13 +309,28 @@ export function NotificationsProvider(props: React.PropsWithChildren) {
             }
         });
 
+        dismissExpiredNotifications()
+
+        const handleAppStateChange = (nextAppState) => {
+            dismissExpiredNotifications(); // Überprüft Berechtigungen, wenn die App in den Vordergrund kommt
+        };
+
+        const appStateChangeSubscription = AppState.addEventListener('change', handleAppStateChange);
+
         return () => {
             notificationListener.current &&
             Notifications.removeNotificationSubscription(notificationListener.current);
             responseListener.current &&
             Notifications.removeNotificationSubscription(responseListener.current);
+            appStateChangeSubscription.remove();
         };
     }, []);
+
+    useEffect(() => {
+        if(user && user.data) {
+            groupDefaults.set("userId", user.data.id);
+        }
+    }, [user])
 
     const value = {
         token: expoPushToken,

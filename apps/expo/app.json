@@ -2,7 +2,7 @@
   "expo": {
     "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "1.1.2",
+    "version": "1.2",
     "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
     "scheme": "checkokay",
     "platforms": [
@@ -16,7 +16,7 @@
         "NSUserActivityTypes": [
           "INSendMessageIntent"
         ],
-        "UIBackgroundModes": ["remote-notification", "processing"]
+        "UIBackgroundModes": ["fetch", "remote-notification", "processing"]
       },
       "entitlements": {
         "com.apple.developer.usernotifications.critical-alerts": true,
@@ -29,7 +29,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "32"
+      "buildNumber": "35"
     },
     "android": {
       "package": "de.nweber.checkokay",
@@ -51,6 +51,14 @@
           "sounds": [
             "./assets/criticalalert.caf"
           ]
+        }
+      ],
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "Anhand deiner Schrittdaten melden wir dich automatisch zurück. Deine Schrittdaten verlassen dein Gerät zu keiner Zeit.",
+          "NSHealthUpdateUsageDescription": "CheckOkay benötigen keinen Schreibzugriff auf deine Schrittdaten",
+          "background": true
         }
       ],
       "expo-secure-store",

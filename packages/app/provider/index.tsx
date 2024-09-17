@@ -7,6 +7,7 @@ import { PortalHost } from '@rn-primitives/portal';
 import React from 'react'
 import { ToastProvider } from 'react-native-toast-notifications'
 import Toast from 'react-native-toast-message';
+import { StepProvider } from 'app/provider/steps'
 
 
 export function Provider({ children }: { children: React.ReactNode }) {
@@ -16,6 +17,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
 
             <AuthProvider>
                 <TRPCProvider>
+                    <StepProvider>
 <NotificationsProvider>
     <ToastProvider>
                     {children}
@@ -23,6 +25,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
     <Toast />
     <PortalHost />
 </NotificationsProvider>
+                    </StepProvider>
                     </TRPCProvider>
             </AuthProvider>
         </SafeArea>

@@ -5,7 +5,7 @@ import { ChecksScreen } from 'app/features/settings/checks/ChecksScreen'
 export default function Page() {
     return (
         <>
-            <Stack.Screen options={{headerTitle: "Kontrollzeitpunkte"}} />
+            <Stack.Screen options={{headerTitle: "Rückmeldungen"}} />
             <ChecksScreen />
         </>
         )

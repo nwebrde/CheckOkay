@@ -30,7 +30,7 @@ export function SettingsNavigator({ header, currentPath, useRelative }: { header
                     <SettingsRow label="Abmelden" onPress={auth?.signOut} separator={false} />
                 </SettingsGroup>
                 <SettingsGroup>
-                    <SettingsRow label="Check-In Zeitpunkte" active={currentPath.includes("checks")} link="checks" useRelative={useRelative} separator={false} />
+                    <SettingsRow label="Rückmeldungen" active={currentPath.includes("checks")} link="checks" useRelative={useRelative} separator={false} />
                 </SettingsGroup>
                 <SettingsGroup>
                     <SettingsRow label="Deine Beschützer" active={currentPath.includes("guards")} link="guards" useRelative={useRelative} separator={false} />

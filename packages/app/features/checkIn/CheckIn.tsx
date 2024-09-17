@@ -99,7 +99,7 @@ export function CheckIn() {
 
                                         {user.data?.nextRequiredCheckIn && (
                                             <Text className="font-medium">
-                                                Beantworte diese Frage bis{' '}
+                                                {(user.data.state == CheckState.OK || user.data.state == CheckState.NOTIFIED) ? "Beantworte diese Frage bis" : "Deine Rückmeldung war fällig"}{' '}
                                                 <Moment
                                                     element={Text}
                                                     locale="de"

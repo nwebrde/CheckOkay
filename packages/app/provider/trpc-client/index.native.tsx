@@ -1,5 +1,5 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { httpBatchLink, loggerLink } from '@trpc/client'
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
 import { useState } from 'react'
 import type { AppRouter } from 'next-app/server/routers/_app'
@@ -23,7 +23,7 @@ export const trpc = createTRPCReact<AppRouter>({
                 await opts.originalFn()
                 await opts.queryClient.invalidateQueries()
             },
-        },
+        }
     },
 })
 
@@ -56,8 +56,9 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                     const refreshToken = await getRefreshToken()
 
                     // on every request, this function is called
-                    if (!accessToken || !refreshToken) {
-                        return true
+                    if (!accessToken) {
+                        await signOut()
+                        return false
                     }
 
                     let decodedToken
@@ -65,10 +66,12 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                         decodedToken = jwtDecode(accessToken)
                     } catch (e) {
                         await signOut()
+                        return false
                     }
 
                     if (!decodedToken || !decodedToken.exp) {
-                        return true
+                        await signOut()
+                        return false
                     }
 
                     // if access token expires in the next 10 sec
@@ -84,13 +87,9 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                     // do your magic to fetch a refresh token here
                     // example:
                     try {
-                        const result = await refresh()
-                        if (!result) {
-                            await signOut()
-                        }
+                        await refresh()
                     } catch (err) {
-                        // token refreshing failed, let's log the user out
-                        await signOut()
+                        // token refreshing failed
                     }
                 },
             }),
@@ -100,7 +99,8 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                 headers: async () => {
                     const token = await getAccessToken()
                     return {authorization: token!}
-                }
+                },
+
             }),
         ],
         transformer: superjson
@@ -109,12 +109,27 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
+                queryCache: new QueryCache({
+                    onError: (error) => {
+                        // @ts-ignore
+                        if (error instanceof TRPCClientError && error.data?.code === 'UNAUTHORIZED') {
+                            signOut();
+                        }
+                    },
+                }),
+                mutationCache: new MutationCache({
+                    onError: (error) => {
+                        if (error instanceof TRPCClientError && error.data?.code === 'UNAUTHORIZED') {
+                            signOut();
+                        }
+                    },
+                }),
                 defaultOptions: {
                     queries: {
-                        retry: 3,
+                        retry: 3
                     },
                     mutations: {
-                        retry: 0,
+                        retry: 0
                     },
                 },
             }),
