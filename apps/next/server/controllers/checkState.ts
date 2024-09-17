@@ -60,7 +60,9 @@ export const remind = async (userId: string, criticalReminder: boolean) => {
 
         if(!criticalReminder) {
             const lastResortCheckInNotification = new LastResortCheckIn(data.id)
-            await notifier.submit(lastResortCheckInNotification)
+
+            const lastResortNotifier = new StandardNotifier(lastResortCheckInNotification, submitters)
+            await lastResortNotifier.submit()
         }
 
         await updateCheckState(userId, CheckState.NOTIFIED)
