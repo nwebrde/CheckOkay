@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 
 export const enum ConcreteNotificationType {
     REMINDER_NOTIFICATION = "REMINDER_NOTIFICATION",
+    LAST_RESORT_CHECK_IN = "LAST_RESORT_CHECK_IN",
     WARNING_NOTIFICATION = "WARNING_NOTIFICATION",
     NEW_GUARD_NOTIFICATION = "NEW_GUARD_NOTIFICATION",
     CHECK_IN_NOTIFICATION = "CHECK_IN_NOTIFICATION",
@@ -110,8 +111,18 @@ export class NewGuardNotification extends Notification {
 }
 
 export class CheckInNotification extends Notification {
-    constructor(guardId: string, guardName: string, guardImage: string | null, initiatorId: string) {
-        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, `Bei ${guardName} ist alles in Ordnung`, "Mir geht es gut. Ich habe verpasst mich zurückzumelden.", undefined, undefined, "checkIn", false, false, false, {name: guardName, image: guardImage, id: guardId, initiatorId: initiatorId})
+    constructor(userId: string, name: string, image: string | null, initiatorId: string) {
+        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, `Bei ${guardName} ist alles in Ordnung`, "Mir geht es gut. Ich habe verpasst mich zurückzumelden.", undefined, undefined, "checkIn", false, false, false, {name: name, image: image, id: userId, initiatorId: initiatorId})
+    }
+
+    async refresh() {
+        return false
+    }
+}
+
+export class LastResortCheckIn extends Notification {
+    constructor(userId: string) {
+        super(ConcreteNotificationType.LAST_RESORT_CHECK_IN, "", "", undefined, undefined, "lastResortCheckIn", true, true, true, undefined)
     }
 
     async refresh() {
@@ -132,7 +143,10 @@ export const toConcreteNotification = (plainObject: any): Notification => {
             result = new NewGuardNotification(plainObject.sender.id, plainObject.guardName, plainObject.sender.image)
             break;
         case ConcreteNotificationType.CHECK_IN_NOTIFICATION:
-            result = new CheckInNotification(plainObject.sender.id, plainObject.guardName, plainObject.sender.image, plainObject.sender.initiatorId)
+            result = new CheckInNotification(plainObject.sender.id, plainObject.name, plainObject.sender.image, plainObject.sender.initiatorId)
+            break;
+        case ConcreteNotificationType.LAST_RESORT_CHECK_IN:
+            result = new CheckInNotification(plainObject.userId)
             break;
         default:
             throw new Error("Concrete notification is not correctly implemented")

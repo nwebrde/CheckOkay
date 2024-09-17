@@ -5,7 +5,7 @@ import { CheckStateController } from '../entities/checks/CheckStateController'
 import { getLastCheckIn, toExternalUserImage, toSeconds, updateCheckState } from '../adapters/db/users'
 import { Recipient } from '../entities/notifications/Notifications'
 import { CheckState } from 'app/lib/types/check'
-import { ReminderNotification, WarningNotification } from './notifications/ConcreteNotifications'
+import { LastResortCheckIn, ReminderNotification, WarningNotification } from './notifications/ConcreteNotifications'
 import { StandardNotifier, WarningNotifier } from './notifications/ConcreteNotifiers'
 import { getMainSubmitters, getPushSubmitters } from './notifications/NotificationSubmitters'
 import { GuardType } from 'app/lib/types/guardUser'
@@ -56,6 +56,13 @@ export const remind = async (userId: string, criticalReminder: boolean) => {
         const notifier = new StandardNotifier(notification, submitters)
 
         await notifier.submit()
+
+
+        if(!criticalReminder) {
+            const lastResortCheckInNotification = new LastResortCheckIn(data.id)
+            await notifier.submit(lastResortCheckInNotification)
+        }
+
         await updateCheckState(userId, CheckState.NOTIFIED)
     }
 }
