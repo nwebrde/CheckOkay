@@ -5,11 +5,10 @@ import { HeaderLink } from 'app/design/settings/HeaderLink'
 import { SettingsGroup } from 'app/design/settings/group'
 import React from 'react'
 import ChecksList from 'app/features/settings/checks/ChecksList'
-import { Platform, Switch } from 'react-native'
+import { Linking, Platform, Switch } from 'react-native'
 import { useSteps } from 'app/provider/steps'
 import { Text } from 'app/design/typography'
 import { Button } from 'app/design/button'
-import * as Linking from 'expo-linking'
 import { View } from 'app/design/view'
 
 function AutomaticCheckIn() {
