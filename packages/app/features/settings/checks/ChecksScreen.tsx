@@ -13,7 +13,7 @@ import { View } from 'app/design/view'
 
 function AutomaticCheckIn() {
     const {state, backgroundState, toggle, toggleBackground, needOverwrite, needPedometerOverwrite, needBackgroundOverwrite} = useSteps()!
-    if(Platform.OS !== "web") {
+    if(Platform.OS == "ios" || Platform.OS == "android") {
         return (
             <SettingsGroup title="Automatische Rückmeldung">
             <SettingsRow headerChild={<Switch
