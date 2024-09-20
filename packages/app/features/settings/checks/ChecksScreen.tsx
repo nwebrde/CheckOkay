@@ -12,8 +12,8 @@ import { Button } from 'app/design/button'
 import { View } from 'app/design/view'
 
 function AutomaticCheckIn() {
-    const {state, backgroundState, toggle, toggleBackground, needOverwrite, needPedometerOverwrite, needBackgroundOverwrite} = useSteps()!
     if(Platform.OS == "ios" || Platform.OS == "android") {
+        const {state, backgroundState, toggle, toggleBackground, needOverwrite, needPedometerOverwrite, needBackgroundOverwrite} = useSteps()!
         return (
             <SettingsGroup title="Automatische Rückmeldung">
             <SettingsRow headerChild={<Switch
