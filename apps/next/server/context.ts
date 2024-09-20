@@ -23,7 +23,7 @@ export async function createContext({
                 try {
                     userId = (await jwtService.verify(token)).sub
                 } catch (e) {
-                    console.error('Error verifying jwt', e)
+                    //console.error('Error verifying jwt', e)
                     Sentry.captureMessage("verifying token failed: " + e);
                 }
             }

@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         return handleResponse(oauthResponse)
     } catch (e) {
         Sentry.captureMessage("refreshing failed: " + e);
-        console.error("refresh failed: ", e)
+        //console.error("refresh failed: ", e)
         return handleError(e)
     }
 }
