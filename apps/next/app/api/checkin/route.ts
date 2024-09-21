@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         }
 
         // if access token expires in the next 10 sec
-        if (state && ((Date.now() - decodedToken["exp"]!) <= (24 * 60 * 60 * 1000))) {
+        if (state && ((Date.now() - decodedToken["exp"]!) <= (7 * 24 * 60 * 60 * 1000))) {
             return true
         }
     }

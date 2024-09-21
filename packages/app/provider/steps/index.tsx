@@ -284,30 +284,36 @@ export const StepProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [backgroundState])
 
+    /*
     useEffect(() => {
 
         const subscribeToSteps = async () => {
-            if(AppState.currentState == "background" && state) {
-                await HealthKit.subscribeToChanges(
-                    HKQuantityTypeIdentifier.stepCount,
-                    async () => {
-                        if(await AsyncStorage.getItem(ASYNC_STORAGE_KEY) != null) {
-                            const user = await utils.getUser.fetch()
-                            let startDate = new Date()
-                            startDate.setDate(startDate.getDate() - 1);
-                            if(user && user.lastCheckIn) {
-                                startDate = new Date(user.lastCheckIn)
-                                startDate.setMinutes(startDate.getMinutes() + 1);
-                            }
-                            const data = await HealthKit.queryStatisticsForQuantity(HKQuantityTypeIdentifier.stepCount, [HKStatisticsOptions.cumulativeSum], startDate, new Date())
-                            if(data && data.sumQuantity && data.sumQuantity.quantity >= 10) {
-                                const mostRecentEndDate = (await HealthKit.getMostRecentQuantitySample(HKQuantityTypeIdentifier.stepCount, HKUnits.Count))?.endDate
-                                await checkInMutation.mutateAsync({step: true, date: mostRecentEndDate})
-                            }
+            await HealthKit.subscribeToChanges(
+                HKQuantityTypeIdentifier.stepCount,
+                async () => {
+                    await fetch('https://app.checkokay.com/api/report', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'ReportName': "health.fired." + AppState.currentState + "." + state
+                        }
+                    });
+                    if(AppState.currentState != "active" && AppState.currentState != "inactive" && state) {
+                        const user = await utils.getUser.fetch()
+                        let startDate = new Date()
+                        startDate.setDate(startDate.getDate() - 1);
+                        if(user && user.lastCheckIn) {
+                            startDate = new Date(user.lastCheckIn)
+                            startDate.setMinutes(startDate.getMinutes() + 1);
+                        }
+                        const data = await HealthKit.queryStatisticsForQuantity(HKQuantityTypeIdentifier.stepCount, [HKStatisticsOptions.cumulativeSum], startDate, new Date())
+                        if(data && data.sumQuantity && data.sumQuantity.quantity >= 10) {
+                            const mostRecentEndDate = (await HealthKit.getMostRecentQuantitySample(HKQuantityTypeIdentifier.stepCount, HKUnits.Count))?.endDate
+                            await checkInMutation.mutateAsync({step: true, date: mostRecentEndDate})
                         }
                     }
-                );
-            }
+                }
+            );
         }
 
         subscribeToSteps()
@@ -318,6 +324,46 @@ export const StepProvider = ({ children }: { children: React.ReactNode }) => {
             subscription.remove();
         }
     }, [state]);
+
+     */
+
+    useEffect(() => {
+        fetch('https://app.checkokay.com/api/report', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'ReportName': "health.not-fired." + AppState.currentState
+            }
+        });
+        if(state) {
+            HealthKit.subscribeToChanges(
+                HKQuantityTypeIdentifier.stepCount,
+                async () => {
+                    await fetch('https://app.checkokay.com/api/report', {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'ReportName': "health.fired." + AppState.currentState
+                        }
+                    });
+                    if(AppState.currentState != "active" && AppState.currentState != "inactive") {
+                        const user = await utils.getUser.fetch()
+                        let startDate = new Date()
+                        startDate.setDate(startDate.getDate() - 1);
+                        if(user && user.lastCheckIn) {
+                            startDate = new Date(user.lastCheckIn)
+                            startDate.setMinutes(startDate.getMinutes() + 1);
+                        }
+                        const data = await HealthKit.queryStatisticsForQuantity(HKQuantityTypeIdentifier.stepCount, [HKStatisticsOptions.cumulativeSum], startDate, new Date())
+                        if(data && data.sumQuantity && data.sumQuantity.quantity >= 10) {
+                            const mostRecentEndDate = (await HealthKit.getMostRecentQuantitySample(HKQuantityTypeIdentifier.stepCount, HKUnits.Count))?.endDate
+                            await checkInMutation.mutateAsync({step: true, date: mostRecentEndDate})
+                        }
+                    }
+                }
+            );
+        }
+    }, [state])
 
     const value = {
         toggle: toggle,

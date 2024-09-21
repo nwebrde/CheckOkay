@@ -16,7 +16,15 @@
         "NSUserActivityTypes": [
           "INSendMessageIntent"
         ],
-        "UIBackgroundModes": ["fetch", "remote-notification", "processing"]
+        "UIBackgroundModes": [
+          "processing",
+          "fetch",
+          "remote-notification"
+        ],
+        "BGTaskSchedulerPermittedIdentifiers": [
+          "BACKGROUND-NOTIFICATION-TASK",
+          "background-step"
+        ]
       },
       "entitlements": {
         "com.apple.developer.usernotifications.critical-alerts": true,
@@ -29,7 +37,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "35"
+      "buildNumber": "36"
     },
     "android": {
       "package": "de.nweber.checkokay",
