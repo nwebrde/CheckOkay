@@ -4,6 +4,7 @@ import { jwtService } from './lib/typescirpt-node-oauth-server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from './lib/nextAuthOptions'
 import * as Sentry from "@sentry/nextjs";
+import { TokenRepository } from './lib/typescirpt-node-oauth-server/repositories'
 
 export async function createContext({
     req,
@@ -17,14 +18,34 @@ export async function createContext({
     async function getUserId(): Promise<string | undefined> {
         let userId = undefined
         if (req.headers.has('authorization')) {
-            const token = req.headers.get('authorization')
-            Sentry.captureMessage("authorization token: " + (token ?? ""));
-            if (token) {
-                try {
-                    userId = (await jwtService.verify(token)).sub
-                } catch (e) {
-                    //console.error('Error verifying jwt', e)
-                    Sentry.captureMessage("verifying token failed: " + e);
+            if(req.headers.has('backgroundprocess')) {
+                const repo = new TokenRepository()
+                const token = req.headers.get('authorization')
+                Sentry.captureMessage("authorization token: " + (token ?? ""));
+                if (token) {
+                    try {
+                        const user = await repo.getByRefreshToken(token)
+                        if(user.refreshTokenExpiresAt && user.refreshTokenExpiresAt.getTime() >= (new Date()).getTime()) {
+                            console.error("background login")
+                            userId = user.user?.id;
+                        }
+                    } catch (e) {
+                        //console.error('Error verifying jwt', e)
+                        Sentry.captureMessage("verifying token failed: " + e);
+                    }
+                }
+            }
+            else {
+                const token = req.headers.get('authorization')
+                Sentry.captureMessage("authorization token: " + (token ?? ""));
+                if (token) {
+                    try {
+                        console.error("foreground login")
+                        userId = (await jwtService.verify(token)).sub
+                    } catch (e) {
+                        //console.error('Error verifying jwt', e)
+                        Sentry.captureMessage("verifying token failed: " + e);
+                    }
                 }
             }
         } else {
