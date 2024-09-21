@@ -61,6 +61,10 @@ export const checkIn = async (userId: string, step: boolean, external = false, d
         throw new Error("User can not be checked in as it is not in WARNED or BACKUP state.")
     }
 
+    if(data.nextCheckInPossibleFrom && (new Date(date)).getTime() <= (new Date(data.nextCheckInPossibleFrom)).getTime()) {
+        throw new Error("User can not be checked in as check in with this date is not possible.")
+    }
+
     const checksController = toChecksController(data.checks)
 
     let res = undefined;
