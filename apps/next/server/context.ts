@@ -24,7 +24,7 @@ export async function createContext({
                 Sentry.captureMessage("authorization token: " + (token ?? ""));
                 if (token) {
                     try {
-                        console.error("background login a", req.url)
+                        console.error("background login a", req.url, token)
                         const user = await repo.getByRefreshToken(token)
                         console.error("background login b", user.refreshTokenExpiresAt.getTime())
                         if(user.refreshTokenExpiresAt && user.refreshTokenExpiresAt.getTime() >= (new Date()).getTime()) {
