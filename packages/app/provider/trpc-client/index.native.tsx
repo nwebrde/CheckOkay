@@ -1,7 +1,7 @@
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client'
 import { createTRPCReact } from '@trpc/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { AppRouter } from 'next-app/server/routers/_app'
 import { jwtDecode } from 'jwt-decode'
 import superjson from 'superjson';
@@ -12,6 +12,7 @@ import atob from 'core-js-pure/stable/atob'
 import btoa from 'core-js-pure/stable/btoa'
 import { tokenRefreshLink } from 'app/provider/trpc-client/refreshLink'
 import { getAccessToken, getRefreshToken, refresh, signOut } from 'expo-app/lib/OAuthClient'
+import { AppState } from 'react-native'
 
 global.atob = atob
 global.btoa = btoa
@@ -42,7 +43,7 @@ function getBaseUrl() {
 }
 
 export function TRPCProvider(props: { children: React.ReactNode }) {
-    const trpcClient = trpc.createClient({
+    const createTrpcClient = (appState) => trpc.createClient({
         links: [
             loggerLink({
                 enabled: () => false
@@ -52,6 +53,11 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                 // access to the original tRPC query operation object
                 // is accessible on both methods
                 tokenRefreshNeeded: async (query) => {
+
+                    if(appState != "active") {
+                        return false
+                    }
+
                     const accessToken = await getAccessToken()
                     const refreshToken = await getRefreshToken()
 
@@ -97,14 +103,21 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
             httpBatchLink({
                 url: process.env.EXPO_PUBLIC_API_URL!,
                 headers: async () => {
-                    const token = await getAccessToken()
-                    return {authorization: token!}
+                    if(appState != "active") {
+                        return {
+                            authorization: (await getRefreshToken())!,
+                            backgroundprocess: "true"
+                        }
+                    }
+                    return {authorization: (await getAccessToken())!}
                 },
 
             }),
         ],
         transformer: superjson
     })
+
+    const [trpcClient, setTrpcClient] = useState(createTrpcClient(AppState.currentState))
 
     const [queryClient] = useState(
         () =>
@@ -134,6 +147,14 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
                 },
             }),
     )
+
+    useEffect(() => {
+        const subscription = AppState.addEventListener('change', (state) => setTrpcClient(createTrpcClient(state)));
+
+        return () => {
+            subscription.remove();
+        }
+    }, []);
 
     return (
         // @ts-ignore

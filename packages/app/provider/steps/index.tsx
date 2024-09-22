@@ -13,7 +13,7 @@ import { useHealthKitPermissions, usePedometerPermissions } from 'app/lib/permis
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import { Pedometer } from 'expo-sensors';
-import { getAccessToken } from 'expo-app/lib/OAuthClient'
+import { getRefreshToken } from 'expo-app/lib/OAuthClient'
 import { AppState, AppStateStatus } from 'react-native'
 
 /**
@@ -55,7 +55,7 @@ export const pedometerCheckIn = async (issuer: string) => {
             headers: {
                 Accept: 'application/json',
                 'steps': stepCount.toString(),
-                'accessToken': (await getAccessToken()) ?? "",
+                'refreshToken': (await getRefreshToken()) ?? "",
                 'startTime': startDate.getTime().toString()
             }
         });

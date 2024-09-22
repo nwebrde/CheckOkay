@@ -37,7 +37,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "36"
+      "buildNumber": "37"
     },
     "android": {
       "package": "de.nweber.checkokay",

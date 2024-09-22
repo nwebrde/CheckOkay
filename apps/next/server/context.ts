@@ -24,14 +24,11 @@ export async function createContext({
                 Sentry.captureMessage("authorization token: " + (token ?? ""));
                 if (token) {
                     try {
-                        console.error("background login a", req.url)
                         const data = (await jwtService.verify(token))
-                        console.error("background login b", data.refresh_token_id)
                         // @ts-ignore
                         const user = await repo.getByRefreshToken(data.refresh_token_id)
-                        console.error("background login c", user.refreshTokenExpiresAt.getTime())
                         if(user.refreshTokenExpiresAt && user.refreshTokenExpiresAt.getTime() >= (new Date()).getTime()) {
-                            console.error("background login")
+                            console.error("background login", req.url)
                             userId = user.user?.id;
                         }
                     } catch (e) {
