@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
     const bodyParams = new URLSearchParams(await req.text())
     const body = Object.fromEntries(bodyParams)
 
+    console.error("refreshing token", body)
+
     try {
         const oauthResponse =
             await authorizationServer.respondToAccessTokenRequest({
