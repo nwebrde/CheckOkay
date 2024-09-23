@@ -67,8 +67,10 @@ export const register = async () => {
                             }
                         }
 
+                        // check-in delay
                         delay = Number(new Date(job.data.checkDate)) - Number(new Date())
 
+                        // normal reminder
                         if(!job.data.lastResortCheckIn && !job.data.firstReminderSent) {
                             delay = 2 * 60 * 1000
                             if(Number(new Date) + delay >= Number(new Date(job.data.checkDate))) {
@@ -76,7 +78,8 @@ export const register = async () => {
                             }
                         }
 
-                        else if(job.data.lastResortCheckIn) {
+                        // critical reminder
+                        else if((!job.data.lastResortCheckIn && job.data.firstReminderSent) || (job.data.lastResortCheckIn && !job.data.firstReminderSent)) {
                             delay = Number(new Date(job.data.checkDate)) - Number(new Date()) - 5 * 60 * 1000
                         }
 
