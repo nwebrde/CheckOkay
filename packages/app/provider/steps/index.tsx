@@ -40,7 +40,7 @@ export const pedometerCheckIn = async (issuer: string) => {
     let startDate = new Date()
 
     for (let i = 0; i <= 5; i++) {
-        startDate = new Date(startDate.getTime() - 30 * MS_PER_MINUTE);
+        startDate = new Date(startDate.getTime() - 28 * MS_PER_MINUTE);
         stepCount = (await Pedometer.getStepCountAsync(startDate, new Date())).steps;
         if(stepCount > 10) {
             break;

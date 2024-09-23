@@ -9,7 +9,6 @@ import {
     changeReminderTime,
     checkIn,
     getCheckSettings,
-    modifyCheck,
     removeCheck
 } from "../controllers/checks";
 import {Hour, Minute, ZTime} from "app/lib/types/time";
@@ -29,6 +28,7 @@ export const checksRouter = router({
                 <Minute>opts.input.minute,
             )
         }),
+    /*
     modify: authorizedProcedure
         .input(
             ZTime.merge(z.object({
@@ -45,6 +45,8 @@ export const checksRouter = router({
                 <Minute>opts.input.minute,
             )
         }),
+
+     */
     remove: authorizedProcedure
         .input(
             z.object({

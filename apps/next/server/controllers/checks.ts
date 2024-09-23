@@ -27,6 +27,7 @@ import { UserDeleted } from './checkState'
 import { NotificationSubmitter } from '../entities/notifications/NotificationSubmitter'
 import { Recipient } from '../entities/notifications/Notifications'
 import { getAllSubmitters, getPushSubmitters } from './notifications/NotificationSubmitters'
+import { checks } from 'db/schema/checks'
 
 /**
  *
@@ -103,10 +104,6 @@ export const checkIn = async (userId: string, step: boolean, external = false, d
 }
 
 export const addCheck = async (userId: string, hour: Hour, minute: Minute ): Promise<boolean> => {
-    if(!await addCheckToDB(userId, hour, minute)) {
-        return false
-    }
-
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
@@ -119,11 +116,35 @@ export const addCheck = async (userId: string, hour: Hour, minute: Minute ): Pro
         throw new Error("User not found. Check was not added.")
     }
 
-    const checksController = toChecksController(data.checks)
+    for (const check of data.checks) {
+        const hourMinute = toHourMinute(check.time)
+        const checkTime = 60 * hourMinute.hour + hourMinute.minute;
+        const time = 60 * hour + minute;
+        const diff = Math.abs(checkTime - time);
+
+        if(diff < 30) {
+            throw new Error("Check not added as there must be a minimum of 30 minutes between checks")
+        }
+    }
+
+    if(!await addCheckToDB(userId, hour, minute)) {
+        return false
+    }
+
+    const dataAfterAdd = await db.query.checks.findMany({
+        where: eq(checks.guardedUserId, userId)
+    })
+
+    if(!dataAfterAdd) {
+        throw new Error("User not found. Check was not added.")
+    }
+
+    const checksController = toChecksController(dataAfterAdd)
 
     return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), false)
 }
 
+/*
 export const modifyCheck = async (userId: string, checkId: number, hour: Hour, minute: Minute): Promise<boolean> => {
     if(!await modifyCheckInDB(userId, checkId, hour, minute)) {
         return false
@@ -144,6 +165,8 @@ export const modifyCheck = async (userId: string, checkId: number, hour: Hour, m
     const checksController = toChecksController(data.checks)
     return await reschedule(userId, checksController, data.currentCheckId, getLastCheckIn(data.lastManualCheck, data.lastStepCheck), data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), false)
 }
+
+ */
 
 export const removeCheck = async (userId: string, checkId: number): Promise<boolean> => {
     if(!await removeCheckFromDB(userId, checkId)) {

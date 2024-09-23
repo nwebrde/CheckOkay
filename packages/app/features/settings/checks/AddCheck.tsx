@@ -23,7 +23,7 @@ export const AddCheck = forwardRef<HandlerRef, Props>((props, ref) => {
 
                 preset: "error", // or "error", "none", "custom"
 
-                message: "Check wurde nicht hinzugefügt", // optional
+                message: "Zwischen Checks müssen 30 Minuten liegen", // optional
 
                 haptic: "error", // or "success", "warning", "error"
 
