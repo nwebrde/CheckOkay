@@ -86,7 +86,7 @@ export const register = async () => {
 
                         await job.moveToDelayed(Date.now() + delay, token);
                         await job.updateData({
-                            step: job.data.firstReminderSent ? CheckSteps.CHECK : CheckSteps.REMINDER,
+                            step: (job.data.lastResortCheckIn && job.data.firstReminderSent) ? CheckSteps.CHECK : CheckSteps.REMINDER,
                             firstReminderSent: job.data.firstReminderSent || job.data.lastResortCheckIn,
                             lastResortCheckIn: true,
                             checkDate: job.data.checkDate,
