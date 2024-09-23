@@ -2,7 +2,7 @@
   "expo": {
     "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "1.2",
+    "version": "1.2.1",
     "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
     "scheme": "checkokay",
     "platforms": [
@@ -37,7 +37,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "37"
+      "buildNumber": "39"
     },
     "android": {
       "package": "de.nweber.checkokay",

@@ -67,19 +67,23 @@ export const register = async () => {
                             }
                         }
 
-                        delay = Number(new Date(job.data.checkDate)) - Number(new Date()) - 5 * 60 * 1000
+                        delay = Number(new Date(job.data.checkDate)) - Number(new Date())
 
                         if(!job.data.lastResortCheckIn && !job.data.firstReminderSent) {
                             delay = 2 * 60 * 1000
+                            if(Number(new Date) + delay >= Number(new Date(job.data.checkDate))) {
+                                delay = 0
+                            }
                         }
 
-                        if(job.data.firstReminderSent) {
-                            delay = Number(new Date(job.data.checkDate)) - Number(new Date())
+                        else if(job.data.lastResortCheckIn) {
+                            delay = Number(new Date(job.data.checkDate)) - Number(new Date()) - 5 * 60 * 1000
                         }
 
                         if(delay < 0) {
                             delay = 0;
                         }
+
                         await job.moveToDelayed(Date.now() + delay, token);
                         await job.updateData({
                             step: job.data.firstReminderSent ? CheckSteps.CHECK : CheckSteps.REMINDER,

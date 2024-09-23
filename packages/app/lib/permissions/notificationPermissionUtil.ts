@@ -43,10 +43,5 @@ export const useNotificationPermissions = () => {
 };
 
 export const openAppSettings = () => {
-    if(Platform.OS === 'ios') {
-        Linking.openURL('App-Prefs:NOTIFICATIONS_ID&path=de.nweber.checkokay')
-    }
-    else {
-        Linking.openSettings()
-    }
+    Linking.openSettings()
 }

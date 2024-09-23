@@ -30,10 +30,10 @@ function AutomaticCheckIn() {
                     value={backgroundState}
                 />} label="Hintergrundüberprüfung" separator={false} description="Mit dieser Option werden Schritte zusätzlich im Hintergrund überprüft, auch wenn dein Gerät nicht entsperrt ist. Die CheckOkay App muss hierfür im Hintergrund laufen und ein mal täglich geöffnet werden">
                     {needPedometerOverwrite &&
-                        <Text>Du musst in den Systemeinstellungen unter CheckOkay den Zugriff auf Bewegung & Fitness zulassen.</Text>
+                        <Text>Du musst in den Systemeinstellungen unter Apps {'>'} CheckOkay den Zugriff auf Bewegung & Fitness zulassen.</Text>
                     }
                     {needBackgroundOverwrite &&
-                        <Text>Du musst in den Systemeinstellungen unter CheckOkay die Hintergrundaktualisierung aktivieren.</Text>
+                        <Text>Du musst in den Systemeinstellungen unter Apps {'>'} CheckOkay die Hintergrundaktualisierung aktivieren.</Text>
                     }
                     {(needPedometerOverwrite || needBackgroundOverwrite) &&
                         <View className="mt-5">

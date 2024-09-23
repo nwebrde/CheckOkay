@@ -14,26 +14,14 @@ const STRINGIFIER = "_string";
  */
 export const addCheck = async (userId: string, checkId: number, time: Date, checkInPossibleFrom: Date | undefined, reminder: number, backup: number) => {
 
-    let reminderDelay = (Number(time) - Number(new Date())) - reminder * 1000;
-    if(checkInPossibleFrom) {
-        const offset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
-        if(offset > 0) {
-            reminderDelay = reminderDelay + offset
-        }
-    }
-
-    let delay = reminderDelay - 60 * 2 * 1000;
-
-    if(delay < 0) {
-        delay = 0
-    }
+    const {delay, skipReminder} = getReminderDelay(time, reminder, checkInPossibleFrom, false)
 
     const backupTime = new Date(time)
     backupTime.setUTCSeconds(backup)
 
     const res = await checkQueue.add('check', {
         step: CheckSteps.REMINDER,
-        firstReminderSent: reminderDelay <= 0,
+        firstReminderSent: skipReminder,
         lastResortCheckIn: false,
         checkDate: time,
         backupDate: backup > 0 ? backupTime : undefined,
@@ -77,33 +65,13 @@ export const updateCheck = async (checkId: number, checkDate: Date, checkInPossi
     switch (job.data.step) {
         case CheckSteps.REMINDER:
 
-            let reminderDelay = 0
-
-            reminderDelay = (Number(checkDate) - Number(new Date())) - 60 * 5 * 1000;
-            if(!job.data.firstReminderSent) {
-                reminderDelay = (Number(checkDate) - Number(new Date())) - reminder * 1000;
-            }
-
-            if(checkInPossibleFrom) {
-                const offset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
-                if(offset > 0) {
-                    reminderDelay = reminderDelay + offset
-                }
-            }
-
-            delay = reminderDelay;
-
-            if(!job.data.lastResortCheckIn) {
-                delay = delay - 2 * 60 * 1000;
-            }
-
-            if(delay < 0) {
-                delay = 0
-            }
+            const reminderDelay = getReminderDelay(checkDate, reminder, checkInPossibleFrom, job.data.lastResortCheckIn)
+            const skipReminder = reminderDelay.skipReminder
+            delay = reminderDelay.delay
 
             await job.updateData({
                 step: CheckSteps.REMINDER,
-                firstReminderSent: job.data.firstReminderSent || reminderDelay <= 0,
+                firstReminderSent: job.data.firstReminderSent || skipReminder,
                 lastResortCheckIn: job.data.lastResortCheckIn,
                 checkDate: checkDate,
                 backupDate: backup > 0 ? backupTime : undefined,
@@ -160,29 +128,11 @@ export const updateReminderTime = async (checkId: number, reminder: number, chec
         return false
     }
 
-    let reminderDelay = (Number(new Date(job.data.checkDate)) - Number(new Date())) - reminder * 1000;
-    let delay = 0;
-
-    if(checkInPossibleFrom) {
-        const offset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
-        if(offset > 0) {
-            reminderDelay = reminderDelay + offset
-        }
-    }
-
-    delay = reminderDelay
-
-    if(!job.data.lastResortCheckIn) {
-        delay = delay - 2 * 60 * 1000
-    }
-
-    if(delay < 0) {
-        delay = 0
-    }
+    const {delay, skipReminder} = getReminderDelay(new Date(job.data.checkDate), reminder, checkInPossibleFrom, job.data.lastResortCheckIn)
 
     await job.updateData({
         step: CheckSteps.REMINDER,
-        firstReminderSent: job.data.firstReminderSent || reminderDelay <= 0,
+        firstReminderSent: job.data.firstReminderSent || skipReminder,
         lastResortCheckIn: job.data.lastResortCheckIn,
         checkDate: job.data.checkDate,
         backupDate: job.data.backupDate,
@@ -248,6 +198,48 @@ export const updateBackupTime = async (checkId: number, backup: number) => {
     }
 
     return true
+}
+
+
+const getReminderDelay = (checkDate: Date, reminder: number, checkInPossibleFrom: Date | undefined, lastResortCheckInDone: boolean) => {
+    let reminderDelay = (Number(checkDate) - Number(new Date())) - reminder * 1000;
+    let criticalDelay = (Number(checkDate) - Number(new Date())) - 5 * 60 * 1000;
+
+    let skipReminder = false
+
+    if(checkInPossibleFrom) {
+        const reminderOffset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
+        if(reminderOffset > 0) {
+            reminderDelay = reminderDelay + reminderOffset
+        }
+
+        const criticalOffset = Number(checkInPossibleFrom) - (Number(new Date()) + criticalDelay)
+        if(criticalOffset > 0) {
+            criticalDelay = reminderDelay + criticalOffset
+        }
+    }
+
+    if(reminderDelay <= 0 && criticalDelay <= 0) {
+        skipReminder = true;
+    }
+
+    let delay = reminderDelay;
+
+    if(!lastResortCheckInDone) {
+        delay = delay - 2 * 60 * 1000;
+    }
+    else if(skipReminder) {
+        delay = criticalDelay
+    }
+
+    if(delay < 0) {
+        delay = 0
+    }
+
+    return {
+        skipReminder: skipReminder,
+        delay: delay
+    }
 }
 
 
