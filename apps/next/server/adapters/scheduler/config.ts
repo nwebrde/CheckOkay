@@ -45,6 +45,7 @@ export type CheckJob = {
     backupDate?: Date;
     userId: string;
     firstReminderSent: boolean;
+    lastResortCheckIn: boolean;
 }
 
 export interface EmailJob {

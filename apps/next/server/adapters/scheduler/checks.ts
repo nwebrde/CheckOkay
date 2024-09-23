@@ -12,12 +12,17 @@ const STRINGIFIER = "_string";
  * @param reminder time in seconds before the check time to notify guarded person about pending checkIn
  * @param backup time in seconds after the check time to warn backup guards
  */
-export const addCheck = async (userId: string, checkId: number, time: Date, reminder: number, backup: number) => {
-    let delay = (Number(time) - Number(new Date())) - 60 * 5 * 1000;
+export const addCheck = async (userId: string, checkId: number, time: Date, checkInPossibleFrom: Date | undefined, reminder: number, backup: number) => {
 
-    if(reminder > 0) {
-        delay = (Number(time) - Number(new Date())) - reminder * 1000;
+    let reminderDelay = (Number(time) - Number(new Date())) - reminder * 1000;
+    if(checkInPossibleFrom) {
+        const offset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
+        if(offset > 0) {
+            reminderDelay = reminderDelay + offset
+        }
     }
+
+    let delay = reminderDelay - 60 * 2 * 1000;
 
     if(delay < 0) {
         delay = 0
@@ -28,7 +33,8 @@ export const addCheck = async (userId: string, checkId: number, time: Date, remi
 
     const res = await checkQueue.add('check', {
         step: CheckSteps.REMINDER,
-        firstReminderSent: reminder <= 0,
+        firstReminderSent: reminderDelay <= 0,
+        lastResortCheckIn: false,
         checkDate: time,
         backupDate: backup > 0 ? backupTime : undefined,
         userId: userId
@@ -52,7 +58,7 @@ export const deleteCheck = async (checkId: number) => {
  * @param reminder if omitted, the old values are used
  * @param backup if omitted, the old values are used
  */
-export const updateCheck = async (checkId: number, checkDate: Date, reminder: number, backup: number) => {
+export const updateCheck = async (checkId: number, checkDate: Date, checkInPossibleFrom: Date | undefined, reminder: number, backup: number) => {
     const job = await checkQueue.getJob(checkId.toString() + STRINGIFIER)
     if(!job) {
         return false
@@ -71,9 +77,24 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
     switch (job.data.step) {
         case CheckSteps.REMINDER:
 
-            delay = (Number(checkDate) - Number(new Date())) - 60 * 5 * 1000;
+            let reminderDelay = 0
+
+            reminderDelay = (Number(checkDate) - Number(new Date())) - 60 * 5 * 1000;
             if(!job.data.firstReminderSent) {
-                delay = (Number(checkDate) - Number(new Date())) - reminder * 1000;
+                reminderDelay = (Number(checkDate) - Number(new Date())) - reminder * 1000;
+            }
+
+            if(checkInPossibleFrom) {
+                const offset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
+                if(offset > 0) {
+                    reminderDelay = reminderDelay + offset
+                }
+            }
+
+            delay = reminderDelay;
+
+            if(!job.data.lastResortCheckIn) {
+                delay = delay - 2 * 60 * 1000;
             }
 
             if(delay < 0) {
@@ -82,7 +103,8 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
 
             await job.updateData({
                 step: CheckSteps.REMINDER,
-                firstReminderSent: reminder <= 0 || job.data.firstReminderSent,
+                firstReminderSent: job.data.firstReminderSent || reminderDelay <= 0,
+                lastResortCheckIn: job.data.lastResortCheckIn,
                 checkDate: checkDate,
                 backupDate: backup > 0 ? backupTime : undefined,
                 userId: job.data.userId
@@ -100,6 +122,7 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
             await job.updateData({
                 step: job.data.step,
                 firstReminderSent: job.data.firstReminderSent,
+                lastResortCheckIn: job.data.lastResortCheckIn,
                 checkDate: checkDate,
                 backupDate: backup > 0 ? backupTime : undefined,
                 userId: job.data.userId
@@ -131,17 +154,40 @@ export const updateCheck = async (checkId: number, checkDate: Date, reminder: nu
  * @param checkId
  * @param reminder seconds
  */
-export const updateReminderTime = async (checkId: number, reminder: number) => {
+export const updateReminderTime = async (checkId: number, reminder: number, checkInPossibleFrom: Date | undefined) => {
     const job = await checkQueue.getJob(checkId.toString() + STRINGIFIER)
     if(!job || job.data.step != CheckSteps.REMINDER || job.data.firstReminderSent) {
         return false
     }
 
-    let delay = (Number(new Date(job.data.checkDate)) - Number(new Date())) - reminder * 1000;
+    let reminderDelay = (Number(new Date(job.data.checkDate)) - Number(new Date())) - reminder * 1000;
+    let delay = 0;
+
+    if(checkInPossibleFrom) {
+        const offset = Number(checkInPossibleFrom) - (Number(new Date()) + reminderDelay)
+        if(offset > 0) {
+            reminderDelay = reminderDelay + offset
+        }
+    }
+
+    delay = reminderDelay
+
+    if(!job.data.lastResortCheckIn) {
+        delay = delay - 2 * 60 * 1000
+    }
+
     if(delay < 0) {
         delay = 0
     }
 
+    await job.updateData({
+        step: CheckSteps.REMINDER,
+        firstReminderSent: job.data.firstReminderSent || reminderDelay <= 0,
+        lastResortCheckIn: job.data.lastResortCheckIn,
+        checkDate: job.data.checkDate,
+        backupDate: job.data.backupDate,
+        userId: job.data.userId
+    })
     await job.changeDelay(delay)
     return true
 }
@@ -170,6 +216,7 @@ export const updateBackupTime = async (checkId: number, backup: number) => {
                 await job.updateData({
                     step: job.data.step,
                     firstReminderSent: job.data.firstReminderSent,
+                    lastResortCheckIn: job.data.lastResortCheckIn,
                     checkDate: job.data.checkDate,
                     backupDate: backupTime,
                     userId: job.data.userId
@@ -188,6 +235,7 @@ export const updateBackupTime = async (checkId: number, backup: number) => {
                 await job.updateData({
                     step: job.data.step,
                     firstReminderSent: job.data.firstReminderSent,
+                    lastResortCheckIn: job.data.lastResortCheckIn,
                     checkDate: job.data.checkDate,
                     backupDate: backupTime,
                     userId: job.data.userId

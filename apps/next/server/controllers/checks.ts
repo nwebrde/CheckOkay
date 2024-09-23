@@ -178,7 +178,10 @@ export const changeReminderTime = async (userId: string, hour: Hour, minute: Min
     }
 
     const data = await db.query.users.findFirst({
-        where: eq(users.id, userId)
+        where: eq(users.id, userId),
+        with: {
+            checks: true
+        }
     })
 
     if(!data) {
@@ -186,7 +189,9 @@ export const changeReminderTime = async (userId: string, hour: Hour, minute: Min
     }
 
     if(data.currentCheckId) {
-        await updateReminderTime(data.currentCheckId, toSeconds(timeString))
+        const checksController = toChecksController(data.checks)
+        const checkInPossibleFrom = checksController.getNextCheck(getLastCheckIn(data.lastManualCheck, data.lastStepCheck))?.date
+        await updateReminderTime(data.currentCheckId, toSeconds(timeString), checkInPossibleFrom)
     }
 
     return true
@@ -257,15 +262,15 @@ const reschedule = async (userId: string, checksController: ChecksController, cu
             if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id, checkInPossibleFrom ?? null)) {
                 throw new Error("Error while updating the next required check in date")
             }
-            return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, reminder, backup)
+            return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, checkInPossibleFrom, reminder, backup)
         }
         else if ((new Date(nextRequired.date)).getTime() != nextRequiredCheckIn?.getTime()) {
             if(!await updateNextRequiredCheckIn(userId, nextRequired.date, nextRequired.check.id, checkInPossibleFrom ?? null)) {
                 throw new Error("Error while updating the next required check in date")
             }
 
-            if(!await updateCheckInQueue(nextRequired.check.id, nextRequired.date, reminder, backup)) {
-                return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, reminder, backup)
+            if(!await updateCheckInQueue(nextRequired.check.id, nextRequired.date, checkInPossibleFrom, reminder, backup)) {
+                return await addCheckToQueue(userId, nextRequired.check.id, nextRequired.date, checkInPossibleFrom, reminder, backup)
             }
             return true
         }

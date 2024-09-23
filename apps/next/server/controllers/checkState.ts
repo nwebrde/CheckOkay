@@ -16,6 +16,34 @@ export class UserDeleted extends Error {
     }
 }
 
+export const lastResortCheckIn = async (userId: string) => {
+    const data = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+        with: {
+            notificationChannels: true,
+        }
+    })
+
+    if(!data) {
+        throw new UserDeleted("User not found. User is not checked-in.")
+    }
+
+    if(!data.nextRequiredCheckDate) {
+        return
+    }
+
+    const recipient: Recipient = {
+        name: data.name ?? ""
+    }
+
+    const submitters = await getPushSubmitters(recipient, undefined, data.notificationChannels)
+
+    const lastResortCheckInNotification = new LastResortCheckIn(data.id)
+
+    const lastResortNotifier = new StandardNotifier(lastResortCheckInNotification, submitters)
+    await lastResortNotifier.submit()
+}
+
 /**
  * Triggered by check queue
  * checks whether a reminder is necessary and performs the reminder
@@ -56,14 +84,6 @@ export const remind = async (userId: string, criticalReminder: boolean) => {
         const notifier = new StandardNotifier(notification, submitters)
 
         await notifier.submit()
-
-
-        if(!criticalReminder) {
-            const lastResortCheckInNotification = new LastResortCheckIn(data.id)
-
-            const lastResortNotifier = new StandardNotifier(lastResortCheckInNotification, submitters)
-            await lastResortNotifier.submit()
-        }
 
         await updateCheckState(userId, CheckState.NOTIFIED)
     }
