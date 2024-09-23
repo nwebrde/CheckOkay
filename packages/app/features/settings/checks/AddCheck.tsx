@@ -1,7 +1,7 @@
 'use client'
 import React, { forwardRef, useState, useImperativeHandle, useRef, useEffect } from 'react'
 import { SettingsNavigator } from 'app/features/settings/index/SettingsNavigator'
-import { TextInput } from 'react-native'
+import { Platform, TextInput } from 'react-native'
 import { Text } from 'app/design/typography'
 import { trpc } from 'app/provider/trpc-client'
 import { Button } from 'app/design/button'
@@ -23,7 +23,7 @@ export const AddCheck = forwardRef<HandlerRef, Props>((props, ref) => {
 
                 preset: "error", // or "error", "none", "custom"
 
-                message: "Zwischen Checks müssen 30 Minuten liegen", // optional
+                message: "30 min. Abstand", // optional
 
                 haptic: "error", // or "success", "warning", "error"
 
@@ -56,7 +56,7 @@ export const AddCheck = forwardRef<HandlerRef, Props>((props, ref) => {
 
             <TimePicker onChange={(hour, minute) => {setHour(hour); setMinute(minute)}} displayTimeInLocalFormat={true} hour={10} minute={9} />
 
-                <Text className="mt-10">Wähle aus, um wie viel Uhr du dich spätestens rückmelden musst. Ziehe dafür die Zahlen an die gewünschte Position</Text>
+                <Text className="mt-10">Wähle aus, um wie viel Uhr du dich spätestens rückmelden musst. Zwischen Rückmeldezeitpunkten müssen mindestens 30 Minuten liegen. {(Platform.OS == "ios" || Platform.OS == "android") ? "Ziehe die Zahlen an die gewünschte Position." : "Gebe die gewünschte Zeit über die Tastaur ein."}</Text>
             </View>
     )
 } )
