@@ -28,7 +28,7 @@ function AutomaticCheckIn() {
                 <SettingsRow headerChild={<Switch
                     onValueChange={toggleBackground}
                     value={backgroundState}
-                />} label="Hintergrundüberprüfung" separator={false} description="Mit dieser Option werden Schritte zusätzlich im Hintergrund überprüft, auch wenn dein Gerät nicht entsperrt ist. Die CheckOkay App muss hierfür im Hintergrund laufen und ein mal täglich geöffnet werden">
+                />} label="Hintergrundüberprüfung" separator={false} description="Mit dieser Option werden Schritte zusätzlich im Hintergrund überprüft, auch wenn dein Gerät nicht entsperrt ist. Die CheckOkay App muss hierfür im Hintergrund laufen und nach einem Neustart deines iOS Geräts einmalig geöffnet werden">
                     {needPedometerOverwrite &&
                         <Text>Du musst in den Systemeinstellungen unter Apps {'>'} CheckOkay den Zugriff auf Bewegung & Fitness zulassen.</Text>
                     }

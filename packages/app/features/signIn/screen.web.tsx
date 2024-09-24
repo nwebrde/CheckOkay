@@ -9,6 +9,7 @@ import { Apple, Google } from 'next-app/components/icons/socials'
 import { SettingsGroup } from 'app/design/settings/group'
 import { SettingsRow } from 'app/design/settings/row'
 import * as Burnt from 'burnt'
+import { TextLink } from 'solito/link'
 
 
 export function SignInScreen() {
@@ -54,9 +55,9 @@ export function SignInScreen() {
                         <DiscordLoginButton text="Melde dich mit Discord an" style={{borderRadius: 10, boxShadow: "none"}} onClick={() => signIn("discord", { callbackUrl: callbackUrl })} />
                     </View>
 
-
-
-
+                    <P className="mt-10 text-center text-md font-light">
+                        Mit der Anmeldung stimmst du unseren <TextLink href="https://checkokay.com/legal">Nutzungs- und Datenschutzbestimmungen</TextLink> zu.
+                    </P>
 
 
                     {
