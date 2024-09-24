@@ -112,7 +112,7 @@ export class NewGuardNotification extends Notification {
 
 export class CheckInNotification extends Notification {
     constructor(userId: string, name: string, image: string | null, initiatorId: string) {
-        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, `Bei ${guardName} ist alles in Ordnung`, "Mir geht es gut. Ich habe verpasst mich zurückzumelden.", undefined, undefined, "checkIn", false, false, false, {name: name, image: image, id: userId, initiatorId: initiatorId})
+        super(ConcreteNotificationType.CHECK_IN_NOTIFICATION, `Bei ${name} ist alles in Ordnung`, "Mir geht es gut. Ich habe verpasst mich zurückzumelden.", undefined, undefined, "checkIn", false, false, false, {name: name, image: image, id: userId, initiatorId: initiatorId})
     }
 
     async refresh() {
