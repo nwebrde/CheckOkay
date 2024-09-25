@@ -2,7 +2,7 @@
   "expo": {
     "name": "CheckOkay",
     "slug": "checkokay",
-    "version": "1.2.1",
+    "version": "1.2.3",
     "description": "Deine Freunde beschützen dich. Wir warnen deine Freunde wenn du nicht mehr reagierst.",
     "scheme": "checkokay",
     "platforms": [
@@ -16,6 +16,7 @@
         "NSUserActivityTypes": [
           "INSendMessageIntent"
         ],
+        "NSMotionUsageDescription": "Anhand deiner Schrittdaten melden wir dich im Hintergrund automatisch zurück. Deine Schrittdaten verlassen dein Gerät zu keiner Zeit.",
         "UIBackgroundModes": [
           "processing",
           "fetch",
@@ -37,7 +38,7 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "39"
+      "buildNumber": "42"
     },
     "android": {
       "package": "de.nweber.checkokay",

@@ -54,7 +54,7 @@ export const signIn = async () => {
         if(!tokenResult.refreshToken) {
             await SecureStore.deleteItemAsync(refreshTokenKey)
         } else {
-            await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken, {keychainAccessible: SecureStore.WHEN_UNLOCKED})
+            await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken, {keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK})
         }
 
 
@@ -92,7 +92,7 @@ export const refresh = async () => {
 
     if(tokenResult && tokenResult.accessToken && tokenResult.refreshToken) {
         await SecureStore.setItemAsync(accessTokenKey, tokenResult.accessToken, {keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK});
-        await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken, {keychainAccessible: SecureStore.WHEN_UNLOCKED});
+        await SecureStore.setItemAsync(refreshTokenKey, tokenResult.refreshToken, {keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK});
         return true
     }
     else {
