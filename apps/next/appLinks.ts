@@ -4,6 +4,6 @@ export const appLinks = {
         id: "6560112706"
     },
     android: {
-        link: "https://checkokay.com/docs/getting-starterd/installation"
+        link: "https://checkokay.com/docs/getting-starterd#android"
     }
 }
