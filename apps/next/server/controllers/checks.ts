@@ -66,7 +66,7 @@ export const checkIn = async (userId: string, step: boolean, external = false, d
     }
 
     if(data.nextCheckInPossibleFrom && (new Date(date)).getTime() < (new Date(data.nextCheckInPossibleFrom)).getTime()) {
-        console.error("User can not be checked in as check in with this date is not possible.", (new Date(date)).getTime(), (new Date(data.nextCheckInPossibleFrom)).getTime())
+        console.error("User can not be checked in as check in with this date is not possible.", (new Date(date)).getTime(), (new Date(data.nextCheckInPossibleFrom)).getTime(), data.nextCheckInPossibleFrom)
         throw new Error("User can not be checked in as check in with this date is not possible.")
     }
 
