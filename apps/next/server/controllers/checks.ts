@@ -36,6 +36,7 @@ import { checks } from 'db/schema/checks'
  * @param external external checkins are only successfull if user state is WARNED or BACKUP
  */
 export const checkIn = async (userId: string, step: boolean, external = false, date = new Date(), initiatorId = userId) => {
+    console.error("check in with", userId, step, external, date, initiatorId)
     const data = await db.query.users.findFirst({
         where: eq(users.id, userId),
         with: {
@@ -55,14 +56,17 @@ export const checkIn = async (userId: string, step: boolean, external = false, d
     })
 
     if(!data) {
+        console.error("User not found. Check was not added.")
         throw new Error("User not found. Check was not added.")
     }
 
     if(external && data.state != CheckState.WARNED && data.state != CheckState.BACKUP) {
+        console.error("User can not be checked in as it is not in WARNED or BACKUP state.")
         throw new Error("User can not be checked in as it is not in WARNED or BACKUP state.")
     }
 
-    if(data.nextCheckInPossibleFrom && (new Date(date)).getTime() <= (new Date(data.nextCheckInPossibleFrom)).getTime()) {
+    if(data.nextCheckInPossibleFrom && (new Date(date)).getTime() < (new Date(data.nextCheckInPossibleFrom)).getTime()) {
+        console.error("User can not be checked in as check in with this date is not possible.", (new Date(date)).getTime(), (new Date(data.nextCheckInPossibleFrom)).getTime())
         throw new Error("User can not be checked in as check in with this date is not possible.")
     }
 
@@ -77,7 +81,8 @@ export const checkIn = async (userId: string, step: boolean, external = false, d
     }
 
     if(res[0].affectedRows <= 0) {
-        throw new Error("Failed updating nextRequiredCheckDate in DB")
+        console.error("Failed updating lastCheck in DB")
+        throw new Error("Failed updating lastCheck in DB")
     }
 
     await reschedule(userId, checksController, data.currentCheckId, date, data.nextRequiredCheckDate, toSeconds(data.reminderBeforeCheck), toSeconds(data.notifyBackupAfter), true)
