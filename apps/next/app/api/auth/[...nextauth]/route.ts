@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import { authOptions } from '../../../../server/lib/nextAuthOptions'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+
 // @ts-ignore
 // const handler = NextAuth(authOptions)
 
