@@ -19,6 +19,7 @@ export const authOptions = (userObject: Profile | undefined = undefined) => ({
         logo: "https://checkokay.com/logo-light.png", // Absolute URL to image
         buttonText: "#ffffff" // Hex color code
     },
+    debug: true,
     pages: {
         signIn: '/auth/signin'
     },
