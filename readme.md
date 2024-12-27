@@ -108,5 +108,16 @@ EAS_LOCAL_BUILD_SKIP_CLEANUP=1 eas build --profile development --platform ios --
 ### iOS Build fails while Archiving with log entry Provisioning profile "*[expo] XXX AdHoc XXX" doesn't include signing certificate "Apple Distribution: XXX"
 "In keychain access, under Login, my certificates, delete all "Apple Distribution: ......" Certificates, then no need to download / do anything else, it just works", taken from https://github.com/expo/eas-cli/issues/1201
 
+### Sign in with Apple fails
+APPLE_CLIENT_SECRET ist nur 180 Tage gültig und muss danach erneuert werden:
+```sh
+npx auth add apple
+
+client id: de.nweber.checkokay.web
+key id: DLFA4AWH5W
+key location: /Users/niklasweber/dev/CheckOkay/apps/next/server/lib/AuthKey_DLFA4AWH5W.p8
+team id: LZH6XCD46X
+```
+
 ### Was this repo forked from a template?
 Yes, this repo was initially forked from a solito monorepo starter.
